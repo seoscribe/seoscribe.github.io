@@ -1,122 +1,462 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
-<title>SEO Scribe &middot; the SEO Text Editor &middot; </title>
-<style>
-html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-webkit-font-smoothing:subpixel-antialiased;-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-overflow-scrolling:touch;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;touch-action:manipulation;font:normal normal 400 16px/1.2 Roboto,-apple-system,Arial,Helmet,Freesans,sans-serif}
-*,:before,:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;touch-action:manipulation;margin:0;padding:0;border:0;font:inherit}:active,:focus{outline:0}article,footer,header,main,nav,section,video{display:block}
-html,body{height:100%;background:#eee}
-a{-webkit-text-decoration-skip:objects;text-decoration:none}button,input,textarea{-webkit-appearance:none;-webkit-border-radius:0;border-radius:0;background:0 0}button,img,video{-webkit-touch-callout:none}button,a,img,video{-webkit-user-select:none;-moz-user-select:none}button,a{color:inherit;cursor:pointer}textarea{resize:none}[disabled]{opacity:.6;cursor:not-allowed}[hidden],video::-webkit-media-controls,video::-webkit-media-controls-play-button,video::-webkit-media-controls-volume-slider,video::-webkit-media-controls-mute-button,video::-webkit-media-controls-timeline,video::-webkit-media-controls-current-time-display{display:none}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#07071c;-webkit-border-radius:4px;border-radius:4px}::-webkit-scrollbar-track{background-color:transparent;background:rgba(0,0,0,0)}::selection{background:#fff;color:#07071c}::-moz-selection{background:#fff;color:#07071c}
-aside {position:fixed;top:0;left:0;padding:4rem 0 4rem 2rem;bottom:0;width:25%;width:calc(30% - 4rem)}
-main {width:70%;padding:2rem 0;margin:0 2rem 0 auto;height:100%;}
-main textarea{-webkit-overflow-scrolling:touch;padding:2rem;background:#fff;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:0 0 54px 0 rgba(0,0,0,.1);box-shadow:0 0 54px 0 rgba(0,0,0,.1);width:100%;height:100%;resize:none;overflow-x:hidden;overflow-y:scroll}
-aside div{
-  position:relative;
-}
-label[for]{font-size:10px;font-weight:700;text-transform:uppercase;}
-output{
-  display:block;
-  padding:0 0 1rem 0;
-}
-</style>
-</head>
-<body>
-<aside>
-  <input id="keyword" type="text" value="keyword">
-  <div>
-    <label for="keyword_density">Keyword density</label>
-    <output id="keyword_density">0</output>
-  </div>
-  <div>
-    <label for="lsi_density">LSI density</label>
-    <output id="lsi_density">0</output>
-  </div>
-  <div>
-    <label for="keyword_headings">Keyword in headings</label>
-    <output id="keyword_headings">No</output>
-  </div>
-  <div>
-    <label for="keyword_first_paragraph">Keyword in first paragraph</label>
-    <output id="keyword_first_paragraph">No</output>
-  </div>
-</aside>
-<main>
-  <textarea></textarea>
-</main>
-<script>
-  ;(function(win,doc){
-    var content = doc.getElementsByTagName('textarea')[0];
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+    <title>SEO Scribe &middot; the SEO Text Editor &middot; </title>
+    <style>
+      html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-webkit-font-smoothing:subpixel-antialiased;-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-overflow-scrolling:touch;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;touch-action:manipulation;font:normal normal 400 16px/1.2 Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,Helmet,Freesans,sans-serif}
+      *,:before,:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;touch-action:manipulation;margin:0;padding:0;border:0;font:inherit}:active,:focus{outline:0}article,footer,header,main,nav,section,video{display:block}
+      html,body{height:100%;background:#eee;overflow:hidden}
+      a{-webkit-text-decoration-skip:objects;text-decoration:none}button,input,textarea{-webkit-appearance:none;-webkit-border-radius:0;border-radius:0;background:0 0}button,img,video{-webkit-touch-callout:none}button,a,img,video{-webkit-user-select:none;-moz-user-select:none}button,a{color:inherit;cursor:pointer}textarea{resize:none}[disabled]{opacity:.6;cursor:not-allowed}[hidden],video::-webkit-media-controls,video::-webkit-media-controls-play-button,video::-webkit-media-controls-volume-slider,video::-webkit-media-controls-mute-button,video::-webkit-media-controls-timeline,video::-webkit-media-controls-current-time-display{display:none}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#111;-webkit-border-radius:4px;border-radius:4px}::-webkit-scrollbar-track{background-color:transparent;background:rgba(0,0,0,0)}::selection{background:#111;color:#fff}::-moz-selection{background:#111;color:#fff}
+      html[data-font-loaded] {
+        font-family: Karla,Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,Helmet,Freesans,sans-serif;
+      }
+      aside, h1 {
+        padding: 64px 32px 0 32px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 300px;
+      }
+      h1 {
+        padding: 0 0 56px 32px;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -2px;
+        opacity: .6;
+      }
+      h1 span {
+        margin-left: 34px;
+      }
+      aside {
+        top: 0;
+        right: 0;
+      }
+      aside div {
+        position: relative;
+        padding: 0 0 1rem 0;
+      }
+      main {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 300px;
+      }
+      main textarea[disabled] {
+        opacity: 1;
+      }
+      main textarea {
+        -webkit-overflow-scrolling: touch;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 76px;
+        background: #fff;
+        width: 100%;
+        resize: none;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      label[for] {
+        display: block;
+        position: relative;
+        font-size: 10px;
+        color: #555;
+        text-transform: uppercase;
+        z-index: 2;
+      }
+      output {
+        display: block;
+      }
+      .btns {
+        font-size: 0;
+        white-space: nowrap;
+      }
+      .exp {
+        display: inline-block;
+        width: 58px;
+        margin-right: 1.2px;
+        padding: 0;
+      }
+      .exp:last-of-type {
+        margin-right: 0;
+      }
+      button {
+        display: block;
+        background-color: #f8f8f8;
+        background-image: linear-gradient(180deg,#f8f8f8,#f1f1f1);
+        border: 1px solid #c6c6c6;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        color: #555;
+        height: 36px;
+        line-height: 27px;
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 700;
+        width: 100%;
+        padding: 0 16px;
+        text-align: center;
+        text-transform: uppercase;
+        transition: .2s cubic-bezier(.4,0,.2,1) border-color;
+        margin-top: 1.2px;
+      }
+      button:hover {
+        border-color: #999;
+        box-shadow: 0 1px 1px rgba(0,0,0,.2);
+        color: #555;
+      }
+      button:focus {
+        border-color: rgb(63,81,181);
+        box-shadow: 0 1px 1px rgba(63,81,181,.2);
+        color: rgb(63,81,181);
+      }
+      #keyword {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        border-bottom: 1px dotted #555;
+      }
+      #keyword ~ .overlay {
+        position: absolute;
+        top: -8px;
+        left: -8px;
+        right: -8px;
+        bottom: 8px;
+        z-index: 1;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        border-radius: 1px;
+        background: #fff;
+        opacity: 0;
+        visibility: hidden;
+        transition-property: opacity, visibility;
+        transition-timing-function: cubic-bezier(.4,0,.2,1);
+        transition-duration: .2s;
+      }
+      #keyword:focus ~ .overlay {
+        opacity: 1;
+        visibility: visible;
+      }
+      h1:before {
+        content:'';
+        display: block;
+        position: absolute;
+        top: 3px;
+        left: 29px;
+        background-image:url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2248px%22%20height%3D%2248px%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cg%3E%0A%3Cpath%20fill%3D%22%23111111%22%20d%3D%22M41%2C47H7c-1.105%2C0-2-0.895-2-2V3c0-1.105%2C0.895-2%2C2-2l24%2C0l12%2C12v32C43%2C46.105%2C42.105%2C47%2C41%2C47z%22/%3E%0A%3Cpath%20fill%3D%22%23555555%22%20d%3D%22M31%2C1v10c0%2C1.105%2C0.895%2C2%2C2%2C2h10L31%2C1z%22/%3E%0A%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M33.707%2C32.293l-5.395-5.395C29.366%2C25.542%2C30%2C23.846%2C30%2C22c0-4.411-3.589-8-8-8s-8%2C3.589-8%2C8s3.589%2C8%2C8%2C8%20%20c1.846%2C0%2C3.542-0.634%2C4.898-1.688l5.395%2C5.395C32.488%2C33.902%2C32.744%2C34%2C33%2C34s0.512-0.098%2C0.707-0.293%20%20C34.098%2C33.316%2C34.098%2C32.684%2C33.707%2C32.293z%20M16%2C22c0-3.309%2C2.691-6%2C6-6s6%2C2.691%2C6%2C6s-2.691%2C6-6%2C6S16%2C25.309%2C16%2C22z%22/%3E%0A%3C/g%3E%3C/svg%3E);
+        background-size: 32px 32px;
+        background-repeat: no-repeat;
+        height: 32px;
+        width: 32px;
+      }
+      #night_mode {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        -webkit-appearance:checkbox
+      }
+      [data-night-mode=on],
+      [data-night-mode=on] body {
+        background: #444;
+        color: #fff;
+      }
+      [data-night-mode=on] label[for],
+      [data-night-mode=on] input[type=text]{
+        color: #eee;
+      }
+      [data-night-mode=on] button {
+        background-color: #333;
+        background-image: linear-gradient(180deg,#484848,#414141);
+        border: 1px solid #333;
+        color: #ccc;
+      }
+      [data-night-mode=on] button:hover {
+        border-color: #222;
+        box-shadow: 0 1px 1px rgba(0,0,0,.2);
+        color:#ccc;
+      }
+      [data-night-mode=on] button:focus {
+        border-color: rgb(63,81,181);
+        box-shadow: 0 1px 1px rgba(63,81,181,.2);
+        color: #ccc;
+      }
+      [data-night-mode=on] #keyword ~ .overlay {
+        background: #555;
+      }
+      [data-night-mode=on] main textarea {
+        background: #555;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      <span>SEO Scribe</span>
+    </h1>
+    <aside>
+      <div>
+        <label for="keyword">Keyword</label>
+        <input id="keyword" type="text" tabindex="1" placeholder="Enter keyword" pattern=".{1,}" required>
+        <span class="overlay" aria-hidden="true" role="presentation"></span>
+      </div>
+      <div>
+        <label for="keyword_density">Keyword density</label>
+        <output id="keyword_density">0</output>
+      </div>
+      <div>
+        <label for="rel_density">Related word density</label>
+        <output id="rel_density">0</output>
+      </div>
+      <div hidden>
+        <label for="keyword_headings">Keyword in headings</label>
+        <output id="keyword_headings">No</output>
+      </div>
+      <div>
+        <label for="keyword_first_paragraph">Keyword in first paragraph</label>
+        <output id="keyword_first_paragraph">No</output>
+      </div>
+      <div>
+        <label for="word_count">Word count</label>
+        <output id="word_count">0</output>
+      </div>
+      <div class="btns">
+        <button type="button" id="save_storage" tabindex="3">Save</button>
+        <button type="button" id="exp_txt" data-txt-type="plain" class="exp" tabindex="4">Txt</button>
+        <button type="button" id="exp_html" data-txt-type="html" class="exp" tabindex="5">HTML</button>
+        <button type="button" id="exp_pdf" class="exp" tabindex="6">PDF</button>
+        <button type="button" id="exp_wrd" class="exp" tabindex="7">Word</button>
+      </div>
+    </aside>
+    <main>
+      <textarea placeholder="Write here" tabindex="2" minlength="1" required></textarea>
+    </main>
+    <input type="checkbox" id="night_mode">
+    <script>
+      ;(function(win,doc){
+        var keyword = doc.getElementById('keyword');
+        var content = doc.getElementsByTagName('textarea')[0];
+        var kd = doc.getElementById('keyword_density');
+        var kh = doc.getElementById('keyword_headings');
+        var kfp = doc.getElementById('keyword_first_paragraph');
+        var rel_d = doc.getElementById('rel_density');
+        var wc = doc.getElementById('word_count');
+        var raw_k;
+        var k;
+        var qs;
+        var kc;
+        var rc;
+        var rel_words;
+        var btn_save = doc.getElementById('save_storage');
+        var btn_exp_txt = doc.getElementById('exp_txt');
+        var btn_exp_html = doc.getElementById('exp_html');
+        var font = doc.createElement('link');
+        var chk_nt_md = doc.getElementById('night_mode');
 
-    content.addEventListener('blur',checkContent,false);
-    content.addEventListener('keyup',checkContent,false);
+        if('localStorage' in win){
+          btn_save.onclick = saveToStorage;
+          chk_nt_md.onclick = storeNightMode;
 
-    function checkContent(){
-      var raw_k = []; raw_k[0] = doc.getElementById('keyword').value;
-      var k = raw_k.length > 1 ? raw_k : raw_k[0];
-      var kd = doc.getElementById('keyword_density');
-      var kh = doc.getElementById('keyword_headings');
-      var kfp = doc.getElementById('keyword_first_paragraph');
-      var lsi_d = doc.getElementById('lsi_density');
-      var lsi_words = [];
-
-        var xhr = new XMLHttpRequest();
-        var qs = raw_k.length > 1 ? k.join('+') : k;
-        xhr.open('GET','https://api.datamuse.com/words?ml='+qs, true);
-        //xhr.setRequestHeader('Content-Type','application/json');
-        xhr.onreadystatechange = function(){
-          if(xhr.readyState = 4 && xhr.status >= 200 && xhr.status < 300){
-            var data = JSON.parse(xhr.responseText);
-            console.log(data);
-            for(var i = 0; i < data.length; ++i){
-              lsi_words[i] = data[i].word;
-            }
-            console.log(lsi_words);
+          if(localStorage.getItem('autosaved_kw') || typeof localStorage.getItem('autosaved_kw') !== 'undefined'){
+            keyword.value = localStorage.getItem('autosaved_kw');
           }
+
+          if(localStorage.getItem('autosaved_txt') || typeof localStorage.getItem('autosaved_txt') !== 'undefined'){
+            content.value = localStorage.getItem('autosaved_txt');
+          }
+
+          if(!localStorage.getItem('night_mode') || typeof localStorage.getItem('night_mode') === 'undefined'){
+            storeNightMode();
+
+          } else if(localStorage.getItem('night_mode') !== 'false'){
+            chk_nt_md.checked = true;
+            setNightMode();
+
+          } else {
+            setNightMode();
+          }
+        }
+
+        if(!('URL' in win) && 'webkitURL' in win){
+          win.URL = win.webkitURL;
+        }
+
+        if('URL' in win){
+          btn_exp_txt.onclick = btn_exp_html.onclick = exportText;
+        }
+
+        win.onload = function(){
+          doc.documentElement.setAttribute('data-font-loaded',!0);
         };
-        xhr.onerror = function(){
 
-        };
-        xhr.send();
+        if(keyword.value.length > 0){
+          startSEOScribe();
+        }
 
-      var c_words = content.value.split(' ');
-      var c_paras = content.value.split('\n');
+        keyword.onblur = startSEOScribe;
 
-      kd.value = 0;
-      lsi_d.value = 0;
+        font.href = 'https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext';
+        font.rel = 'stylesheet';
+        doc.head.appendChild(font);
 
-      kfp.value = 'No';
+        function startSEOScribe(){
+          k = keyword.value;
+          rel_words = [];
 
-      if(c_paras.length > 0){
-        c_paras[0].split(' ').forEach(function(word){
-          if(word.trim() === k) kfp.value = 'Yes';
-        });
-        c_paras.forEach(function(para){
-          para.split(' ').forEach(function(word){
-            if(word.trim() === k){
-              kd.value++;
+          if(!k) return;
+
+          getRelatedWords();
+
+          if(!content.onblur) content.onblur = checkContent;
+          if(!content.onkeyup) content.onkeyup = rebounce(checkContent);
+
+          function checkContent(){
+            var c_words = !!content.value ? content.value.split(' ') : [];
+            var c_paras = !!content.value ? content.value.split('\n') : [];
+            var c_count = !!content.value ? content.value.match(/\S+/g).length : 0;
+
+            if(!(content.validity.valid)) return;
+
+            localStorage.setItem('autosaved_kw', k);
+
+            if(!!content.value){
+              localStorage.setItem('autosaved_txt', content.value);
             }
             else {
-              lsi_words.forEach(function(lsi_word){
-                if(word.trim() === lsi_word) lsi_d.value++;
+              localStorage.removeItem('autosaved_txt');
+            }
+
+            wc.value = c_count;
+            kc = 0;
+            rc = 0;
+            kd.value = 0;
+            rel_d.value = 0;
+            kfp.value = 'No';
+
+            if(c_paras.length > 0){
+              c_paras[0].split(' ').forEach(function(word){
+                if(word.trim() === k){
+                  kfp.value = 'Yes';
+                }
+              });
+              c_paras.forEach(function(para){
+                para.split(' ').forEach(function(word){
+                  if(clean(word) === clean(k) || clean(word) === clean(k) + 's'){
+                    kc++;
+                    kd.value = (kc / c_count * 100 << 0) + '%';
+                  } else {
+                    rel_words.forEach(function(rel_word){
+                      if(clean(word) === clean(rel_word) || clean(word) === clean(rel_word) + 's'){
+                        rc++;
+                        rel_d.value = (rc / c_count * 100 << 0) + '%';
+                      }
+                    });
+                  }
+                });
+              });
+            } else {
+              c_words.forEach(function(word){
+                if(clean(word) === clean(k) || clean(word) === clean(k) + 's'){
+                  kc++;
+                  kd.value = (kc / c_count * 100 << 0) + '%';
+                } else {
+                  rel_words.forEach(function(rel_word){
+                    if(clean(word) === clean(rel_word) || clean(word) === clean(rel_word) + 's'){
+                      rc++;
+                      rel_d.value = (rc / c_count * 100 << 0) + '%';
+                    }
+                  });
+                }
               });
             }
-          });
-        });
-      }
-      else {
-        c_words.forEach(function(word){
-          if(word.trim() === k) kd.value++;
-        });
-        lsi_words.forEach(function(lsi_word){
-          if(lsi_word.trim() === k) lsi_.value++;
-        });
-      }
+          }
 
-    }
+          function clean(word){
+            if(typeof word === 'string')
+              return word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'');
+            return word;
+          }
 
-  })(window,window.document);
-</script>
-</body>
+          function getRelatedWords(){
+            var xhr = new XMLHttpRequest();
+            raw_k = keyword.value.split(' ');
+            qs = raw_k.length > 1 ? raw_k.join('+') : raw_k;
+            xhr.open('GET','http://api.datamuse.com/words?ml='+qs, true);
+            xhr.responseType = 'json';
+            xhr.onload = function(){
+              if(xhr.readyState = 4 && xhr.status >= 200 && xhr.status < 300){
+                var data = xhr.response;
+                for(var i = 0; i < data.length; ++i) rel_words[i] = data[i].word;
+              }
+            };
+            xhr.onerror = xhr.onabort = xhr.ontimeout = function(){
+              console.error('There was an error with the request: ' + xhr.status)
+            };
+            xhr.send(null);
+          }
+
+        }
+
+        function saveToStorage(){
+          if('localStorage' in win){
+            localStorage.setItem('autosaved_txt',content.value);
+          }
+        }
+
+        function exportText(){
+          var txt_type = 'text/' + (event.target || this).getAttribute('data-txt-type');
+          var dl_link = doc.createElement('a');
+          var _blob = txt_type === 'text/html' ? '<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>' : content.value;
+          dl_link.download = (keyword.value || 'untitled')
+                           + '-'
+                           + (new Date().toDateString().toLowerCase().split(' ').join('-'))
+                           + (txt_type === 'text/html' ? '.html' : '.txt');
+          dl_link.textContent = 'Download';
+          dl_link.href = win.URL.createObjectURL(new Blob([_blob], {type: txt_type}));
+          dl_link.onclick = function(){doc.body.removeChild(this)};
+          dl_link.target = '_blank';
+          dl_link.rel = 'noreferrer noopener nofollow';
+          dl_link.style.display = 'none';
+          doc.body.appendChild(dl_link);
+          return dl_link.click();
+        }
+
+        function exportWord(){
+
+        }
+
+        function exportPDF(){
+
+        }
+
+        function storeNightMode(){
+          localStorage.setItem('night_mode', chk_nt_md.checked);
+          setNightMode();
+        }
+
+        function setNightMode(){
+          doc.documentElement.setAttribute('data-night-mode', localStorage.getItem('night_mode') !== 'true' ? 'off' : 'on');
+        }
+
+        function rebounce(f){
+          var scheduled,context,args;
+          return function(){
+            context=this;
+            args=[];
+            for (var i=0;i<arguments.length;++i) args[i]=arguments[i];
+            if(scheduled)win.cancelAnimationFrame(scheduled);
+            scheduled=win.requestAnimationFrame(function(){
+              f.apply(context,args);
+              scheduled=null;
+            });
+          }
+        }
+
+      })(window,window.document);
+    </script>
+  </body>
 </html>
