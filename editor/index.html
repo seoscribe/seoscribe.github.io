@@ -376,18 +376,18 @@
 
         function initApp(){
           if('localStorage' in win){
-            if(localStorage.getItem('autosaved_kw') || typeof localStorage.getItem('autosaved_kw') !== 'undefined'){
-              keyword.value = localStorage.getItem('autosaved_kw');
+            if(win.localStorage.getItem('autosaved_kw') || typeof win.localStorage.getItem('autosaved_kw') !== 'undefined'){
+              keyword.value = win.localStorage.getItem('autosaved_kw');
             }
 
-            if(localStorage.getItem('autosaved_txt') || typeof localStorage.getItem('autosaved_txt') !== 'undefined'){
-              content.value = localStorage.getItem('autosaved_txt');
+            if(win.localStorage.getItem('autosaved_txt') || typeof win.localStorage.getItem('autosaved_txt') !== 'undefined'){
+              content.value = win.localStorage.getItem('autosaved_txt');
             }
 
-            if(!localStorage.getItem('night_mode') || typeof localStorage.getItem('night_mode') === 'undefined'){
+            if(!win.localStorage.getItem('night_mode') || typeof win.localStorage.getItem('night_mode') === 'undefined'){
               storeNightMode();
 
-            } else if(localStorage.getItem('night_mode') !== 'false'){
+            } else if(win.localStorage.getItem('night_mode') !== 'false'){
               chk_nt_md.checked = !0;
               setNightMode();
 
@@ -396,13 +396,9 @@
             }
           }
 
-          if(keyword.value){
-            startSEOScribe();
-          }
+          if(keyword.value) startSEOScribe();
 
-          if(!('URL' in win) && 'webkitURL' in win){
-            win.URL = win.webkitURL;
-          }
+          if(!('URL' in win) && 'webkitURL' in win) win.URL = win.webkitURL;
 
           font.href = 'https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext';
           font.rel = 'stylesheet';
@@ -426,7 +422,7 @@
         function startSEOScribe(){
           k = keyword.value.toLowerCase();
           rel_words = [];
-          localStorage.setItem('autosaved_kw', k);
+          win.localStorage.setItem('autosaved_kw', k);
           if(!k) return;
           getRelatedWords();
         }
@@ -435,16 +431,16 @@
           var c_paras = !!content.value ? content.value.split('\n') : [];
           var w_count = !!content.value && content.value.match(/\S+/g) ? content.value.match(/\S+/g).length : 0;
 
-          localStorage.setItem('autosaved_txt', content.value);
+          win.localStorage.setItem('autosaved_txt', content.value);
 
           wc.value = w_count;
           adjustWordCountColor(wc.value, wc);
 
           kc = 0;
           rc = 0;
-          kd.value = '0%';
-          rel_d.value = '0%';
-          kfp.value = 'No';
+          kd.textContent = '0%';
+          rel_d.textContent = '0%';
+          kfp.textContent = 'No';
 
           if(!k)return;
 
@@ -457,8 +453,8 @@
             rc += matchString(content.value, rel_w);
           });
 
-          kd.value = (kc / w_count * 100 << 0) + '%';
-          rel_d.value = (rc / w_count * 100 << 0) + '%';
+          kd.textContent = (kc / w_count * 100 << 0) + '%';
+          rel_d.textContent = (rc / w_count * 100 << 0) + '%';
           adjustDensityColor(kc / w_count * 100 << 0, kd);
           adjustDensityColor(rc / w_count * 100 << 0, rel_d);
         }
@@ -532,7 +528,6 @@
 
           xhr.open('GET', 'http://api.datamuse.com/words?ml=' + qs, true);
           xhr.responseType = 'json';
-
           xhr.onload = function(){
             if(xhr.readyState = 4 && xhr.status >= 200 && xhr.status < 300){
               rel_words = xhr.response.map(function(datum){
@@ -541,11 +536,9 @@
               checkContent();
             }
           };
-
           xhr.onerror = xhr.onabort = xhr.ontimeout = function(){
             console.error('There was an error with the request: ' + xhr.status);
           };
-
           xhr.send(null);
         }
 
@@ -559,16 +552,14 @@
 
         function saveToStorage(){
           if('localStorage' in win){
-            localStorage.setItem('autosaved_txt', content.value);
-            localStorage.setItem('autosaved_kw', k);
+            win.localStorage.setItem('autosaved_txt', content.value);
+            win.localStorage.setItem('autosaved_kw', k);
           }
         }
 
         function exportText(){
           var txt_type = 'text/' + ((event.target || this).getAttribute('data-txt-type') || 'plain');
-
           var dl_link = doc.createElement('a');
-
           var _blob = txt_type === 'text/html'
                     ? '<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>'
                     : content.value;
@@ -616,12 +607,12 @@
         }
 
         function storeNightMode(){
-          localStorage.setItem('night_mode', chk_nt_md.checked);
+          win.localStorage.setItem('night_mode', chk_nt_md.checked);
           setNightMode();
         }
 
         function setNightMode(){
-          doc.documentElement.setAttribute('data-night-mode', localStorage.getItem('night_mode') !== 'true' ? 'off' : 'on');
+          doc.documentElement.setAttribute('data-night-mode', win.localStorage.getItem('night_mode') !== 'true' ? 'off' : 'on');
         }
 
         function rebounce(f){
