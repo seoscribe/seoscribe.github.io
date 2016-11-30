@@ -12,37 +12,43 @@
       html[data-font-loaded="true"] {
         font-family: Karla,Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,Helmet,Freesans,sans-serif;
       }
-      aside, h1 {
-        padding: 32px 32px 0 32px;
+      aside {
+        -webkit-overflow-scrolling: touch;
         position: absolute;
         right: 0;
+        top: 0;
+        bottom: 0;
         width: 300px;
+        padding: 32px 32px 0 32px;
+        overflow-y: scroll;
       }
       h1 {
+        position: relative;
         background: #eee;
-        padding: 32px 0 0 32px;
         font-size: 32px;
         font-weight: 700;
         letter-spacing: -2px;
         color: #555;
-        top: 0;
-        z-index: 90;
-        /*box-shadow: 0 1px 3px rgba(0,0,0,0.1);*/
+        margin-bottom: 16px;
+      }
+      h1:before {
+        content:'';
+        display: block;
+        position: absolute;
+        top: 2px;
+        left: -3px;
+        background-image:url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2248px%22%20height%3D%2248px%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cg%3E%0A%3Cpath%20fill%3D%22%23555555%22%20d%3D%22M41%2C47H7c-1.105%2C0-2-0.895-2-2V3c0-1.105%2C0.895-2%2C2-2l24%2C0l12%2C12v32C43%2C46.105%2C42.105%2C47%2C41%2C47z%22/%3E%0A%3Cpath%20fill%3D%22%23777777%22%20d%3D%22M31%2C1v10c0%2C1.105%2C0.895%2C2%2C2%2C2h10L31%2C1z%22/%3E%0A%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M33.707%2C32.293l-5.395-5.395C29.366%2C25.542%2C30%2C23.846%2C30%2C22c0-4.411-3.589-8-8-8s-8%2C3.589-8%2C8s3.589%2C8%2C8%2C8%20%20c1.846%2C0%2C3.542-0.634%2C4.898-1.688l5.395%2C5.395C32.488%2C33.902%2C32.744%2C34%2C33%2C34s0.512-0.098%2C0.707-0.293%20%20C34.098%2C33.316%2C34.098%2C32.684%2C33.707%2C32.293z%20M16%2C22c0-3.309%2C2.691-6%2C6-6s6%2C2.691%2C6%2C6s-2.691%2C6-6%2C6S16%2C25.309%2C16%2C22z%22/%3E%0A%3C/g%3E%3C/svg%3E);
+        background-size: 32px 32px;
+        background-repeat: no-repeat;
+        height: 32px;
+        width: 32px;
       }
       h1 span {
         margin-left: 34px;
       }
-      aside {
-        top: 0;
-        bottom: 0;
-        overflow-y: scroll;
-      }
       aside div {
         position: relative;
         padding: 0 0 1rem 0;
-      }
-      aside div:first-of-type {
-        margin-top: 64px;
       }
       main {
         position: absolute;
@@ -61,7 +67,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        padding: 108px;
+        padding: 99px;
         background: #fff;
         width: 100%;
         resize: none;
@@ -79,6 +85,7 @@
       }
       output {
         display: block;
+        border-bottom: 3px solid transparent;
       }
       .btns {
         font-size: 0;
@@ -86,7 +93,7 @@
       }
       .exp {
         display: inline-block;
-        width: 58px;
+        width: 25%;
         padding: 0;
       }
       .exp:last-of-type {
@@ -146,18 +153,6 @@
         opacity: 1;
         visibility: visible;
       }
-      h1:before {
-        content:'';
-        display: block;
-        position: absolute;
-        top: 35px;
-        left: 29px;
-        background-image:url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2248px%22%20height%3D%2248px%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cg%3E%0A%3Cpath%20fill%3D%22%23555555%22%20d%3D%22M41%2C47H7c-1.105%2C0-2-0.895-2-2V3c0-1.105%2C0.895-2%2C2-2l24%2C0l12%2C12v32C43%2C46.105%2C42.105%2C47%2C41%2C47z%22/%3E%0A%3Cpath%20fill%3D%22%23777777%22%20d%3D%22M31%2C1v10c0%2C1.105%2C0.895%2C2%2C2%2C2h10L31%2C1z%22/%3E%0A%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M33.707%2C32.293l-5.395-5.395C29.366%2C25.542%2C30%2C23.846%2C30%2C22c0-4.411-3.589-8-8-8s-8%2C3.589-8%2C8s3.589%2C8%2C8%2C8%20%20c1.846%2C0%2C3.542-0.634%2C4.898-1.688l5.395%2C5.395C32.488%2C33.902%2C32.744%2C34%2C33%2C34s0.512-0.098%2C0.707-0.293%20%20C34.098%2C33.316%2C34.098%2C32.684%2C33.707%2C32.293z%20M16%2C22c0-3.309%2C2.691-6%2C6-6s6%2C2.691%2C6%2C6s-2.691%2C6-6%2C6S16%2C25.309%2C16%2C22z%22/%3E%0A%3C/g%3E%3C/svg%3E);
-        background-size: 32px 32px;
-        background-repeat: no-repeat;
-        height: 32px;
-        width: 32px;
-      }
       .label-switch {
         border-radius: 32px;
         cursor: pointer;
@@ -172,7 +167,6 @@
       }
       .label-switch input[type="checkbox"] + .switch {
         background-color: #f8f8f8;
-        background-image: linear-gradient(180deg,#f8f8f8,#f1f1f1);
         border: 1px solid #c6c6c6;
         border-radius: 32px;
         cursor: pointer;
@@ -191,7 +185,6 @@
         bottom: 0;
         left: 2px;
         background-color: #f8f8f8;
-        background-image: linear-gradient(180deg,#fff,#f8f8f8);
         border-radius: 32px;
         content: '';
         height: 28px;
@@ -279,10 +272,10 @@
     </style>
   </head>
   <body>
-    <h1>
-      <span>SEO Scribe</span>
-    </h1>
     <aside>
+      <h1>
+        <span>SEO Scribe</span>
+      </h1>
       <div>
         <label for="keyword">Keyword</label>
         <input id="keyword" type="text" tabindex="2" placeholder="Enter keyword" pattern=".{1,}" required>
@@ -369,7 +362,7 @@
         var btn_exp_html = doc.getElementById('exp_htm');
         var font = doc.createElement('link');
         var chk_nt_md = doc.getElementById('night_mode');
-        var k = keyword.value;
+        var k = keyword.value.toLowerCase();
         var kc;
         var rc;
         var rel_words;
@@ -419,7 +412,7 @@
         doc.head.appendChild(font);
 
         function startSEOScribe(){
-          k = keyword.value;
+          k = keyword.value.toLowerCase();
           rel_words = [];
 
           /*
@@ -447,123 +440,168 @@
           }
 
           getRelatedWords();
+        }
 
-          function checkContent(){
-            var c_words = !!content.value ? content.value.split(' ') : [];
-            var c_paras = !!content.value ? content.value.split('\n') : [];
-            var c_count = !!content.value ? content.value.match(/\S+/g).length : 0;
+        function checkContent(){
+          var c_words = !!content.value ? content.value.split(' ') : [];
+          var c_paras = !!content.value ? content.value.split('\n') : [];
+          var c_count = !!content.value && content.value.match(/\S+/g) ? content.value.match(/\S+/g).length : 0;
 
-            localStorage.setItem('autosaved_txt', content.value);
+          localStorage.setItem('autosaved_txt', content.value);
 
-            // no text entered? exit function
-            if(!content.value){
-              return;
-            }
+          // update word count
+          wc.value = c_count;
+          adjustWordCountColor(wc.value, wc);
 
-            // update word count
-            wc.value = c_count;
+          // prime/overwrite keyword, related word and first para outputs
+          kc = 0;
+          rc = 0;
+          kd.value = '0%';
+          rel_d.value = '0%';
+          kfp.value = 'No';
 
-            // prime/overwrite keyword, related word and first para outputs
-            kc = 0;
-            rc = 0;
-            kd.value = 0;
-            rel_d.value = 0;
-            kfp.value = 'No';
+          // no text entered? exit function
+          if(!content.value){
+            return;
+          }
 
-            if(c_paras.length > 0){
-              /*
-                if there are multiple paragraphs (newlines)
-                  check if the keyword appears in the first paragraph string
-              */
-              c_paras[0].split(' ').forEach(function(word){
-                if(word.trim() === k){
-                  kfp.value = 'Yes';
-                }
-              });
+          if(c_paras.length > 0){
+            /*
+              if there are multiple paragraphs (newlines)
+                check if the keyword appears in the first paragraph string
+            */
+            c_paras[0].split(' ').forEach(function(word){
+              if(word.trim() === k){
+                kfp.value = 'Yes';
+              }
+            });
 
-              /*
-                for each paragraph
-                  split the paragraph string into words
-                    for each word
-                      match to keyword
-                      or related word
-                        calculate keyword/related word density
-                          update outputs
-              */
-              c_paras.forEach(function(para){
-                para.split(' ').forEach(function(word){
-                  if(clean(word) === clean(k) || clean(word) === clean(k) + 's'){
-                    kc++;
-                    kd.value = (kc / c_count * 100 << 0) + '%';
-                  } else {
-                    rel_words.forEach(function(rel_word){
-                      if(clean(word) === clean(rel_word) || clean(word) === clean(rel_word) + 's'){
-                        rc++;
-                        rel_d.value = (rc / c_count * 100 << 0) + '%';
-                      }
-                    });
-                  }
-                });
-              });
-            } else {
-
-              /*
-                if no paragraphs
-                  split the string into words
-                    for each word
-                      match to keyword
-                      or related word
-                        calculate keyword/related word density
-                          update ouputs
-              */
-              c_words.forEach(function(word){
+            /*
+              for each paragraph
+                split the paragraph string into words
+                  for each word
+                    match to keyword
+                    or related word
+                      calculate keyword/related word density
+                        update outputs
+            */
+            c_paras.forEach(function(para){
+              para.split(' ').forEach(function(word){
                 if(clean(word) === clean(k) || clean(word) === clean(k) + 's'){
                   kc++;
-                  kd.value = (kc / c_count * 100 << 0) + '%';
                 } else {
                   rel_words.forEach(function(rel_word){
                     if(clean(word) === clean(rel_word) || clean(word) === clean(rel_word) + 's'){
                       rc++;
-                      rel_d.value = (rc / c_count * 100 << 0) + '%';
                     }
                   });
                 }
+                kd.value = (kc / c_count * 100 << 0) + '%';
+                rel_d.value = (rc / c_count * 100 << 0) + '%';
               });
-            }
-          }
+            });
+          } else {
 
-          function clean(word){
             /*
-              if `word` parameter is a string, wipe punctuation barring quotation marks/apostrophes
-              return cleaned `word`
+              if no paragraphs
+                split the string into words
+                  for each word
+                    match to keyword
+                    or related word
+                      calculate keyword/related word density
+                        update ouputs
             */
-            if(typeof word === 'string'){
-              return word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'');
-            }
-            return word;
-          }
-
-          function getRelatedWords(){
-            var xhr = new XMLHttpRequest();
-            var qs = k.split(' ').length > 1 ? k.split(' ').join('+') : k;
-
-            xhr.open('GET', 'http://api.datamuse.com/words?ml=' + qs, true);
-            xhr.responseType = 'json';
-
-            xhr.onload = function(){
-              if(xhr.readyState = 4 && xhr.status >= 200 && xhr.status < 300){
-                rel_words = xhr.response.map(function(datum){
-                  return datum.word;
+            c_words.forEach(function(word){
+              if(clean(word) === clean(k) || clean(word) === clean(k) + 's'){
+                kc++;
+              } else {
+                rel_words.forEach(function(rel_word){
+                  if(clean(word) === clean(rel_word) || clean(word) === clean(rel_word) + 's'){
+                    rc++;
+                  }
                 });
               }
-            };
-
-            xhr.onerror = xhr.onabort = xhr.ontimeout = function(){
-              console.error('There was an error with the request: ' + xhr.status);
-            };
-
-            xhr.send(null);
+              kd.value = (kc / c_count * 100 << 0) + '%';
+              rel_d.value = (rc / c_count * 100 << 0) + '%';
+            });
           }
+          adjustDensityColor(kc / c_count * 100 << 0, kd);
+          adjustDensityColor(rc / c_count * 100 << 0, rel_d);
+        }
+
+        function adjustDensityColor(val, el){
+          el.style.width = val + '%';
+          if(val >= 15 && val > 14){
+            el.style.borderColor = 'rgba(244,67,54,.7)';
+          }
+          else if(val < 14 && val >= 6 && val > 0){
+            el.style.borderColor = 'rgba(255,138,34,.7)';
+          }
+          else if(val <= 5 && val >= 4 && val > 0){
+            el.style.borderColor = 'rgba(255,204,0,.7)';
+          }
+          else if(val < 4 && val > 0){
+            el.style.borderColor = 'rgba(154,205,50,.7)';
+          }
+          else {
+            el.style.borderColor = 'rgba(244,67,54,.7)';
+          }
+        }
+
+        function adjustWordCountColor(val, el){
+          el.style.width = val <= 300 ? val / 3 + '%' : '100%';
+          if(val > 299){
+            el.style.borderColor = 'rgba(154,205,50,.7)';
+          }
+          else if(val <= 299 && val > 199){
+            el.style.borderColor = 'rgba(255,204,0,.7)';
+          }
+          else if(val <= 199 && val > 49){
+            el.style.borderColor = 'rgba(255,138,34,.7)';
+          }
+          else if(val <= 49){
+            el.style.borderColor = 'rgba(244,67,54,.7)';
+          }
+          else {
+            el.style.borderColor = 'rgba(244,67,54,.7)';
+          }
+        }
+
+        function clean(word){
+          /*
+            if `word` parameter is a string, wipe punctuation barring quotation marks/apostrophes
+            return cleaned `word`
+          */
+          if(typeof word === 'string'){
+            return word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'').toLowerCase();
+          }
+          return word;
+        }
+
+        function getRelatedWords(){
+          var xhr = new XMLHttpRequest();
+          var qs = k.split(' ').length > 1 ? k.split(' ').join('+') : k;
+
+          xhr.open('GET', 'http://api.datamuse.com/words?ml=' + qs, true);
+          xhr.responseType = 'json';
+
+          xhr.onload = function(){
+            if(xhr.readyState = 4 && xhr.status >= 200 && xhr.status < 300){
+              rel_words = xhr.response.map(function(datum){
+                return datum.word;
+              });
+            }
+          };
+
+          xhr.onerror = xhr.onabort = xhr.ontimeout = function(){
+            console.error('There was an error with the request: ' + xhr.status);
+          };
+
+          xhr.send(null);
+        }
+
+        function getReadabilityScore(){
+
         }
 
         function saveToStorage(){
