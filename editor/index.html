@@ -50,6 +50,9 @@
         position: relative;
         padding: 0 0 1rem 0;
       }
+      aside {
+        overflow-x: hidden;
+      }
       main {
         position: absolute;
         top: 0;
@@ -363,170 +366,110 @@
         var font = doc.createElement('link');
         var chk_nt_md = doc.getElementById('night_mode');
         var k = keyword.value.toLowerCase();
-        var kc;
-        var rc;
-        var rel_words;
+        var kc = 0;
+        var rc = 0;
+        var rel_words = [];
+        var lsi_words = [];
 
-        if('localStorage' in win){
-          btn_save.onclick = saveToStorage;
-          chk_nt_md.onclick = storeNightMode;
+        initApp();
+        eventWireUp();
 
-          if(localStorage.getItem('autosaved_kw') || typeof localStorage.getItem('autosaved_kw') !== 'undefined'){
-            keyword.value = localStorage.getItem('autosaved_kw');
+        function initApp(){
+          if('localStorage' in win){
+            if(localStorage.getItem('autosaved_kw') || typeof localStorage.getItem('autosaved_kw') !== 'undefined'){
+              keyword.value = localStorage.getItem('autosaved_kw');
+            }
+
+            if(localStorage.getItem('autosaved_txt') || typeof localStorage.getItem('autosaved_txt') !== 'undefined'){
+              content.value = localStorage.getItem('autosaved_txt');
+            }
+
+            if(!localStorage.getItem('night_mode') || typeof localStorage.getItem('night_mode') === 'undefined'){
+              storeNightMode();
+
+            } else if(localStorage.getItem('night_mode') !== 'false'){
+              chk_nt_md.checked = !0;
+              setNightMode();
+
+            } else {
+              setNightMode();
+            }
           }
 
-          if(localStorage.getItem('autosaved_txt') || typeof localStorage.getItem('autosaved_txt') !== 'undefined'){
-            content.value = localStorage.getItem('autosaved_txt');
+          if(keyword.value){
+            startSEOScribe();
           }
 
-          if(!localStorage.getItem('night_mode') || typeof localStorage.getItem('night_mode') === 'undefined'){
-            storeNightMode();
-
-          } else if(localStorage.getItem('night_mode') !== 'false'){
-            chk_nt_md.checked = !0;
-            setNightMode();
-
-          } else {
-            setNightMode();
-
+          if(!('URL' in win) && 'webkitURL' in win){
+            win.URL = win.webkitURL;
           }
+
+          font.href = 'https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext';
+          font.rel = 'stylesheet';
+          doc.head.appendChild(font);
         }
 
-        if(!('URL' in win) && 'webkitURL' in win){
-          win.URL = win.webkitURL;
+        function eventWireUp(){
+          win.addEventListener('load', function(){
+            doc.documentElement.setAttribute('data-font-loaded', !0);
+          }, false);
+          win.addEventListener('unload', saveToStorage, false);
+          keyword.addEventListener('blur', startSEOScribe, false);
+          content.addEventListener('blur', checkContent, false);
+          content.addEventListener('keydown', rebounce(checkContent), false);
+          btn_exp_txt.addEventListener('click', exportText, false);
+          btn_exp_html.addEventListener('click', exportText, false);
+          btn_save.addEventListener('click', saveToStorage, false);
+          chk_nt_md.addEventListener('click', storeNightMode, false);
         }
-
-        win.onload = function(){
-          doc.documentElement.setAttribute('data-font-loaded',!0);
-        };
-
-        if(keyword.value){
-          startSEOScribe();
-        }
-
-        keyword.onblur = startSEOScribe;
-        btn_exp_txt.onclick = btn_exp_html.onclick = exportText;
-
-        font.href = 'https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext';
-        font.rel = 'stylesheet';
-        doc.head.appendChild(font);
 
         function startSEOScribe(){
           k = keyword.value.toLowerCase();
           rel_words = [];
-
-          /*
-            store keyword
-          */
           localStorage.setItem('autosaved_kw', k);
-
-          /*
-            if keyword is empty, don't go further
-            and don't try to check for related words
-          */
-          if(!k) {
-            return;
-          }
-
-          /*
-            attach event handlers if not already attached
-          */
-          if(!content.onblur){
-            content.onblur = checkContent;
-          }
-
-          if(!content.onkeyup){
-            content.onkeyup = rebounce(checkContent);
-          }
-
+          if(!k) return;
           getRelatedWords();
         }
 
         function checkContent(){
-          var c_words = !!content.value ? content.value.split(' ') : [];
           var c_paras = !!content.value ? content.value.split('\n') : [];
-          var c_count = !!content.value && content.value.match(/\S+/g) ? content.value.match(/\S+/g).length : 0;
+          var w_count = !!content.value && content.value.match(/\S+/g) ? content.value.match(/\S+/g).length : 0;
 
           localStorage.setItem('autosaved_txt', content.value);
 
-          // update word count
-          wc.value = c_count;
+          wc.value = w_count;
           adjustWordCountColor(wc.value, wc);
 
-          // prime/overwrite keyword, related word and first para outputs
           kc = 0;
           rc = 0;
           kd.value = '0%';
           rel_d.value = '0%';
           kfp.value = 'No';
 
-          // no text entered? exit function
-          if(!content.value){
-            return;
-          }
+          if(!k)return;
 
           if(c_paras.length > 0){
-            /*
-              if there are multiple paragraphs (newlines)
-                check if the keyword appears in the first paragraph string
-            */
-            c_paras[0].split(' ').forEach(function(word){
-              if(word.trim() === k){
-                kfp.value = 'Yes';
-              }
-            });
-
-            /*
-              for each paragraph
-                split the paragraph string into words
-                  for each word
-                    match to keyword
-                    or related word
-                      calculate keyword/related word density
-                        update outputs
-            */
-            c_paras.forEach(function(para){
-              para.split(' ').forEach(function(word){
-                if(clean(word) === clean(k) || clean(word) === clean(k) + 's'){
-                  kc++;
-                } else {
-                  rel_words.forEach(function(rel_word){
-                    if(clean(word) === clean(rel_word) || clean(word) === clean(rel_word) + 's'){
-                      rc++;
-                    }
-                  });
-                }
-                kd.value = (kc / c_count * 100 << 0) + '%';
-                rel_d.value = (rc / c_count * 100 << 0) + '%';
-              });
-            });
-          } else {
-
-            /*
-              if no paragraphs
-                split the string into words
-                  for each word
-                    match to keyword
-                    or related word
-                      calculate keyword/related word density
-                        update ouputs
-            */
-            c_words.forEach(function(word){
-              if(clean(word) === clean(k) || clean(word) === clean(k) + 's'){
-                kc++;
-              } else {
-                rel_words.forEach(function(rel_word){
-                  if(clean(word) === clean(rel_word) || clean(word) === clean(rel_word) + 's'){
-                    rc++;
-                  }
-                });
-              }
-              kd.value = (kc / c_count * 100 << 0) + '%';
-              rel_d.value = (rc / c_count * 100 << 0) + '%';
-            });
+            kfp.value = !!matchString(c_paras[0], k) ? 'Yes' : 'No';
           }
-          adjustDensityColor(kc / c_count * 100 << 0, kd);
-          adjustDensityColor(rc / c_count * 100 << 0, rel_d);
+
+          kc = matchString(content.value, k);
+          rel_words.forEach(function(rel_w){
+            rc += matchString(content.value, rel_w);
+          });
+
+          kd.value = (kc / w_count * 100 << 0) + '%';
+          rel_d.value = (rc / w_count * 100 << 0) + '%';
+          adjustDensityColor(kc / w_count * 100 << 0, kd);
+          adjustDensityColor(rc / w_count * 100 << 0, rel_d);
+        }
+
+        function matchString(string, to_match){
+          var rgx = new RegExp('\\b' + to_match + '\\b', 'gi');
+          var idx = string.match(rgx);
+          if(idx && idx.length > 0){
+            return idx.length;
+          }
+          return 0;
         }
 
         function adjustDensityColor(val, el){
@@ -568,10 +511,6 @@
         }
 
         function clean(word){
-          /*
-            if `word` parameter is a string, wipe punctuation barring quotation marks/apostrophes
-            return cleaned `word`
-          */
           if(typeof word === 'string'){
             return word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'').toLowerCase();
           }
@@ -580,7 +519,16 @@
 
         function getRelatedWords(){
           var xhr = new XMLHttpRequest();
-          var qs = k.split(' ').length > 1 ? k.split(' ').join('+') : k;
+          var prep, qs;
+
+          if(k.split(' ').length > 1){
+            prep = k.split(' ').map(function(word){
+              return win.encodeURIComponent(clean(word));
+            });
+            qs = prep.join('+');
+          } else {
+            qs = k;
+          }
 
           xhr.open('GET', 'http://api.datamuse.com/words?ml=' + qs, true);
           xhr.responseType = 'json';
@@ -590,6 +538,7 @@
               rel_words = xhr.response.map(function(datum){
                 return datum.word;
               });
+              checkContent();
             }
           };
 
@@ -600,6 +549,10 @@
           xhr.send(null);
         }
 
+        function getLSIWords(){
+
+        }
+
         function getReadabilityScore(){
 
         }
@@ -607,21 +560,15 @@
         function saveToStorage(){
           if('localStorage' in win){
             localStorage.setItem('autosaved_txt', content.value);
+            localStorage.setItem('autosaved_kw', k);
           }
         }
 
         function exportText(){
           var txt_type = 'text/' + ((event.target || this).getAttribute('data-txt-type') || 'plain');
 
-          /*
-            create an anchor which will be clicked (virtually) to initiate direct blob download
-          */
           var dl_link = doc.createElement('a');
 
-          /*
-            if html mime type is set on exporting event target
-              wrap content with doctype and basic html elements
-          */
           var _blob = txt_type === 'text/html'
                     ? '<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>'
                     : content.value;
@@ -649,6 +596,10 @@
           return 'data:' + mimetype + ',' + win.encodeURIComponent(data);
         }
 
+        function exportRTF(){
+
+        }
+
         function exportWord(){
           /*
             to be continued
@@ -665,25 +616,14 @@
         }
 
         function storeNightMode(){
-          /*
-            initialise or otherwise overwrite localStorage
-          */
           localStorage.setItem('night_mode', chk_nt_md.checked);
           setNightMode();
         }
 
         function setNightMode(){
-          /*
-            switch off the lights
-              where localStorage is the source of truth
-          */
           doc.documentElement.setAttribute('data-night-mode', localStorage.getItem('night_mode') !== 'true' ? 'off' : 'on');
         }
 
-        /*
-          generic debouncer
-          using rAF because reasons
-        */
         function rebounce(f){
           var scheduled, context, args;
           return function(){
