@@ -2,9 +2,9 @@
 // http://jsfiddle.net/JamesMGreene/2b6Lc/
 function convertHtmlToRtf(html) {
   if (!html || !(typeof html === 'string' && html)) return null;
-
+  
   var tmpRichText, hasHyperlinks;
-  var richText = html;
+  var richText = html.replace(/^\s{8}|\s+$/mg, "").replace(/^\s+/, "").replace(/[ ]{4}/g, "  ");
 
   // Singleton tags
   richText = richText.replace(/<(?:hr)(?:\s+[^>]*)?\s*[\/]?>/ig, "{\\pard \\brdrb \\brdrs \\brdrw10 \\brsp20 \\par}\n{\\pard\\par}\n");
