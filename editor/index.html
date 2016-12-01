@@ -39,6 +39,10 @@
         transition: .3s cubic-bezier(.4,0,.2,1) -webkit-transform;
         transition: .3s cubic-bezier(.4,0,.2,1) transform;
       }
+      aside.in {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+      }
       h1 {
         position: relative;
         background: #eee;
@@ -136,7 +140,7 @@
       .exp:last-of-type {
         margin-right: 0;
       }
-      button {
+      aside button {
         display: block;
         background-color: #f8f8f8;
         background-image: linear-gradient(180deg,#f8f8f8,#f1f1f1);
@@ -154,12 +158,12 @@
         text-align: center;
         text-transform: uppercase;
       }
-      button:hover {
+      aside button:hover {
         border-color: #999;
         box-shadow: 0 1px 1px rgba(0,0,0,.2);
         color: #555;
       }
-      button:focus {
+      aside button:focus {
         border-color: rgb(63,81,181);
         box-shadow: 0 1px 1px rgba(63,81,181,.2);
         color: rgb(63,81,181);
@@ -290,18 +294,18 @@
         color: #ffcc00;
         border-color: #ffcc00;
       }
-      [data-night-mode="on"] button {
+      [data-night-mode="on"] aside button {
         background-color: #333;
         background-image: linear-gradient(180deg,#484848,#414141);
         border: 1px solid #333;
         color: #ccc;
       }
-      [data-night-mode="on"] button:hover {
+      [data-night-mode="on"] aside button:hover {
         border-color: #222;
         box-shadow: 0 1px 1px rgba(0,0,0,.2);
         color: #ccc;
       }
-      [data-night-mode="on"] button:focus {
+      [data-night-mode="on"] aside button:focus {
         border-color: #ffcc00;
         box-shadow: 0 1px 1px rgba(255, 204, 0, .2);
         color: #ffcc00;
@@ -330,6 +334,17 @@
       [data-night-mode="on"] h1:after {
         background: #444;
       }
+      #btn_menu {
+        position: fixed;
+        z-index: 100;
+        display: block;
+        width: 48px;
+        height: 48px;
+        top: 16px;
+        right: 8px;
+        border-radius: 50%;
+        font-size: 32px;
+      }
       @media screen and (min-width: 414px){
         aside {
           padding: 32px 32px 0 32px;
@@ -345,6 +360,9 @@
         aside {
           -webkit-transform: translateX(0);
           transform: translateX(0);
+        }
+        #btn_menu {
+          display: none;
         }
       }
       @media screen and (min-width: 768px) and (min-height: 580px){
@@ -442,6 +460,7 @@
       <textarea placeholder="Write here, in plain text or HTML.
 HTML will be detected automatically and additional ranking criteria will be displayed." tabindex="1" minlength="1" required></textarea>
     </main>
+    <button id="btn_menu">&equiv;</button>
     <script>
       ;(function(win,doc){
         var keyword = doc.getElementById('keyword');
@@ -464,6 +483,8 @@ HTML will be detected automatically and additional ranking criteria will be disp
         var no_lists = doc.getElementById('no_lists');
         var no_imgs = doc.getElementById('no_imgs');
         var no_img_alts = doc.getElementById('no_img_alts');
+        var btn_menu = doc.getElementById('btn_menu');
+        var sidebar = doc.getElementsByTagName('aside')[0];
         var font = doc.createElement('link');
         var k = keyword.value.toLowerCase();
         var kc = 0;
@@ -520,6 +541,10 @@ HTML will be detected automatically and additional ranking criteria will be disp
           content.addEventListener('keydown', rebounce(checkContent), false);
           btn_exp_txt.addEventListener('click', exportText, false);
           btn_exp_html.addEventListener('click', exportText, false);
+          btn_menu.addEventListener('click',function(){
+            sidebar.classList.toggle('in');
+            btn_menu.textContent = sidebar.classList.contains('in') ? '\u00d7' : '\u2261';
+          },false);
 
           if(storage_ok){
             win.addEventListener('unload', saveToStorage, false);
