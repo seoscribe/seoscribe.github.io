@@ -36,6 +36,7 @@
         z-index: 10;
         opacity: 0;
         visibility: hidden;
+        box-shadow: 0 10px 100px rgba(50,50,93,.1), 0 5px 35px rgba(50,50,93,.15), 0 0 15px rgba(0,0,0,.1);
         -webkit-transform: scale(0);
         transform: scale(0);
         transition: .3s cubic-bezier(.4,0,.2,1) opacity,.3s cubic-bezier(.4,0,.2,1) visibility;
@@ -49,9 +50,10 @@
       h1 {
         position: relative;
         background: #eee;
-        font-size: 32px;
+        font-size: 24px;
         font-weight: 700;
         letter-spacing: -2px;
+        line-height: 36px;
         color: #555;
         margin-bottom: 16px;
       }
@@ -73,6 +75,29 @@
       aside div {
         position: relative;
         padding: 0 0 16px 0;
+      }
+      #btn_menu {
+        position: absolute;
+        z-index: 100;
+        display: block;
+        width: 38px;
+        height: 38px;
+        top: 16px;
+        right: 8px;
+        font-size: 38px;
+        color: #666;
+      }
+      #btn_menu:after {
+        content:'\2261';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        line-height: 38px;
+      }
+      #btn_menu.close:after {
+        content:'\00D7';
       }
       main {
         position: absolute;
@@ -337,16 +362,8 @@
       [data-night-mode="on"] h1:after {
         background: #444;
       }
-      #btn_menu {
-        position: fixed;
-        z-index: 100;
-        display: block;
-        width: 48px;
-        height: 48px;
-        top: 16px;
-        right: 8px;
-        border-radius: 50%;
-        font-size: 32px;
+      [data-night-mode="on"] #btn_menu {
+        color: #bbb;
       }
       @media screen and (min-width: 414px){
         aside {
@@ -361,6 +378,7 @@
           right: 300px;
         }
         aside {
+          box-shadow: none;
           opacity: 1;
           visibility: visible;
           -webkit-transform: scale(1);
@@ -462,10 +480,10 @@
       </div>
     </aside>
     <main>
-      <textarea placeholder="Write here, in plain text or HTML.
+      <textarea placeholder="Write here, in plain text or HTML.&nbsp;
 HTML will be detected automatically and additional ranking criteria will be displayed." tabindex="1" minlength="1" required></textarea>
     </main>
-    <button id="btn_menu">&equiv;</button>
+    <button id="btn_menu"></button>
     <script>
       ;(function(win,doc){
         var keyword = doc.getElementById('keyword');
@@ -548,7 +566,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
           btn_exp_html.addEventListener('click', exportText, false);
           btn_menu.addEventListener('click',function(){
             sidebar.classList.toggle('in');
-            btn_menu.textContent = sidebar.classList.contains('in') ? '\u00d7' : '\u2261';
+            btn_menu.classList.toggle('close');
           },false);
 
           if(storage_ok){
