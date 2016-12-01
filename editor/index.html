@@ -3,6 +3,16 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+    <base href="https://seoscribe.net/">
+    <link rel="manifest" href="https://seoscribe.net/manifest.json">
+    <link rel="canonical" href="https://seoscribe.net">
+    <link rel="publisher" href="https://plus.google.com/+">
+    <link rel="icon" href="https://seoscribe.net/assets/img/favicon.ico">
+    <meta name="format-detection" content="telephone=no;email=no">
+    <meta name="MobileOptimized" content="width">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="referrer" content="origin">
+    <meta name="description" content="">
     <title>SEO Scribe &middot; the SEO Text Editor &middot; </title>
     <style>
       html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-webkit-font-smoothing:subpixel-antialiased;-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-overflow-scrolling:touch;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;touch-action:manipulation;font:normal normal 400 16px/1.2 Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,Helmet,Freesans,sans-serif}
@@ -73,10 +83,15 @@
         padding: 99px;
         background: #fff;
         width: 100%;
-        resize: none;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        max-width: 100%;
+        max-height: 100%;
         overflow-x: hidden;
         overflow-y: scroll;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        resize: none;
       }
       label[for] {
         display: block;
@@ -309,6 +324,7 @@
         background: #444;
       }
     </style>
+    <!--[if IE]><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--><!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><!--[if IE]><script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/2014.01.31/classList.min.js"></script><![endif]-->
   </head>
   <body>
     <aside>
@@ -369,6 +385,15 @@
       <div class="warning" id="no_links" hidden>
         Don't forget to include external links
       </div>
+      <div class="warning" id="no_lists" hidden>
+        Consider using lists in your content
+      </div>
+      <div class="warning" id="no_imgs" hidden>
+        Adding images can improve quality
+      </div>
+      <div class="warning" id="no_img_alts" hidden>
+        Images should have alternate text
+      </div>
       <div class="switch-row">
         <label for="night_mode">Night mode</label>
         <label class="label-switch">
@@ -406,6 +431,9 @@
         var sp_warn = doc.getElementById('sp_warn');
         var no_hdngs = doc.getElementById('no_hdngs');
         var no_links = doc.getElementById('no_links');
+        var no_lists = doc.getElementById('no_lists');
+        var no_imgs = doc.getElementById('no_imgs');
+        var no_img_alts = doc.getElementById('no_img_alts');
         var font = doc.createElement('link');
         var k = keyword.value.toLowerCase();
         var kc = 0;
@@ -509,6 +537,9 @@
           ss_warn.setAttribute('hidden','');
           no_hdngs.setAttribute('hidden','');
           no_links.setAttribute('hidden','');
+          no_lists.setAttribute('hidden','');
+          no_imgs.setAttribute('hidden','');
+          no_img_alts.setAttribute('hidden','');
 
           if(!k) return;
 
@@ -582,6 +613,24 @@
             no_links.setAttribute('hidden','');
           }
 
+          if(_doc.querySelectorAll('ul,ol').length < 1){
+            no_lists.removeAttribute('hidden');
+          } else {
+            no_lists.setAttribute('hidden','');
+          }
+
+          if(_doc.querySelectorAll('img[src]').length < 1){
+            no_imgs.removeAttribute('hidden');
+          } else {
+            no_imgs.setAttribute('hidden','');
+          }
+
+          if(_doc.querySelectorAll('img[src]').length > 0 && _doc.querySelectorAll('img[alt]').length < 1){
+            no_img_alts.removeAttribute('hidden');
+          } else {
+            no_img_alts.setAttribute('hidden','');
+          }
+
           kh.parentNode.removeAttribute('hidden');
           hc = 0;
 
@@ -630,17 +679,17 @@
         }
 
         function adjustWordCountColor(val, el){
-          el.style.width = val <= 300 ? val / 3 + '%' : '100%';
-          if(val > 299){
+          el.style.width = val <= 1000 ? val / 10 + '%' : '100%';
+          if(val > 399){
             el.style.borderColor = 'rgba(154,205,50,.7)';
           }
-          else if(val <= 299 && val > 199){
+          else if(val <= 399 && val > 299){
             el.style.borderColor = 'rgba(255,204,0,.7)';
           }
-          else if(val <= 199 && val > 49){
+          else if(val <= 299 && val > 199){
             el.style.borderColor = 'rgba(255,138,34,.7)';
           }
-          else if(val <= 49){
+          else if(val <= 199){
             el.style.borderColor = 'rgba(244,67,54,.7)';
           }
           else {
@@ -704,7 +753,7 @@
           wrds.forEach(function(wrd){
             syll += countSyllables(wrd);
           });
-          return (206 - 1.015 * (wrds.length / sntcs.length) - 84 * (syll / wrds.length)).toFixed(1);
+          return (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
         }
 
         function saveToStorage(){
