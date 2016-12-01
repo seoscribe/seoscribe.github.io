@@ -1,3 +1,5 @@
+// (c) James Greene
+// http://jsfiddle.net/JamesMGreene/2b6Lc/
 function convertHtmlToRtf(html) {
   if (!html || !(typeof html === 'string' && html)) return null;
 
