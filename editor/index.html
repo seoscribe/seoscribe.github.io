@@ -192,7 +192,7 @@
         margin: 0;
         padding: 0;
         position: relative;
-        transition: .3s cubic-bezier(.4,0,.2,1) all;
+        /*transition: .3s cubic-bezier(.4,0,.2,1) background-color;*/
         width: 52px;
         z-index: 0;
       }
@@ -208,7 +208,7 @@
         height: 28px;
         -webkit-transform: scale(1);
         transform: scale(1);
-        transition: .3s cubic-bezier(.4,0,.2,1) all;
+        /*transition: .3s cubic-bezier(.4,0,.2,1) transform;*/
         width: 48px;
         z-index: 1;
       }
@@ -225,11 +225,11 @@
         border-radius: 28px;
         box-shadow: 0 1px 3px rgba(0,0,0,.4);
         content: '';
-        transition: all 0.3s ease;
+        transition: left 0.3s ease;
         z-index: 2;
       }
       .label-switch input[type="checkbox"]:checked + .switch {
-        background: #ffcc00;
+        background: #333;
       }
       .label-switch input[type="checkbox"]:checked + .switch:before {
         -webkit-transform: scale(0);
@@ -244,7 +244,8 @@
       .warning {
         font-size: 12px;
         font-weight: 700;
-        background: rgba(244,67,54,.7);
+        color: #111;
+        background: rgba(255,204,0,.7);
         padding: 2px 4px;
         margin-bottom: 1px;
         border-radius: 2px;
@@ -276,7 +277,7 @@
       [data-night-mode="on"] button:hover {
         border-color: #222;
         box-shadow: 0 1px 1px rgba(0,0,0,.2);
-        color:#ccc;
+        color: #ccc;
       }
       [data-night-mode="on"] button:focus {
         border-color: #ffcc00;
@@ -353,7 +354,7 @@
       <div class="warning" id="ss_warn" hidden>
         Consider shortening some sentences
       </div>
-      <div class="warning" hidden>
+      <div class="warning" id="sp_warn" hidden>
         Consider breaking up long paragraphs
       </div>
       <div class="warning" hidden>
@@ -402,6 +403,7 @@
         var btn_exp_html = doc.getElementById('exp_htm');
         var chk_nt_md = doc.getElementById('night_mode');
         var ss_warn = doc.getElementById('ss_warn');
+        var sp_warn = doc.getElementById('sp_warn');
         var no_hdngs = doc.getElementById('no_hdngs');
         var no_links = doc.getElementById('no_links');
         var font = doc.createElement('link');
@@ -411,16 +413,18 @@
         var tc = 0;
         var hc = 0;
         var ssc = 0;
+        var spc = 0;
         var syll = 0;
         var rel_words = [];
         var lsi_words = [];
         var trn_words = ['I mean','above all','accordingly','as a consequence','actually','additionally','admittedly','after this','afterwards','albeit','all in all','all the same','also','alternatively','although','altogether','and yet','anyhow','anyway','as I have said','as a final point','as a matter of fact','as a result','as an illustration','as for','as has been mentioned','as has been noted','as long as','as was previously stated','as well','at any rate','at first','at last','be that as it may','because of the fact','before this','besides','briefly','but','but also','but even so','by the same token','by the way','by way of contrast','by way of example','concerning','consequently','considering','conversely','despite','due to the fact','either','either way','equally','ergo','especially','even if','even more','even though','eventually','finally','first of all','firstly','for a start','for as much as','for example','for fear','for instance','for one thing','for starters','for the purpose of','for the simple reason that','for this reason','further','furthermore','given that','given these points','granted that','granting that','hence','however','if not','if so','in a like manner','in a word','in addition to','in all honesty','in any case','in any event','in as much as','in case','in conclusion','in consequence','in contrast','in either case','in either event','in fact','in light of the fact','in order that','in order to','in other words','in particular','in short','in spite of','in summary','in that case','in that since','in the end','in the event that','in the first place','in the hope that','in the same way','in view of the fact','incidentally','including','indeed','initially','instead','last but not least','lastly','lest','let alone','likewise','long story short','more importantly','moreover','much less','namely','neither','nevertheless','next','nonetheless','nor','not only','not to mention','notably','notwithstanding','on the condition that','on the other hand','on the subject of','on the whole','only if','or at least','otherwise','overall','owing to the fact','particularly','previously','provided that','providing that','rather','regarding','regardless','secondly','seeing that','similarly','so as to','so long as','so much so that','so that','speaking of which','specifically','still','subsequently','such as','that being the case','that is to say','therefore','thirdly','though','thus','to be brief','to begin with','to change the topic','to conclude','to get back to the point','to illustrate','to put it another way','to put it briefly','to resume','to return to the subject','to say nothing of','to start with','to sum up','to summarize','to tell the truth','to the end that','under those circumstances','unless,what is more','whatever happens','when in fact','whereas','whichever happens','while','with regards to','with this in mind'];
+        var storage_ok = 'localStorage' in win;
 
         initApp();
         eventWireUp();
 
         function initApp(){
-          if('localStorage' in win){
+          if(storage_ok){
             if(win.localStorage.getItem('autosaved_kw') || typeof win.localStorage.getItem('autosaved_kw') !== 'undefined'){
               keyword.value = win.localStorage.getItem('autosaved_kw');
             }
@@ -453,21 +457,26 @@
           win.addEventListener('load', function(){
             doc.documentElement.setAttribute('data-font-loaded', !0);
           }, false);
-          win.addEventListener('unload', saveToStorage, false);
           keyword.addEventListener('blur', startSEOScribe, false);
           content.addEventListener('blur', checkContent, false);
           content.addEventListener('keydown', rebounce(checkContent), false);
           btn_exp_txt.addEventListener('click', exportText, false);
           btn_exp_html.addEventListener('click', exportText, false);
-          btn_save.addEventListener('click', saveToStorage, false);
-          chk_nt_md.addEventListener('click', storeNightMode, false);
+
+          if(storage_ok){
+            win.addEventListener('unload', saveToStorage, false);
+            btn_save.addEventListener('click', saveToStorage, false);
+            chk_nt_md.addEventListener('click', storeNightMode, false);
+          }
         }
 
         function startSEOScribe(){
           k = keyword.value.toLowerCase();
           rel_words = [];
-          win.localStorage.setItem('autosaved_kw', k);
+
+          if(storage_ok) win.localStorage.setItem('autosaved_kw', k);
           if(!k) return;
+
           getRelatedWords();
         }
 
@@ -476,10 +485,11 @@
           var _sntcs = !!content.value && content.value.match(/[^\.!\?]+[\.!\?]+/g) ? content.value.match(/[^\.!\?]+[\.!\?]+/g) : [];
           var _wrds = !!content.value && content.value.match(/\w+/gi) ? content.value.match(/\w+/gi) : [];
           var _html = !!content.value && content.value.match(/<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
-          var w_count = !!content.value && content.value.match(/\S+/g) ? content.value.match(/\S+/g).length : 0;
-          var s_count = !!content.value && content.value.match(/[^\.!\?]+[\.!\?]+/g) ? content.value.match(/[^\.!\?]+[\.!\?]+/g).length : 0;
-          var fks =
-          win.localStorage.setItem('autosaved_txt', content.value);
+          var p_count = _paras.length;
+          var s_count = _sntcs.length;
+          var w_count = _wrds.length;
+
+          if(storage_ok) win.localStorage.setItem('autosaved_txt', content.value);
 
           wc.value = w_count;
           adjustWordCountColor(wc.value, wc);
@@ -488,6 +498,7 @@
           rc = 0;
           tc = 0;
           ssc = 0;
+          spc = 0;
           syll = 0;
           kd.textContent = '0%';
           rel_d.textContent = '0%';
@@ -509,6 +520,18 @@
 
           if(_paras.length > 0){
             kfp.textContent = !!matchString(_paras[0], k) ? 'Yes' : 'No';
+
+            _paras.forEach(function(para){
+              if(para.split(' ').length < 200){
+                spc++;
+              }
+
+              if((spc / p_count * 100 << 0) < 80){
+                sp_warn.removeAttribute('hidden');
+              } else {
+                sp_warn.setAttribute('hidden','');
+              }
+            });
           }
 
           if(_sntcs.length > 0){
@@ -536,7 +559,7 @@
           adjustDensityColor(rc / w_count * 100 << 0, rel_d);
 
           if(!content.value) return;
-          r_ease.textContent = getReadabilityScore(_sntcs,_wrds);
+          r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
 
           if(!_html) return;
           checkHTML();
@@ -666,13 +689,13 @@
         }
 
         function countSyllables(word){
-          var _wrd = word.toLowerCase();
+          var _wrd = clean(word).toLowerCase();
 
           if(word.length <= 3) return 1;
 
           _wrd = _wrd.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
           _wrd = _wrd.replace(/^y/, '');
-          return _wrd.match(/[aeiouy]{1,2}/g).length;
+          return (_wrd.match(/[aeiouy]{1,2}/g) ? _wrd.match(/[aeiouy]{1,2}/g).length : 1);
         }
 
         function getReadabilityScore(sntcs, wrds){
@@ -685,7 +708,7 @@
         }
 
         function saveToStorage(){
-          if('localStorage' in win){
+          if(storage_ok){
             win.localStorage.setItem('autosaved_txt', content.value);
             win.localStorage.setItem('autosaved_kw', k);
           }
@@ -735,12 +758,16 @@
         }
 
         function storeNightMode(){
-          win.localStorage.setItem('night_mode', chk_nt_md.checked);
-          setNightMode();
+          if(storage_ok){
+            win.localStorage.setItem('night_mode', chk_nt_md.checked);
+            setNightMode();
+          }
         }
 
         function setNightMode(){
-          doc.documentElement.setAttribute('data-night-mode', win.localStorage.getItem('night_mode') !== 'true' ? 'off' : 'on');
+          if(storage_ok){
+            doc.documentElement.setAttribute('data-night-mode', win.localStorage.getItem('night_mode') !== 'true' ? 'off' : 'on');
+          }
         }
 
         function rebounce(f){
