@@ -29,8 +29,15 @@
         top: 0;
         bottom: 0;
         width: 300px;
-        padding: 32px 32px 0 32px;
+        padding: 16px 16px 0 16px;
         overflow-y: scroll;
+        overflow-x: hidden;
+        background: #eee;
+        z-index: 10;
+        -webkit-transform: translateX(300px);
+        transform: translateX(300px);
+        transition: .3s cubic-bezier(.4,0,.2,1) -webkit-transform;
+        transition: .3s cubic-bezier(.4,0,.2,1) transform;
       }
       h1 {
         position: relative;
@@ -60,15 +67,12 @@
         position: relative;
         padding: 0 0 16px 0;
       }
-      aside {
-        overflow-x: hidden;
-      }
       main {
         position: absolute;
         top: 0;
         left: 0;
         bottom: 0;
-        right: 300px;
+        right: 0;
       }
       main textarea[disabled] {
         opacity: 1;
@@ -80,7 +84,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        padding: 99px;
+        padding: 16px;
         background: #fff;
         width: 100%;
         height: 100%;
@@ -270,6 +274,9 @@
         background: #444;
         color: #fff;
       }
+      [data-night-mode="on"] aside {
+        background: #444;
+      }
       [data-night-mode="on"] label[for],
       [data-night-mode="on"] input[type="text"]{
         color: #eee;
@@ -322,6 +329,28 @@
       }
       [data-night-mode="on"] h1:after {
         background: #444;
+      }
+      @media screen and (min-width: 414px){
+        aside {
+          padding: 32px 32px 0 32px;
+        }
+        main textarea {
+          padding: 32px;
+        }
+      }
+      @media screen and (min-width: 737px){
+        main {
+          right: 300px;
+        }
+        aside {
+          -webkit-transform: translateX(0);
+          transform: translateX(0);
+        }
+      }
+      @media screen and (min-width: 768px) and (min-height: 580px){
+        main textarea {
+          padding: 99px;
+        }
       }
     </style>
     <!--[if IE]><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--><!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><!--[if IE]><script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/2014.01.31/classList.min.js"></script><![endif]-->
@@ -410,7 +439,8 @@
       </div>
     </aside>
     <main>
-      <textarea placeholder="Write plain text or HTML" tabindex="1" minlength="1" required></textarea>
+      <textarea placeholder="Write here, in plain text or HTML.
+HTML will be detected automatically and additional ranking criteria will be displayed." tabindex="1" minlength="1" required></textarea>
     </main>
     <script>
       ;(function(win,doc){
@@ -758,19 +788,32 @@
           return (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
         }
 
-        function saveToStorage(){
+        function saveToStorage(e){
+          var evt = (e.target || this);
           if(storage_ok){
             win.localStorage.setItem('autosaved_txt', content.value);
             win.localStorage.setItem('autosaved_kw', k);
+            evt.textContent = 'Saved';
+            evt.setAttribute('disabled','');
+            win.setTimeout(function(){
+              evt.textContent = 'Save';
+              evt.removeAttribute('disabled');
+            },3e3);
           }
         }
 
-        function exportText(){
+        function exportText(e){
+          var evt = (e.target || this);
           var txt_type = 'text/' + ((event.target || this).getAttribute('data-txt-type') || 'plain');
           var dl_link = doc.createElement('a');
           var _blob = txt_type === 'text/html'
                     ? '<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>'
                     : content.value;
+
+          evt.setAttribute('disabled','');
+          win.setTimeout(function(){
+            evt.removeAttribute('disabled');
+          },2e3);
 
           dl_link.download = (keyword.value || 'untitled')
                            + '-'
