@@ -549,6 +549,8 @@
             rc += matchString(content.value, rel_w);
           });
 
+          // 10% max for passive voice
+
           if(_paras.length > 0){
             kfp.textContent = !!matchString(_paras[0], k) ? 'Yes' : 'No';
 
