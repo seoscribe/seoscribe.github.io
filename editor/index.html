@@ -1,1 +1,767 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+    <title>SEO Scribe &middot; the SEO Text Editor &middot; </title>
+    <style>
+      html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-webkit-font-smoothing:subpixel-antialiased;-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-overflow-scrolling:touch;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;touch-action:manipulation;font:normal normal 400 16px/1.2 Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,Helmet,Freesans,sans-serif}
+      *,:before,:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;touch-action:manipulation;margin:0;padding:0;border:0;font:inherit}:active,:focus{outline:0}article,footer,header,main,nav,section,video{display:block}
+      html,body{height:100%;background:#eee;overflow-x:hidden;overflow-y:hidden}
+      a{-webkit-text-decoration-skip:objects;text-decoration:none}button,input,textarea{-webkit-appearance:none;-webkit-border-radius:0;border-radius:0;background:0 0}button,img,video{-webkit-touch-callout:none}button,a,img,video{-webkit-user-select:none;-moz-user-select:none}button,a{color:inherit;cursor:pointer}textarea{resize:none}[disabled]{opacity:.6;cursor:not-allowed}[hidden],video::-webkit-media-controls,video::-webkit-media-controls-play-button,video::-webkit-media-controls-volume-slider,video::-webkit-media-controls-mute-button,video::-webkit-media-controls-timeline,video::-webkit-media-controls-current-time-display{display:none}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#111;-webkit-border-radius:4px;border-radius:4px}::-webkit-scrollbar-track{background-color:transparent;background:rgba(0,0,0,0)}::selection{background:#111;color:#fff}::-moz-selection{background:#111;color:#fff}
+      html[data-font-loaded="true"] {
+        font-family: Karla,Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,Helmet,Freesans,sans-serif;
+      }
+      aside {
+        -webkit-overflow-scrolling: touch;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 300px;
+        padding: 32px 32px 0 32px;
+        overflow-y: scroll;
+      }
+      h1 {
+        position: relative;
+        background: #eee;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -2px;
+        color: #555;
+        margin-bottom: 16px;
+      }
+      h1:before {
+        content:'';
+        display: block;
+        position: absolute;
+        top: 2px;
+        left: -3px;
+        background-image:url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2248px%22%20height%3D%2248px%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cg%3E%0A%3Cpath%20fill%3D%22%23555555%22%20d%3D%22M41%2C47H7c-1.105%2C0-2-0.895-2-2V3c0-1.105%2C0.895-2%2C2-2l24%2C0l12%2C12v32C43%2C46.105%2C42.105%2C47%2C41%2C47z%22/%3E%0A%3Cpath%20fill%3D%22%23777777%22%20d%3D%22M31%2C1v10c0%2C1.105%2C0.895%2C2%2C2%2C2h10L31%2C1z%22/%3E%0A%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M33.707%2C32.293l-5.395-5.395C29.366%2C25.542%2C30%2C23.846%2C30%2C22c0-4.411-3.589-8-8-8s-8%2C3.589-8%2C8s3.589%2C8%2C8%2C8%20%20c1.846%2C0%2C3.542-0.634%2C4.898-1.688l5.395%2C5.395C32.488%2C33.902%2C32.744%2C34%2C33%2C34s0.512-0.098%2C0.707-0.293%20%20C34.098%2C33.316%2C34.098%2C32.684%2C33.707%2C32.293z%20M16%2C22c0-3.309%2C2.691-6%2C6-6s6%2C2.691%2C6%2C6s-2.691%2C6-6%2C6S16%2C25.309%2C16%2C22z%22/%3E%0A%3C/g%3E%3C/svg%3E);
+        background-size: 32px 32px;
+        background-repeat: no-repeat;
+        height: 32px;
+        width: 32px;
+      }
+      h1 span {
+        margin-left: 34px;
+      }
+      aside div {
+        position: relative;
+        padding: 0 0 16px 0;
+      }
+      aside {
+        overflow-x: hidden;
+      }
+      main {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 300px;
+      }
+      main textarea[disabled] {
+        opacity: 1;
+      }
+      main textarea {
+        -webkit-overflow-scrolling: touch;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 99px;
+        background: #fff;
+        width: 100%;
+        resize: none;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      label[for] {
+        display: block;
+        position: relative;
+        font-size: 10px;
+        color: #555;
+        text-transform: uppercase;
+        z-index: 2;
+      }
+      label[for] > span {
+        position: absolute;
+        margin-left: 1ex;
+        width: 12px;
+        height: 12px;
+        font-size: 9px;
+        text-align: center;
+        background-color: #f8f8f8;
+        border: 1px solid #c6c6c6;
+        border-radius: 50%;
+      }
+      label[for] > span:hover {
+        color: rgb(63,81,181);
+        border-color: rgb(63,81,181);
+      }
+      output {
+        display: block;
+        border-bottom: 3px solid transparent;
+      }
+      .btns {
+        font-size: 0;
+        white-space: nowrap;
+      }
+      .exp {
+        display: inline-block;
+        width: 25%;
+        padding: 0;
+      }
+      .exp:last-of-type {
+        margin-right: 0;
+      }
+      button {
+        display: block;
+        background-color: #f8f8f8;
+        background-image: linear-gradient(180deg,#f8f8f8,#f1f1f1);
+        border: 1px solid #c6c6c6;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        color: #555;
+        height: 36px;
+        line-height: 27px;
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 700;
+        width: 100%;
+        padding: 0 16px;
+        text-align: center;
+        text-transform: uppercase;
+      }
+      button:hover {
+        border-color: #999;
+        box-shadow: 0 1px 1px rgba(0,0,0,.2);
+        color: #555;
+      }
+      button:focus {
+        border-color: rgb(63,81,181);
+        box-shadow: 0 1px 1px rgba(63,81,181,.2);
+        color: rgb(63,81,181);
+      }
+      #keyword {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        border-bottom: 1px dotted #555;
+      }
+      #keyword ~ .overlay {
+        position: absolute;
+        top: -8px;
+        left: -8px;
+        right: -8px;
+        bottom: 8px;
+        z-index: 1;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        border-radius: 1px;
+        background: #fff;
+        opacity: 0;
+        visibility: hidden;
+        transition-property: opacity, visibility;
+        transition-timing-function: cubic-bezier(.4,0,.2,1);
+        transition-duration: .2s;
+      }
+      #keyword:focus ~ .overlay {
+        opacity: 1;
+        visibility: visible;
+      }
+      .label-switch {
+        border-radius: 32px;
+        cursor: pointer;
+        display: block;
+        height: 32px;
+        position: relative;
+        width: 52px;
+        margin-top:4px;
+      }
+      .label-switch input[type="checkbox"] {
+        display: none;
+      }
+      .label-switch input[type="checkbox"] + .switch {
+        background-color: #f8f8f8;
+        border: 1px solid #c6c6c6;
+        border-radius: 32px;
+        cursor: pointer;
+        height: 32px;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        transition: .3s cubic-bezier(.4,0,.2,1) all;
+        width: 52px;
+        z-index: 0;
+      }
+      .label-switch input[type="checkbox"] + .switch:before {
+        position: absolute;
+        top: 2px;
+        right: 0;
+        bottom: 0;
+        left: 2px;
+        background-color: #f8f8f8;
+        border-radius: 32px;
+        content: '';
+        height: 28px;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        transition: .3s cubic-bezier(.4,0,.2,1) all;
+        width: 48px;
+        z-index: 1;
+      }
+      .label-switch input[type="checkbox"] + .switch:after {
+        position: absolute;
+        top: 1px;
+        right: 0;
+        bottom: 0;
+        left: 1px;
+        height: 28px;
+        width: 28px;
+        background-color: #f8f8f8;
+        background-image: linear-gradient(180deg,#f8f8f8,#f1f1f1);
+        border-radius: 28px;
+        box-shadow: 0 1px 3px rgba(0,0,0,.4);
+        content: '';
+        transition: all 0.3s ease;
+        z-index: 2;
+      }
+      .label-switch input[type="checkbox"]:checked + .switch {
+        background: #ffcc00;
+      }
+      .label-switch input[type="checkbox"]:checked + .switch:before {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+      }
+      .label-switch input[type="checkbox"]:checked + .switch:after {
+        left: 22px;
+      }
+      .switch-row {
+        margin-top: 15px;
+      }
+      .warning {
+        font-size: 12px;
+        font-weight: 700;
+        background: rgba(244,67,54,.7);
+        padding: 2px 4px;
+        margin-bottom: 1px;
+        border-radius: 2px;
+      }
+      [data-night-mode="on"],
+      [data-night-mode="on"] body {
+        background: #444;
+        color: #fff;
+      }
+      [data-night-mode="on"] label[for],
+      [data-night-mode="on"] input[type="text"]{
+        color: #eee;
+      }
+      [data-night-mode="on"] label[for] > span {
+        background-color: #333;
+        color: #eee;
+        border-color: #333;
+      }
+      [data-night-mode="on"] label[for] > span:hover {
+        color: #ffcc00;
+        border-color: #ffcc00;
+      }
+      [data-night-mode="on"] button {
+        background-color: #333;
+        background-image: linear-gradient(180deg,#484848,#414141);
+        border: 1px solid #333;
+        color: #ccc;
+      }
+      [data-night-mode="on"] button:hover {
+        border-color: #222;
+        box-shadow: 0 1px 1px rgba(0,0,0,.2);
+        color:#ccc;
+      }
+      [data-night-mode="on"] button:focus {
+        border-color: #ffcc00;
+        box-shadow: 0 1px 1px rgba(255, 204, 0, .2);
+        color: #ffcc00;
+      }
+      [data-night-mode="on"] #keyword ~ .overlay {
+        background: #555;
+      }
+      [data-night-mode="on"] main textarea {
+        background: #555;
+        color: #fff;
+      }
+      [data-night-mode="on"] .label-switch input[type="checkbox"] + .switch {
+        border: 1px solid #444;
+      }
+      [data-night-mode="on"] .label-switch input[type="checkbox"] + .switch:after {
+        background-color: #333;
+        background-image: linear-gradient(180deg,#484848,#414141);
+      }
+      [data-night-mode="on"] h1 {
+        background: #444;
+        color: #bbb;
+      }
+      [data-night-mode="on"] h1:before {
+        background-image:url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2248px%22%20height%3D%2248px%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cg%3E%0A%3Cpath%20fill%3D%22%23bbbbbb%22%20d%3D%22M41%2C47H7c-1.105%2C0-2-0.895-2-2V3c0-1.105%2C0.895-2%2C2-2l24%2C0l12%2C12v32C43%2C46.105%2C42.105%2C47%2C41%2C47z%22/%3E%0A%3Cpath%20fill%3D%22%23aaaaaa%22%20d%3D%22M31%2C1v10c0%2C1.105%2C0.895%2C2%2C2%2C2h10L31%2C1z%22/%3E%0A%3Cpath%20fill%3D%22%23444444%22%20d%3D%22M33.707%2C32.293l-5.395-5.395C29.366%2C25.542%2C30%2C23.846%2C30%2C22c0-4.411-3.589-8-8-8s-8%2C3.589-8%2C8s3.589%2C8%2C8%2C8%20%20c1.846%2C0%2C3.542-0.634%2C4.898-1.688l5.395%2C5.395C32.488%2C33.902%2C32.744%2C34%2C33%2C34s0.512-0.098%2C0.707-0.293%20%20C34.098%2C33.316%2C34.098%2C32.684%2C33.707%2C32.293z%20M16%2C22c0-3.309%2C2.691-6%2C6-6s6%2C2.691%2C6%2C6s-2.691%2C6-6%2C6S16%2C25.309%2C16%2C22z%22/%3E%0A%3C/g%3E%3C/svg%3E);
+      }
+      [data-night-mode="on"] h1:after {
+        background: #444;
+      }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <h1>
+        <span>SEO Scribe</span>
+      </h1>
+      <div>
+        <label for="keyword">Keyword</label>
+        <input id="keyword" type="text" tabindex="2" placeholder="Enter keyword" pattern=".{1,}" required>
+        <span class="overlay" aria-hidden="true" role="presentation"></span>
+      </div>
+      <div>
+        <label for="keyword_density">Keyword density <span title="Percentage of total words that are keywords. Should be more than 0% and less than 5%.">?</span></label>
+        <output id="keyword_density">0%</output>
+      </div>
+      <div>
+        <label for="rel_density">Related word density <span title="Percentage of total words that are words related to keyword. Should be more than 0% and less than 50%.">?</span></label>
+        <output id="rel_density">0%</output>
+      </div>
+      <div>
+        <label for="keyword_first_paragraph">Keyword in first paragraph <span title="Your keyword should appear in the first paragraph of your content.">?</span></label>
+        <output id="keyword_first_paragraph">No</output>
+      </div>
+      <div>
+        <label for="readability_score">Ease of Readability <span title="A measurement of how easy your content is to read, using the Flesch-Kincaid reading ease metric. Lower is better.">?</span></label>
+        <output id="readability_score">N/A</output>
+      </div>
+      <div>
+        <label for="trn_density">Sentences with transition words <span title="Transition words are a good indicator of better quality content, and should appear in your content where possible.">?</span></label>
+        <output id="trn_density">0%</output>
+      </div>
+      <div hidden>
+        <label for="keyword_headings">Keyword in headings <span title="Your keyword should appear in your headings as well as your title and meta description.">?</span></label>
+        <output id="keyword_headings">No</output>
+      </div>
+      <div>
+        <label for="word_count">Word count <span title="Total word count of your content. This should be a minimum of 300 words.">?</span></label>
+        <output id="word_count">0</output>
+      </div>
+      <div class="warning" hidden>
+        0 sentences starting with same word
+      </div>
+      <div class="warning" id="ss_warn" hidden>
+        Consider shortening some sentences
+      </div>
+      <div class="warning" hidden>
+        Consider breaking up long paragraphs
+      </div>
+      <div class="warning" hidden>
+        0 transition words/phrases
+      </div>
+      <div class="warning" hidden>
+        0% in passive voice
+      </div>
+      <div class="warning" id="no_hdngs" hidden>
+        Use headings to structure your content
+      </div>
+      <div class="warning" id="no_links" hidden>
+        Don't forget to include external links
+      </div>
+      <div class="switch-row">
+        <label for="night_mode">Night mode</label>
+        <label class="label-switch">
+          <input type="checkbox" id="night_mode">
+          <div class="switch"></div>
+        </label>
+      </div>
+      <div class="btns">
+        <button type="button" id="save_storage" tabindex="3">Save</button>
+        <button type="button" id="exp_txt" class="exp" tabindex="4" data-txt-type="plain">Txt</button>
+        <button type="button" id="exp_htm" class="exp" tabindex="5" data-txt-type="html">HTML</button>
+        <button type="button" id="exp_pdf" class="exp" tabindex="6" data-txt-type="html" disabled>PDF</button>
+        <button type="button" id="exp_wrd" class="exp" tabindex="7" data-txt-type="html" disabled>Word</button>
+      </div>
+    </aside>
+    <main>
+      <textarea placeholder="Write plain text or HTML" tabindex="1" minlength="1" required></textarea>
+    </main>
+    <script>
+      ;(function(win,doc){
+        var keyword = doc.getElementById('keyword');
+        var content = doc.getElementsByTagName('textarea')[0];
+        var kd = doc.getElementById('keyword_density');
+        var kh = doc.getElementById('keyword_headings');
+        var kfp = doc.getElementById('keyword_first_paragraph');
+        var r_ease = doc.getElementById('readability_score');
+        var rel_d = doc.getElementById('rel_density');
+        var trn_d = doc.getElementById('trn_density');
+        var wc = doc.getElementById('word_count');
+        var btn_save = doc.getElementById('save_storage');
+        var btn_exp_txt = doc.getElementById('exp_txt');
+        var btn_exp_html = doc.getElementById('exp_htm');
+        var chk_nt_md = doc.getElementById('night_mode');
+        var ss_warn = doc.getElementById('ss_warn');
+        var no_hdngs = doc.getElementById('no_hdngs');
+        var no_links = doc.getElementById('no_links');
+        var font = doc.createElement('link');
+        var k = keyword.value.toLowerCase();
+        var kc = 0;
+        var rc = 0;
+        var tc = 0;
+        var hc = 0;
+        var ssc = 0;
+        var syll = 0;
+        var rel_words = [];
+        var lsi_words = [];
+        var trn_words = ['I mean','above all','accordingly','as a consequence','actually','additionally','admittedly','after this','afterwards','albeit','all in all','all the same','also','alternatively','although','altogether','and yet','anyhow','anyway','as I have said','as a final point','as a matter of fact','as a result','as an illustration','as for','as has been mentioned','as has been noted','as long as','as was previously stated','as well','at any rate','at first','at last','be that as it may','because of the fact','before this','besides','briefly','but','but also','but even so','by the same token','by the way','by way of contrast','by way of example','concerning','consequently','considering','conversely','despite','due to the fact','either','either way','equally','ergo','especially','even if','even more','even though','eventually','finally','first of all','firstly','for a start','for as much as','for example','for fear','for instance','for one thing','for starters','for the purpose of','for the simple reason that','for this reason','further','furthermore','given that','given these points','granted that','granting that','hence','however','if not','if so','in a like manner','in a word','in addition to','in all honesty','in any case','in any event','in as much as','in case','in conclusion','in consequence','in contrast','in either case','in either event','in fact','in light of the fact','in order that','in order to','in other words','in particular','in short','in spite of','in summary','in that case','in that since','in the end','in the event that','in the first place','in the hope that','in the same way','in view of the fact','incidentally','including','indeed','initially','instead','last but not least','lastly','lest','let alone','likewise','long story short','more importantly','moreover','much less','namely','neither','nevertheless','next','nonetheless','nor','not only','not to mention','notably','notwithstanding','on the condition that','on the other hand','on the subject of','on the whole','only if','or at least','otherwise','overall','owing to the fact','particularly','previously','provided that','providing that','rather','regarding','regardless','secondly','seeing that','similarly','so as to','so long as','so much so that','so that','speaking of which','specifically','still','subsequently','such as','that being the case','that is to say','therefore','thirdly','though','thus','to be brief','to begin with','to change the topic','to conclude','to get back to the point','to illustrate','to put it another way','to put it briefly','to resume','to return to the subject','to say nothing of','to start with','to sum up','to summarize','to tell the truth','to the end that','under those circumstances','unless,what is more','whatever happens','when in fact','whereas','whichever happens','while','with regards to','with this in mind'];
 
+        initApp();
+        eventWireUp();
+
+        function initApp(){
+          if('localStorage' in win){
+            if(win.localStorage.getItem('autosaved_kw') || typeof win.localStorage.getItem('autosaved_kw') !== 'undefined'){
+              keyword.value = win.localStorage.getItem('autosaved_kw');
+            }
+
+            if(win.localStorage.getItem('autosaved_txt') || typeof win.localStorage.getItem('autosaved_txt') !== 'undefined'){
+              content.value = win.localStorage.getItem('autosaved_txt');
+            }
+
+            if(!win.localStorage.getItem('night_mode') || typeof win.localStorage.getItem('night_mode') === 'undefined'){
+              storeNightMode();
+
+            } else if(win.localStorage.getItem('night_mode') !== 'false'){
+              chk_nt_md.checked = !0;
+              setNightMode();
+
+            } else {
+              setNightMode();
+            }
+          }
+
+          if(keyword.value) startSEOScribe();
+          if(!('URL' in win) && 'webkitURL' in win) win.URL = win.webkitURL;
+
+          font.href = 'https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext';
+          font.rel = 'stylesheet';
+          doc.head.appendChild(font);
+        }
+
+        function eventWireUp(){
+          win.addEventListener('load', function(){
+            doc.documentElement.setAttribute('data-font-loaded', !0);
+          }, false);
+          win.addEventListener('unload', saveToStorage, false);
+          keyword.addEventListener('blur', startSEOScribe, false);
+          content.addEventListener('blur', checkContent, false);
+          content.addEventListener('keydown', rebounce(checkContent), false);
+          btn_exp_txt.addEventListener('click', exportText, false);
+          btn_exp_html.addEventListener('click', exportText, false);
+          btn_save.addEventListener('click', saveToStorage, false);
+          chk_nt_md.addEventListener('click', storeNightMode, false);
+        }
+
+        function startSEOScribe(){
+          k = keyword.value.toLowerCase();
+          rel_words = [];
+          win.localStorage.setItem('autosaved_kw', k);
+          if(!k) return;
+          getRelatedWords();
+        }
+
+        function checkContent(){
+          var _paras = !!content.value ? content.value.split('\n') : [];
+          var _sntcs = !!content.value && content.value.match(/[^\.!\?]+[\.!\?]+/g) ? content.value.match(/[^\.!\?]+[\.!\?]+/g) : [];
+          var _wrds = !!content.value && content.value.match(/\w+/gi) ? content.value.match(/\w+/gi) : [];
+          var _html = !!content.value && content.value.match(/<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
+          var w_count = !!content.value && content.value.match(/\S+/g) ? content.value.match(/\S+/g).length : 0;
+          var s_count = !!content.value && content.value.match(/[^\.!\?]+[\.!\?]+/g) ? content.value.match(/[^\.!\?]+[\.!\?]+/g).length : 0;
+          var fks =
+          win.localStorage.setItem('autosaved_txt', content.value);
+
+          wc.value = w_count;
+          adjustWordCountColor(wc.value, wc);
+
+          kc = 0;
+          rc = 0;
+          tc = 0;
+          ssc = 0;
+          syll = 0;
+          kd.textContent = '0%';
+          rel_d.textContent = '0%';
+          trn_d.textContent = '0%';
+          kfp.textContent = 'No';
+          r_ease.textContent = 'N/A';
+          kh.parentNode.setAttribute('hidden','');
+          ss_warn.setAttribute('hidden','');
+          no_hdngs.setAttribute('hidden','');
+          no_links.setAttribute('hidden','');
+
+          if(!k) return;
+
+          kc = matchString(content.value, k);
+
+          rel_words.forEach(function(rel_w){
+            rc += matchString(content.value, rel_w);
+          });
+
+          if(_paras.length > 0){
+            kfp.textContent = !!matchString(_paras[0], k) ? 'Yes' : 'No';
+          }
+
+          if(_sntcs.length > 0){
+            _sntcs.forEach(function(sntc){
+              if(sntc.split(' ').length < 20){
+                ssc++;
+              }
+
+              if((ssc / s_count * 100 << 0) < 80){
+                ss_warn.removeAttribute('hidden');
+              } else {
+                ss_warn.setAttribute('hidden','');
+              }
+
+              trn_words.forEach(function(trn_w){
+                tc += matchString(sntc, trn_w);
+              });
+            });
+          }
+
+          kd.textContent = (kc / w_count * 100 << 0) + '%';
+          rel_d.textContent = (rc / w_count * 100 << 0) + '%';
+          trn_d.textContent = (tc / s_count * 100 << 0) + '%';
+          adjustDensityColor(kc / w_count * 100 << 0, kd);
+          adjustDensityColor(rc / w_count * 100 << 0, rel_d);
+
+          if(!content.value) return;
+          r_ease.textContent = getReadabilityScore(_sntcs,_wrds);
+
+          if(!_html) return;
+          checkHTML();
+        }
+
+        function checkHTML(){
+          var _prsr = new DOMParser();
+          var _doc = _prsr.parseFromString('<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>','text/html');
+          var _hdngs = _doc.querySelectorAll('h1,h2,h3,h4,h5,h6,header');
+
+          if(_hdngs.length < 1){
+            no_hdngs.removeAttribute('hidden');
+          } else {
+            no_hdngs.setAttribute('hidden','');
+          }
+
+          if(_doc.querySelectorAll('a[href]').length < 1){
+            no_links.removeAttribute('hidden');
+          } else {
+            no_links.setAttribute('hidden','');
+          }
+
+          kh.parentNode.removeAttribute('hidden');
+          hc = 0;
+
+          [].slice.call(_hdngs).forEach(function(heading){
+            if(matchString(heading.textContent, k) > 0){
+              hc++;
+            } else {
+              for(var j = 0; j < rel_words.length; ++j){
+                if(matchString(heading.textContent, rel_words[j]) > 0){
+                  hc++;
+                  break;
+                }
+              }
+            }
+          });
+
+          kh.textContent = hc > 0 && hc === _hdngs.length ? 'Yes' : 'No';
+        }
+
+        function matchString(string, to_match){
+          var rgx = new RegExp('\\b' + to_match + '\\b', 'gi');
+          var idx = string.match(rgx);
+          if(idx && idx.length > 0){
+            return idx.length;
+          }
+          return 0;
+        }
+
+        function adjustDensityColor(val, el){
+          el.style.width = val + '%';
+          if(val >= 15 && val > 14){
+            el.style.borderColor = 'rgba(244,67,54,.7)';
+          }
+          else if(val < 14 && val >= 6 && val > 0){
+            el.style.borderColor = 'rgba(255,138,34,.7)';
+          }
+          else if(val <= 5 && val >= 4 && val > 0){
+            el.style.borderColor = 'rgba(255,204,0,.7)';
+          }
+          else if(val < 4 && val > 0){
+            el.style.borderColor = 'rgba(154,205,50,.7)';
+          }
+          else {
+            el.style.borderColor = 'rgba(244,67,54,.7)';
+          }
+        }
+
+        function adjustWordCountColor(val, el){
+          el.style.width = val <= 300 ? val / 3 + '%' : '100%';
+          if(val > 299){
+            el.style.borderColor = 'rgba(154,205,50,.7)';
+          }
+          else if(val <= 299 && val > 199){
+            el.style.borderColor = 'rgba(255,204,0,.7)';
+          }
+          else if(val <= 199 && val > 49){
+            el.style.borderColor = 'rgba(255,138,34,.7)';
+          }
+          else if(val <= 49){
+            el.style.borderColor = 'rgba(244,67,54,.7)';
+          }
+          else {
+            el.style.borderColor = 'rgba(244,67,54,.7)';
+          }
+        }
+
+        function clean(word){
+          if(typeof word === 'string'){
+            return word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'').toLowerCase();
+          }
+          return word;
+        }
+
+        function getRelatedWords(){
+          var xhr = new XMLHttpRequest();
+          var prep, qs;
+
+          if(k.split(' ').length > 1){
+            prep = k.split(' ').map(function(word){
+              return win.encodeURIComponent(clean(word));
+            });
+            qs = prep.join('+');
+          } else {
+            qs = k;
+          }
+
+          xhr.open('GET', 'http://api.datamuse.com/words?ml=' + qs, true);
+          xhr.responseType = 'json';
+          xhr.onload = function(){
+            if(xhr.readyState = 4 && xhr.status >= 200 && xhr.status < 300){
+              rel_words = xhr.response.map(function(datum){
+                return datum.word;
+              });
+              checkContent();
+            }
+          };
+          xhr.onerror = xhr.onabort = xhr.ontimeout = function(){
+            console.error('There was an error with the request: ' + xhr.status);
+          };
+          xhr.send(null);
+        }
+
+        function getLSIWords(){
+
+        }
+
+        function countSyllables(word){
+          var _wrd = word.toLowerCase();
+
+          if(word.length <= 3) return 1;
+
+          _wrd = _wrd.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
+          _wrd = _wrd.replace(/^y/, '');
+          return _wrd.match(/[aeiouy]{1,2}/g).length;
+        }
+
+        function getReadabilityScore(sntcs, wrds){
+          if(sntcs.length === 0 || wrds.length === 0) return 'N/A';
+          syll = 0;
+          wrds.forEach(function(wrd){
+            syll += countSyllables(wrd);
+          });
+          return (206 - 1.015 * (wrds.length / sntcs.length) - 84 * (syll / wrds.length)).toFixed(1);
+        }
+
+        function saveToStorage(){
+          if('localStorage' in win){
+            win.localStorage.setItem('autosaved_txt', content.value);
+            win.localStorage.setItem('autosaved_kw', k);
+          }
+        }
+
+        function exportText(){
+          var txt_type = 'text/' + ((event.target || this).getAttribute('data-txt-type') || 'plain');
+          var dl_link = doc.createElement('a');
+          var _blob = txt_type === 'text/html'
+                    ? '<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>'
+                    : content.value;
+
+          dl_link.download = (keyword.value || 'untitled')
+                           + '-'
+                           + (new Date().toDateString().toLowerCase().split(' ').join('-'))
+                           + (txt_type === 'text/html' ? '.html' : '.txt');
+
+          dl_link.href = createBlob(txt_type, _blob);
+          dl_link.textContent = 'Download';
+          dl_link.target = '_blank';
+          dl_link.rel = 'noreferrer noopener nofollow';
+          dl_link.style.display = 'none';
+          dl_link.onclick = function(){doc.body.removeChild(this)};
+
+          doc.body.appendChild(dl_link);
+          dl_link.click();
+        }
+
+        function createBlob(mimetype, data){
+          if('createObjectURL' in win.URL){
+            return win.URL.createObjectURL(new Blob([data],{type: mimetype}));
+          }
+          return 'data:' + mimetype + ',' + win.encodeURIComponent(data);
+        }
+
+        function exportRTF(){
+        }
+
+        function exportWord(){
+          //var doc = new DOCXjs();
+          //doc.text('');
+        }
+
+        function exportPDF(){
+          //var doc = new jsPDF();
+          //doc.text(35, 25, '');
+        }
+
+        function storeNightMode(){
+          win.localStorage.setItem('night_mode', chk_nt_md.checked);
+          setNightMode();
+        }
+
+        function setNightMode(){
+          doc.documentElement.setAttribute('data-night-mode', win.localStorage.getItem('night_mode') !== 'true' ? 'off' : 'on');
+        }
+
+        function rebounce(f){
+          var scheduled, context, args;
+          return function(){
+            context = this;
+            args = [];
+            for (var i = 0; i < arguments.length; ++i){
+              args[i] = arguments[i];
+            }
+            if (!!scheduled){
+              win.cancelAnimationFrame(scheduled);
+            }
+            scheduled = win.requestAnimationFrame(function(){
+              f.apply(context,args);
+              scheduled = null;
+            });
+          }
+        }
+
+      })(window,window.document);
+    </script>
+  </body>
+</html>
