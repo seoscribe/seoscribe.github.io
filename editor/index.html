@@ -34,14 +34,17 @@
         overflow-x: hidden;
         background: #eee;
         z-index: 10;
-        -webkit-transform: translateX(300px);
-        transform: translateX(300px);
-        transition: .3s cubic-bezier(.4,0,.2,1) -webkit-transform;
-        transition: .3s cubic-bezier(.4,0,.2,1) transform;
+        opacity: 0;
+        visibility: hidden;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+        transition: .3s cubic-bezier(.4,0,.2,1) opacity,.3s cubic-bezier(.4,0,.2,1) visibility;
       }
       aside.in {
-        -webkit-transform: translateX(0);
-        transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+        -webkit-transform: scale(1);
+        transform: scale(1);
       }
       h1 {
         position: relative;
@@ -358,8 +361,10 @@
           right: 300px;
         }
         aside {
-          -webkit-transform: translateX(0);
-          transform: translateX(0);
+          opacity: 1;
+          visibility: visible;
+          -webkit-transform: scale(1);
+          transform: scale(1);
         }
         #btn_menu {
           display: none;
