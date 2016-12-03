@@ -810,7 +810,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
           rel_d.textContent = (rc / wc * 100 << 0) + '%';
           trn_d.textContent = (tc / _s_c * 100 << 0) + '%';
           adjustDensityColor(kc / wc * 100 << 0, kd);
-          adjustDensityColor(rc / wc * 100 << 0, rel_d);
+          adjustDensityColor((rc / 2) / wc * 100 << 0, rel_d);
           adjustWordCountColor(wc, wrd_c);
         }
 
