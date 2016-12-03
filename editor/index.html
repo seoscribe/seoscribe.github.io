@@ -495,7 +495,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
         var r_ease = doc.getElementById('readability_score');
         var rel_d = doc.getElementById('rel_density');
         var trn_d = doc.getElementById('trn_density');
-        var wc = doc.getElementById('word_count');
+        var wrd_c = doc.getElementById('word_count');
         var btn_save = doc.getElementById('save_storage');
         var btn_exp_txt = doc.getElementById('exp_txt');
         var btn_exp_html = doc.getElementById('exp_htm');
@@ -510,6 +510,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
         var btn_menu = doc.getElementById('btn_menu');
         var font = doc.createElement('link');
         var k = keyword.value.toLowerCase();
+        var wc = 0;
         var kc = 0;
         var rc = 0;
         var tc = 0;
@@ -597,6 +598,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
           var _has_html = !!content.value && content.value.match(/<\/?[\w\s="/.':;#-\/\?]+>+[\/?[\w\s="/.':;#-\/\?]+<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
           if(storage_ok) win.localStorage.setItem('autosaved_txt', content.value);
 
+          wc = 0;
           kc = 0;
           rc = 0;
           tc = 0;
@@ -667,20 +669,28 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
         function checkPlain(){
           var _plain = content.value;
-          var _paras = !!_plain ? _plain.split('\n') : [];
-          var _sntcs = !!_plain && _plain.match(/[^\.!\?\n]+[\.!\?\n]+/g) ? _plain.match(/[^\.!\?\n]+[\.!\?\n]+/g) : [];
-          var _wrds = !!_plain && _plain.match(/\w+/gi) ? _plain.match(/\w+/gi) : [];
+          var _paras = [];
+          var _sntcs = [];
+          var _wrds = [];
+          var _passive = [];
 
+          if(!!_plain && typeof _plain.match === 'function'){
+            _paras = _plain.split('\n') ? _plain.split('\n') : [];
+            _sntcs = _plain.match(/[^\.!\?\n]+[\.!\?\n]+/g) ? _plain.match(/[^\.!\?\n]+[\.!\?\n]+/g) : [];
+            _wrds = _plain.match(/\w+/gi) ? _plain.match(/\w+/gi) : [];
+            _passive = _plain.match(/(was|were)(\s|\n)[a-z]*(ing|ed)(\s|\n)by(\s|\n)/g) ? _plain.match(/(was|were)(\s|\n)[a-z]*(ing|ed)(\s|\n)by(\s|\n)/g) : [];
+          }
+
+          wc = _wrds.length;
           kc = matchString(_plain, k);
           rel_words.forEach(function(rel_w){
             rc += matchString(_plain, rel_w);
           });
-
-          // 10% max for passive voice
+          // pv =
 
           checkParagraphs(_paras);
           checkSentences(_sntcs);
-          updateKeywordMetrics(kc,rc,tc,_wrds.length,_sntcs.length);
+          updateKeywordMetrics(_sntcs.length);
           r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
           if(_sntcs.length > 29) r_smog.textContent = getSMOGScore(_sntcs, _wrds);
         }
@@ -690,17 +700,25 @@ HTML will be detected automatically and additional ranking criteria will be disp
           var _doc = _prsr.parseFromString('<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>','text/html');
           var _hdngs = [].slice.call(_doc.body.querySelectorAll('h1,h2,h3,h4,h5,h6,header'));
           var _html_txt = _doc.body.textContent;
-          var _html_paras = !!_html_txt ? _html_txt.split('\n') : [];
-          var _html_sntcs = !!_html_txt && _html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g) ? _html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g) : [];
-          var _html_wrds = !!_html_txt && _html_txt.match(/\w+/gi) ? _html_txt.match(/\w+/gi) : [];
+          var _html_paras = [];
+          var _html_sntcs = [];
+          var _html_wrds = [];
+          var _html_passive = [];
 
+          if(!!_html_txt && typeof _html_txt.match === 'function'){
+            _html_paras = _html_txt.split('\n') ? _html_txt.split('\n') : [];
+            _html_sntcs =_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g) ? _html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g) : [];
+            _html_wrds = _html_txt.match(/\w+/gi) ? _html_txt.match(/\w+/gi) : [];
+            _html_passive = _html_txt.match(/(was|were)(\s|\n)[a-z]*(ing|ed)(\s|\n)by(\s|\n)/g) ? _html_txt.match(/(was|were)(\s|\n)[a-z]*(ing|ed)(\s|\n)by(\s|\n)/g) : [];
+          }
+          wc = _html_wrds.length;
           kc = matchString(_html_txt, k);
           rel_words.forEach(function(rel_w){
             rc += matchString(_html_txt, rel_w);
           });
           checkParagraphs(_html_paras);
           checkSentences(_html_sntcs);
-          updateKeywordMetrics(kc,rc,tc,_html_wrds.length,_html_sntcs.length);
+          updateKeywordMetrics(_html_sntcs.length);
           r_ease.textContent = getReadabilityScore(_html_sntcs, _html_wrds);
 
           // if(_html_sntcs.length > 29) r_smog.textContent = getSMOGScore(_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g), _html_txt.match(/\w+/gi));
@@ -754,14 +772,14 @@ HTML will be detected automatically and additional ranking criteria will be disp
           kh.textContent = hc > 0 && hc === _hdngs.length ? 'Yes' : 'No';
         }
 
-        function updateKeywordMetrics(_kc,_rc,_tc,_w_c,_s_c){
-          wc.textContent = _w_c;
-          kd.textContent = (_kc / _w_c * 100 << 0) + '%';
-          rel_d.textContent = (_rc / _w_c * 100 << 0) + '%';
-          trn_d.textContent = (_tc / _s_c * 100 << 0) + '%';
-          adjustDensityColor(_kc / _w_c * 100 << 0, kd);
-          adjustDensityColor(_rc / _w_c * 100 << 0, rel_d);
-          adjustWordCountColor(wc.value, wc);
+        function updateKeywordMetrics(_s_c){
+          wrd_c.textContent = wc;
+          kd.textContent = (kc / wc * 100 << 0) + '%';
+          rel_d.textContent = (rc / wc * 100 << 0) + '%';
+          trn_d.textContent = (tc / _s_c * 100 << 0) + '%';
+          adjustDensityColor(kc / wc * 100 << 0, kd);
+          adjustDensityColor(rc / wc * 100 << 0, rel_d);
+          adjustWordCountColor(wc, wrd_c);
         }
 
         function matchString(string, to_match){
