@@ -116,7 +116,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        padding: 16px;
+        padding: 16px 48px 16px 16px;
         background: #fff;
         width: 100%;
         height: 100%;
@@ -370,7 +370,7 @@
           padding: 32px 32px 0 32px;
         }
         main textarea {
-          padding: 32px;
+          padding: 32px 48px 32px 32px;
         }
       }
       @media screen and (min-width: 737px){
@@ -415,8 +415,8 @@
         <output id="rel_density">0%</output>
       </div>
       <div>
-        <label for="keyword_first_paragraph">Keyword in first paragraph <span title="Your keyword should appear in the first paragraph of your content.">?</span></label>
-        <output id="keyword_first_paragraph">No</output>
+        <label for="trn_density">Sentences with transition words <span title="Transition words are a good indicator of better quality content, and should appear in your content where possible.">?</span></label>
+        <output id="trn_density">0%</output>
       </div>
       <div>
         <label for="readability_score">Ease of Readability <span title="A measurement of how easy your content is to read, using the Flesch-Kincaid reading ease metric. Lower is better.">?</span></label>
@@ -427,8 +427,8 @@
         <output id="smog_score">N/A</output>
       </div>
       <div>
-        <label for="trn_density">Sentences with transition words <span title="Transition words are a good indicator of better quality content, and should appear in your content where possible.">?</span></label>
-        <output id="trn_density">0%</output>
+        <label for="keyword_first_paragraph">Keyword in first paragraph <span title="Your keyword should appear in the first paragraph of your content.">?</span></label>
+        <output id="keyword_first_paragraph">No</output>
       </div>
       <div hidden>
         <label for="keyword_headings">Keyword in headings <span title="Your keyword should appear in your headings as well as your title and meta description.">?</span></label>
