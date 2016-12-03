@@ -560,8 +560,13 @@ HTML will be detected automatically and additional ranking criteria will be disp
             }
           }
 
-          if(keyword.value) startSEOScribe();
-          if(!('URL' in win) && 'webkitURL' in win) win.URL = win.webkitURL;
+          if(keyword.value){
+            startSEOScribe();
+          }
+
+          if(!('URL' in win) && 'webkitURL' in win){
+            win.URL = win.webkitURL;
+          }
 
           font.href = 'https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext';
           font.rel = 'stylesheet';
@@ -591,19 +596,29 @@ HTML will be detected automatically and additional ranking criteria will be disp
         }
 
         function startSEOScribe(){
-          k = keyword.value.toLowerCase();
+          if(keyword.value.toLowerCase().trim() === k){
+            return;
+          }
+
+          k = keyword.value.toLowerCase().trim();
           rel_words = [];
 
-          if(storage_ok) win.localStorage.setItem('autosaved_kw', k);
-          if(!k) return;
+          if(storage_ok){
+            win.localStorage.setItem('autosaved_kw', k);
+          }
+
+          if(!k){
+            return;
+          }
 
           getRelatedWords();
         }
 
         function checkContent(){
           var _has_html = !!content.value && content.value.match(/<\/?[\w\s="/.':;#-\/\?]+>+[\/?[\w\s="/.':;#-\/\?]+<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
-          if(storage_ok) win.localStorage.setItem('autosaved_txt', content.value);
-
+          if(storage_ok){
+            win.localStorage.setItem('autosaved_txt', content.value);
+          }
           wc = 0;
           kc = 0;
           rc = 0;
@@ -660,7 +675,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
         function checkSentences(_s){
           if(_s.length > 0){
             _s.forEach(function(sntc){
-              if(sntc.split(' ').length < 20){
+              if(sntc.split(' ').length < 30){
                 ssc++;
               }
 
@@ -800,7 +815,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
         }
 
         function matchString(string, to_match){
-          var rgx = new RegExp('\\b' + to_match + '\\b', 'gi');
+          var rgx = new RegExp('\\b(' + to_match + '|' + to_match + '+s|i?es|ves)\\b', 'gi');
           var idx = string.match(rgx);
           if(idx && idx.length > 0){
             return idx.length;
