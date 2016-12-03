@@ -422,6 +422,10 @@
         <label for="readability_score">Ease of Readability <span title="A measurement of how easy your content is to read, using the Flesch-Kincaid reading ease metric. Lower is better.">?</span></label>
         <output id="readability_score">N/A</output>
       </div>
+      <div hidden>
+        <label for="smog_score">SMOG Score <span title="The SMOG index is an alternative metric for readability, more accurate than Flesch-Kincaid. A lower score indicates a more readable text.">?</span></label>
+        <output id="smog_score">N/A</output>
+      </div>
       <div>
         <label for="trn_density">Sentences with transition words <span title="Transition words are a good indicator of better quality content, and should appear in your content where possible.">?</span></label>
         <output id="trn_density">0%</output>
@@ -493,6 +497,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
         var kh = doc.getElementById('keyword_headings');
         var kfp = doc.getElementById('keyword_first_paragraph');
         var r_ease = doc.getElementById('readability_score');
+        var r_smog = doc.getElementById('smog_score');
         var rel_d = doc.getElementById('rel_density');
         var trn_d = doc.getElementById('trn_density');
         var wrd_c = doc.getElementById('word_count');
@@ -518,6 +523,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
         var ssc = 0;
         var spc = 0;
         var syll = 0;
+        var p_syll = 0;
         var rel_words = [];
         var lsi_words = [];
         var trn_words = ['I mean','above all','accordingly','as a consequence','actually','additionally','admittedly','after this','afterwards','albeit','all in all','all the same','also','alternatively','although','altogether','and yet','anyhow','anyway','as I have said','as a final point','as a matter of fact','as a result','as an illustration','as for','as has been mentioned','as has been noted','as long as','as was previously stated','as well','at any rate','at first','at last','be that as it may','because of the fact','before this','besides','briefly','but','but also','but even so','by the same token','by the way','by way of contrast','by way of example','concerning','consequently','considering','conversely','despite','due to the fact','either','either way','equally','ergo','especially','even if','even more','even though','eventually','finally','first of all','firstly','for a start','for as much as','for example','for fear','for instance','for one thing','for starters','for the purpose of','for the simple reason that','for this reason','further','furthermore','given that','given these points','granted that','granting that','hence','however','if not','if so','in a like manner','in a word','in addition to','in all honesty','in any case','in any event','in as much as','in case','in conclusion','in consequence','in contrast','in either case','in either event','in fact','in light of the fact','in order that','in order to','in other words','in particular','in short','in spite of','in summary','in that case','in that since','in the end','in the event that','in the first place','in the hope that','in the same way','in view of the fact','incidentally','including','indeed','initially','instead','last but not least','lastly','lest','let alone','likewise','long story short','more importantly','moreover','much less','namely','neither','nevertheless','next','nonetheless','nor','not only','not to mention','notably','notwithstanding','on the condition that','on the other hand','on the subject of','on the whole','only if','or at least','otherwise','overall','owing to the fact','particularly','previously','provided that','providing that','rather','regarding','regardless','secondly','seeing that','similarly','so as to','so long as','so much so that','so that','speaking of which','specifically','still','subsequently','such as','that being the case','that is to say','therefore','thirdly','though','thus','to be brief','to begin with','to change the topic','to conclude','to get back to the point','to illustrate','to put it another way','to put it briefly','to resume','to return to the subject','to say nothing of','to start with','to sum up','to summarize','to tell the truth','to the end that','under those circumstances','unless,what is more','whatever happens','when in fact','whereas','whichever happens','while','with regards to','with this in mind'];
@@ -605,15 +611,19 @@ HTML will be detected automatically and additional ranking criteria will be disp
           ssc = 0;
           spc = 0;
           syll = 0;
+          p_syll = 0;
 
           kd.textContent = '0%';
           rel_d.textContent = '0%';
           trn_d.textContent = '0%';
           kfp.textContent = 'No';
           r_ease.textContent = 'N/A';
+          r_smog.textContent = 'N/A';
 
+          r_smog.parentNode.setAttribute('hidden','');
           kh.parentNode.setAttribute('hidden', '');
           ss_warn.setAttribute('hidden', '');
+          sp_warn.setAttribute('hidden', '');
           no_hdngs.setAttribute('hidden', '');
           no_links.setAttribute('hidden', '');
           no_lists.setAttribute('hidden', '');
@@ -692,7 +702,11 @@ HTML will be detected automatically and additional ranking criteria will be disp
           checkSentences(_sntcs);
           updateKeywordMetrics(_sntcs.length);
           r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
-          if(_sntcs.length > 29) r_smog.textContent = getSMOGScore(_sntcs, _wrds);
+
+          if(_sntcs.length > 29){
+            r_smog.parentNode.removeAttribute('hidden');
+            r_smog.textContent = getSMOGScore(_sntcs, _wrds);
+          }
         }
 
         function checkHTML(){
@@ -721,7 +735,10 @@ HTML will be detected automatically and additional ranking criteria will be disp
           updateKeywordMetrics(_html_sntcs.length);
           r_ease.textContent = getReadabilityScore(_html_sntcs, _html_wrds);
 
-          // if(_html_sntcs.length > 29) r_smog.textContent = getSMOGScore(_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g), _html_txt.match(/\w+/gi));
+          if(_html_sntcs.length > 29){
+            r_smog.parentNode.removeAttribute('hidden');
+            r_smog.textContent = getSMOGScore(_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g), _html_txt.match(/\w+/gi));
+          }
 
           if(_hdngs.length < 1){
             no_hdngs.removeAttribute('hidden');
@@ -735,7 +752,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
             no_links.setAttribute('hidden', '');
           }
 
-          if(_doc.querySelectorAll('ul,ol').length < 1){
+          if(_doc.querySelectorAll('ul li,ol li').length < 1){
             no_lists.removeAttribute('hidden');
           } else {
             no_lists.setAttribute('hidden', '');
@@ -871,9 +888,9 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
         function countSyllables(word){
           var _wrd = clean(word).toLowerCase();
-
-          if(word.length <= 3) return 1;
-
+          if(word.length <= 3){
+            return 1;
+          }
           _wrd = _wrd.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
           _wrd = _wrd.replace(/^y/, '');
           return (_wrd.match(/[aeiouy]{1,2}/g) ? _wrd.match(/[aeiouy]{1,2}/g).length : 1);
@@ -886,21 +903,21 @@ HTML will be detected automatically and additional ranking criteria will be disp
           wrds.forEach(function(wrd){
             syll += countSyllables(wrd);
           });
-          if(syll.length > 0){
+          if(syll > 0){
             _score = (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
           }
           return _score > 100 ? '100.0' : _score < 0 ? '0.0' : _score;
         }
 
-        function getSMOGScore(){
+        function getSMOGScore(sntcs,wrds){
           var _smog = 0;
           if(sntcs.length < 1 || wrds.length < 1) return 'N/A';
-          syll = 0;
+          p_syll = 0;
           wrds.forEach(function(wrd){
-            syll += countSyllables(wrd);
+            if(countSyllables(wrd) > 2) p_syll++;
           });
-          if(syll.length > 0){
-            _smog = (1.0430 * Math.sqrt(syll.length * (30 / sntcs.length)) + 3.1291).toFixed(1);
+          if(p_syll > 0){
+            _smog = (1.0430 * Math.sqrt(p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1);
           }
           return _smog > 100 ? '100.0' : _smog < 0 ? '0.0' : _smog;
         }
