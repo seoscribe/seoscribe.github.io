@@ -593,19 +593,30 @@ HTML will be detected automatically and additional ranking criteria will be disp
           getRelatedWords();
         }
 
-        function checkContent(){
+        function checkPlain(){
           var _paras = !!content.value ? content.value.split('\n') : [];
           var _sntcs = !!content.value && content.value.match(/[^\.!\?]+[\.!\?]+/g) ? content.value.match(/[^\.!\?]+[\.!\?]+/g) : [];
           var _wrds = !!content.value && content.value.match(/\w+/gi) ? content.value.match(/\w+/gi) : [];
-          var _html = !!content.value && content.value.match(/<\/?[\w\s="/.':;#-\/\?]+>+[\/?[\w\s="/.':;#-\/\?]+<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
-          var p_count = _paras.length;
-          var s_count = _sntcs.length;
-          var w_count = _wrds.length;
 
+          kc = matchString(content.value, k);
+
+          rel_words.forEach(function(rel_w){
+            rc += matchString(content.value, rel_w);
+          });
+
+          // 10% max for passive voice
+
+          checkParagraphs(_paras);
+          checkSentences(_sntcs);
+          updateKeywordMetrics(kc,rc,tc,_wrds.length,_sntcs.length);
+          r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
+          if(_sntcs.length > 29) r_smog.textContent = getSMOGScore(_sntcs, _wrds);
+        }
+
+
+        function checkContent(){
+          var _has_html = !!content.value && content.value.match(/<\/?[\w\s="/.':;#-\/\?]+>+[\/?[\w\s="/.':;#-\/\?]+<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
           if(storage_ok) win.localStorage.setItem('autosaved_txt', content.value);
-
-          wc.value = w_count;
-          adjustWordCountColor(wc.value, wc);
 
           kc = 0;
           rc = 0;
@@ -628,39 +639,41 @@ HTML will be detected automatically and additional ranking criteria will be disp
           no_imgs.setAttribute('hidden', '');
           no_img_alts.setAttribute('hidden', '');
 
-          if(!k) return;
+          if(!k || !content.value){
+            return;
+          } else if(!_has_html){
+            checkPlain();
+          } else {
+            checkHTML();
+          }
+        }
 
-          kc = matchString(content.value, k);
+        function checkParagraphs(_p){
+          if(_p.length > 0){
+            kfp.textContent = !!matchString(_p[0], k) ? 'Yes' : 'No';
 
-          rel_words.forEach(function(rel_w){
-            rc += matchString(content.value, rel_w);
-          });
-
-          // 10% max for passive voice
-
-          if(_paras.length > 0){
-            kfp.textContent = !!matchString(_paras[0], k) ? 'Yes' : 'No';
-
-            _paras.forEach(function(para){
+            _p.forEach(function(para){
               if(para.split(' ').length < 200){
                 spc++;
               }
 
-              if((spc / p_count * 100 << 0) < 80){
+              if((spc / _p.length * 100 << 0) < 80){
                 sp_warn.removeAttribute('hidden');
               } else {
                 sp_warn.setAttribute('hidden', '');
               }
             });
           }
+        }
 
-          if(_sntcs.length > 0){
-            _sntcs.forEach(function(sntc){
+        function checkSentences(_s){
+          if(_s.length > 0){
+            _s.forEach(function(sntc){
               if(sntc.split(' ').length < 20){
                 ssc++;
               }
 
-              if((ssc / s_count * 100 << 0) < 80){
+              if((ssc / _s.length * 100 << 0) < 80){
                 ss_warn.removeAttribute('hidden');
               } else {
                 ss_warn.setAttribute('hidden', '');
@@ -671,16 +684,6 @@ HTML will be detected automatically and additional ranking criteria will be disp
               });
             });
           }
-
-          kd.textContent = (kc / w_count * 100 << 0) + '%';
-          rel_d.textContent = (rc / w_count * 100 << 0) + '%';
-          trn_d.textContent = (tc / s_count * 100 << 0) + '%';
-          adjustDensityColor(kc / w_count * 100 << 0, kd);
-          adjustDensityColor(rc / w_count * 100 << 0, rel_d);
-
-          if(!content.value) return;
-          if(!_html) r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
-          else checkHTML();
         }
 
         function checkHTML(){
@@ -736,7 +739,15 @@ HTML will be detected automatically and additional ranking criteria will be disp
             return f + g;
           });
 
-          r_ease.textContent = getReadabilityScore(_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g), _html_txt.match(/\w+/gi));
+          var _html_paras = _html_txt.split('\n');
+          var _html_sntcs = _html_txt.match(/[^\.!\?]+[\.!\?]+/g);
+          var _html_wrds = _html_txt.match(/\w+/gi);
+          checkParagraphs(_html_paras);
+          checkSentences(_html_sntcs);
+          updateKeywordMetrics(kc,rc,tc,_html_wrds.length,_html_sntcs.length);
+          r_ease.textContent = getReadabilityScore(_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g), _html_wrds);
+
+          // if(s_count > 29) r_smog.textContent = getSMOGScore(_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g), _html_txt.match(/\w+/gi));
 
           if(_hdngs.length < 1){
             no_hdngs.removeAttribute('hidden');
@@ -785,6 +796,16 @@ HTML will be detected automatically and additional ranking criteria will be disp
           });
 
           kh.textContent = hc > 0 && hc === _hdngs.length ? 'Yes' : 'No';
+        }
+
+        function updateKeywordMetrics(_kc,_rc,_tc,_w_c,_s_c){
+          wc.textContent = _w_c;
+          kd.textContent = (_kc / _w_c * 100 << 0) + '%';
+          rel_d.textContent = (_rc / _w_c * 100 << 0) + '%';
+          trn_d.textContent = (_tc / _s_c * 100 << 0) + '%';
+          adjustDensityColor(_kc / _w_c * 100 << 0, kd);
+          adjustDensityColor(_rc / _w_c * 100 << 0, rel_d);
+          adjustWordCountColor(wc.value, wc);
         }
 
         function matchString(string, to_match){
@@ -886,13 +907,24 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
         function getReadabilityScore(sntcs, wrds){
           var _score = 0;
-          if(sntcs.length === 0 || wrds.length === 0) return 'N/A';
+          if(sntcs.length < 1 || wrds.length < 1) return 'N/A';
           syll = 0;
           wrds.forEach(function(wrd){
             syll += countSyllables(wrd);
           });
           _score = (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
           return _score < 100 ? _score : '100.0';
+        }
+
+        function getSMOGScore(){
+          var _smog = 0;
+          if(sntcs.length < 1 || wrds.length < 1) return 'N/A';
+          syll = 0;
+          wrds.forEach(function(wrd){
+            syll += countSyllables(wrd);
+          });
+          _smog = 1.0430 * Math.sqrt(syll.length * (30 / sntcs.length)) + 3.1291;
+          return _smog < 100 ? _smog : '100.0';
         }
 
         function saveToStorage(e){
