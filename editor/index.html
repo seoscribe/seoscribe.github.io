@@ -526,6 +526,12 @@ HTML will be detected automatically and additional ranking criteria will be disp
         eventWireUp();
 
         function initApp(){
+          if(!('performance' in win)){
+            win.performance = {
+              'now': function(){return new Date().getTime()}
+            };
+          }
+
           if(storage_ok){
             if(win.localStorage.getItem('autosaved_kw')){
               keyword.value = win.localStorage.getItem('autosaved_kw');
@@ -562,7 +568,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
           keyword.addEventListener('blur', startSEOScribe, false);
           content.addEventListener('blur', checkContent, false);
-          content.addEventListener('keydown', rebounce(checkContent), false);
+          content.addEventListener('keydown', debounce(checkContent, 300), false);
           btn_exp_txt.addEventListener('click', exportText, false);
           btn_exp_html.addEventListener('click', exportText, false);
           btn_menu.addEventListener('click',function(){
@@ -591,7 +597,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
           var _paras = !!content.value ? content.value.split('\n') : [];
           var _sntcs = !!content.value && content.value.match(/[^\.!\?]+[\.!\?]+/g) ? content.value.match(/[^\.!\?]+[\.!\?]+/g) : [];
           var _wrds = !!content.value && content.value.match(/\w+/gi) ? content.value.match(/\w+/gi) : [];
-          var _html = !!content.value && content.value.match(/<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
+          var _html = !!content.value && content.value.match(/<\/?[\w\s="/.':;#-\/\?]+>+[\/?[\w\s="/.':;#-\/\?]+<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
           var p_count = _paras.length;
           var s_count = _sntcs.length;
           var w_count = _wrds.length;
@@ -673,16 +679,64 @@ HTML will be detected automatically and additional ranking criteria will be disp
           adjustDensityColor(rc / w_count * 100 << 0, rel_d);
 
           if(!content.value) return;
-          r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
-
-          if(!_html) return;
-          checkHTML();
+          if(!_html) r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
+          else checkHTML();
         }
 
         function checkHTML(){
           var _prsr = new DOMParser();
           var _doc = _prsr.parseFromString('<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>','text/html');
-          var _hdngs = _doc.querySelectorAll('h1,h2,h3,h4,h5,h6,header');
+          var _els = [].slice.call(_doc.body.getElementsByTagName('*'));
+
+          var _hdngs = _els.filter(function(a){
+            return a.tagName.toLowerCase() === 'h1'
+            || a.tagName.toLowerCase() === 'h2'
+            || a.tagName.toLowerCase() === 'h3'
+            || a.tagName.toLowerCase() === 'h4'
+            || a.tagName.toLowerCase() === 'h5'
+            || a.tagName.toLowerCase() === 'h6'
+            || a.tagName.toLowerCase() === 'header';
+          });
+
+          // we need to strip the html tags and separate into sentences for flesch-kincaid
+          var _html_txt = _els.filter(function(b){
+            return b.textContent.length > 0;
+          }).map(function(c){
+            switch(c.tagName.toLowerCase()){
+              case 'address':
+              case 'article':
+              case 'aside':
+              case 'blockquote':
+              case 'div':
+              case 'dd':
+              case 'dl':
+              case 'dt':
+              case 'footer':
+              case 'h1':
+              case 'h2':
+              case 'h3':
+              case 'h4':
+              case 'h5':
+              case 'h6':
+              case 'header':
+              case 'hgroup':
+              case 'li':
+              case 'main':
+              case 'nav':
+              case 'ol':
+              case 'p':
+              case 'pre':
+              case 'section':
+              case 'ul':
+                return c.textContent + '\n';
+              default:
+                return c.textContent + ' ';
+            }
+          }).reduce(function(f,g){
+            return f + g;
+          });
+
+          r_ease.textContent = getReadabilityScore(_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g), _html_txt.match(/\w+/gi));
 
           if(_hdngs.length < 1){
             no_hdngs.removeAttribute('hidden');
@@ -717,7 +771,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
           kh.parentNode.removeAttribute('hidden');
           hc = 0;
 
-          [].slice.call(_hdngs).forEach(function(heading){
+          _hdngs.forEach(function(heading){
             if(matchString(heading.textContent, k) > 0){
               hc++;
             } else {
@@ -831,12 +885,14 @@ HTML will be detected automatically and additional ranking criteria will be disp
         }
 
         function getReadabilityScore(sntcs, wrds){
+          var _score = 0;
           if(sntcs.length === 0 || wrds.length === 0) return 'N/A';
           syll = 0;
           wrds.forEach(function(wrd){
             syll += countSyllables(wrd);
           });
-          return (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
+          _score = (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
+          return _score < 100 ? _score : '100.0';
         }
 
         function saveToStorage(e){
@@ -915,21 +971,25 @@ HTML will be detected automatically and additional ranking criteria will be disp
           }
         }
 
-        function rebounce(f){
-          var scheduled, context, args;
+        function debounce(f, wait){
+          var scheduled, args, context, timestamp;
           return function(){
-            context = this;
-            args = [];
+            context = this; args = []; timestamp = win.performance.now;
             for (var i = 0; i < arguments.length; ++i){
               args[i] = arguments[i];
             }
-            if (!!scheduled){
-              win.cancelAnimationFrame(scheduled);
+            function later(){
+              var last = win.performance.now - timestamp;
+              if(last < wait){
+                scheduled = setTimeout(later, wait - last);
+              } else {
+                scheduled = null;
+                f.apply(context, args);
+              }
+            };
+            if(!scheduled){
+             scheduled = setTimeout(later, wait);
             }
-            scheduled = win.requestAnimationFrame(function(){
-              f.apply(context,args);
-              scheduled = null;
-            });
           }
         }
 
