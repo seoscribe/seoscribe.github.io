@@ -568,7 +568,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
           keyword.addEventListener('blur', startSEOScribe, false);
           content.addEventListener('blur', checkContent, false);
-          content.addEventListener('keydown', debounce(checkContent, 300), false);
+          content.addEventListener('keydown', debounce(checkContent, 100), false);
           btn_exp_txt.addEventListener('click', exportText, false);
           btn_exp_html.addEventListener('click', exportText, false);
           btn_menu.addEventListener('click',function(){
@@ -618,7 +618,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
           no_imgs.setAttribute('hidden', '');
           no_img_alts.setAttribute('hidden', '');
 
-          if(!k || !content.value){
+          if(!k){
             return;
           } else if(!_has_html){
             checkPlain();
@@ -666,14 +666,14 @@ HTML will be detected automatically and additional ranking criteria will be disp
         }
 
         function checkPlain(){
-          var _paras = !!content.value ? content.value.split('\n') : [];
-          var _sntcs = !!content.value && content.value.match(/[^\.!\?]+[\.!\?]+/g) ? content.value.match(/[^\.!\?]+[\.!\?]+/g) : [];
-          var _wrds = !!content.value && content.value.match(/\w+/gi) ? content.value.match(/\w+/gi) : [];
+          var _plain = content.value;
+          var _paras = !!_plain ? _plain.split('\n') : [];
+          var _sntcs = !!_plain && _plain.match(/[^\.!\?\n]+[\.!\?\n]+/g) ? _plain.match(/[^\.!\?\n]+[\.!\?\n]+/g) : [];
+          var _wrds = !!_plain && _plain.match(/\w+/gi) ? _plain.match(/\w+/gi) : [];
 
-          kc = matchString(content.value, k);
-
+          kc = matchString(_plain, k);
           rel_words.forEach(function(rel_w){
-            rc += matchString(content.value, rel_w);
+            rc += matchString(_plain, rel_w);
           });
 
           // 10% max for passive voice
@@ -688,65 +688,22 @@ HTML will be detected automatically and additional ranking criteria will be disp
         function checkHTML(){
           var _prsr = new DOMParser();
           var _doc = _prsr.parseFromString('<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>','text/html');
-          var _els = [].slice.call(_doc.body.getElementsByTagName('*'));
-
-          var _hdngs = _els.filter(function(a){
-            return a.tagName.toLowerCase() === 'h1'
-            || a.tagName.toLowerCase() === 'h2'
-            || a.tagName.toLowerCase() === 'h3'
-            || a.tagName.toLowerCase() === 'h4'
-            || a.tagName.toLowerCase() === 'h5'
-            || a.tagName.toLowerCase() === 'h6'
-            || a.tagName.toLowerCase() === 'header';
-          });
-
-          // we need to strip the html tags and separate into sentences for flesch-kincaid
-          var _html_txt = _els.filter(function(b){
-            return b.textContent.length > 0;
-          }).map(function(c){
-            switch(c.tagName.toLowerCase()){
-              case 'address':
-              case 'article':
-              case 'aside':
-              case 'blockquote':
-              case 'div':
-              case 'dd':
-              case 'dl':
-              case 'dt':
-              case 'footer':
-              case 'h1':
-              case 'h2':
-              case 'h3':
-              case 'h4':
-              case 'h5':
-              case 'h6':
-              case 'header':
-              case 'hgroup':
-              case 'li':
-              case 'main':
-              case 'nav':
-              case 'ol':
-              case 'p':
-              case 'pre':
-              case 'section':
-              case 'ul':
-                return c.textContent + '\n';
-              default:
-                return c.textContent + ' ';
-            }
-          }).reduce(function(f,g){
-            return f + g;
-          });
-
+          var _hdngs = [].slice.call(_doc.body.querySelectorAll('h1,h2,h3,h4,h5,h6,header'));
+          var _html_txt = _doc.body.textContent;
           var _html_paras = !!_html_txt ? _html_txt.split('\n') : [];
-          var _html_sntcs = !!_html_txt && _html_txt.match(/[^\.!\?]+[\.!\?]+/g) ? _html_txt.match(/[^\.!\?]+[\.!\?]+/g) : [];
+          var _html_sntcs = !!_html_txt && _html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g) ? _html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g) : [];
           var _html_wrds = !!_html_txt && _html_txt.match(/\w+/gi) ? _html_txt.match(/\w+/gi) : [];
+
+          kc = matchString(_html_txt, k);
+          rel_words.forEach(function(rel_w){
+            rc += matchString(_html_txt, rel_w);
+          });
           checkParagraphs(_html_paras);
           checkSentences(_html_sntcs);
           updateKeywordMetrics(kc,rc,tc,_html_wrds.length,_html_sntcs.length);
-          r_ease.textContent = getReadabilityScore(_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g), _html_wrds);
+          r_ease.textContent = getReadabilityScore(_html_sntcs, _html_wrds);
 
-          // if(s_count > 29) r_smog.textContent = getSMOGScore(_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g), _html_txt.match(/\w+/gi));
+          // if(_html_sntcs.length > 29) r_smog.textContent = getSMOGScore(_html_txt.match(/[^\.!\?\n]+[\.!\?\n]+/g), _html_txt.match(/\w+/gi));
 
           if(_hdngs.length < 1){
             no_hdngs.removeAttribute('hidden');
@@ -911,8 +868,10 @@ HTML will be detected automatically and additional ranking criteria will be disp
           wrds.forEach(function(wrd){
             syll += countSyllables(wrd);
           });
-          _score = (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
-          return _score < 100 ? _score : '100.0';
+          if(syll.length > 0){
+            _score = (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
+          }
+          return _score > 100 ? '100.0' : _score < 0 ? '0.0' : _score;
         }
 
         function getSMOGScore(){
@@ -922,8 +881,10 @@ HTML will be detected automatically and additional ranking criteria will be disp
           wrds.forEach(function(wrd){
             syll += countSyllables(wrd);
           });
-          _smog = 1.0430 * Math.sqrt(syll.length * (30 / sntcs.length)) + 3.1291;
-          return _smog < 100 ? _smog : '100.0';
+          if(syll.length > 0){
+            _smog = (1.0430 * Math.sqrt(syll.length * (30 / sntcs.length)) + 3.1291).toFixed(1);
+          }
+          return _smog > 100 ? '100.0' : _smog < 0 ? '0.0' : _smog;
         }
 
         function saveToStorage(e){
