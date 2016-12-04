@@ -411,9 +411,15 @@
         <output id="keyword_density">0%</output>
       </div>
       <div>
-        <label for="rel_density">Related word density <span title="Percentage of total words that are words related to keyword. Should be more than 0% and less than 50%.">?</span></label>
+        <label for="rel_density">Related word density <span title="Percentage of total words that are words related to keyword. Should be more than 0% and less than 10%.">?</span></label>
         <output id="rel_density">0%</output>
       </div>
+
+      <div>
+        <label for="lsi_density">LSI word density <span title="Percentage of total words that are latent semantic keywords/phrases. Should be more than 0% and less than 10%.">?</span></label>
+        <output id="lsi_density">0%</output>
+      </div>
+
       <div>
         <label for="trn_density">Sentences with transition words <span title="Transition words are a good indicator of better quality content, and should appear in your content where possible.">?</span></label>
         <output id="trn_density">0%</output>
@@ -485,7 +491,7 @@
     </aside>
     <main>
       <textarea placeholder="Write here, in plain text or HTML.&nbsp;
-HTML will be detected automatically and additional ranking criteria will be displayed." tabindex="1" minlength="1" required></textarea>
+HTML will be detected automatically and additional ranking criteria will be displayed." tabindex="1" autocomplete="off" minlength="1" required></textarea>
     </main>
     <button id="btn_menu"></button>
     <script>
@@ -499,6 +505,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
         var r_ease = doc.getElementById('readability_score');
         var r_smog = doc.getElementById('smog_score');
         var rel_d = doc.getElementById('rel_density');
+        var lsi_d = doc.getElementById('lsi_density');
         var trn_d = doc.getElementById('trn_density');
         var wrd_c = doc.getElementById('word_count');
         var btn_save = doc.getElementById('save_storage');
@@ -518,6 +525,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
         var wc = 0;
         var kc = 0;
         var rc = 0;
+        var lc = 0;
         var tc = 0;
         var hc = 0;
         var ssc = 0;
@@ -525,7 +533,6 @@ HTML will be detected automatically and additional ranking criteria will be disp
         var syll = 0;
         var p_syll = 0;
         var rel_words = [];
-        var lsi_words = [];
         var trn_words = ['I mean','above all','accordingly','as a consequence','actually','additionally','admittedly','after this','afterwards','albeit','all in all','all the same','also','alternatively','although','altogether','and yet','anyhow','anyway','as I have said','as a final point','as a matter of fact','as a result','as an illustration','as for','as has been mentioned','as has been noted','as long as','as was previously stated','as well','at any rate','at first','at last','be that as it may','because of the fact','before this','besides','briefly','but','but also','but even so','by the same token','by the way','by way of contrast','by way of example','concerning','consequently','considering','conversely','despite','due to the fact','either','either way','equally','ergo','especially','even if','even more','even though','eventually','finally','first of all','firstly','for a start','for as much as','for example','for fear','for instance','for one thing','for starters','for the purpose of','for the simple reason that','for this reason','further','furthermore','given that','given these points','granted that','granting that','hence','however','if not','if so','in a like manner','in a word','in addition to','in all honesty','in any case','in any event','in as much as','in case','in conclusion','in consequence','in contrast','in either case','in either event','in fact','in light of the fact','in order that','in order to','in other words','in particular','in short','in spite of','in summary','in that case','in that since','in the end','in the event that','in the first place','in the hope that','in the same way','in view of the fact','incidentally','including','indeed','initially','instead','last but not least','lastly','lest','let alone','likewise','long story short','more importantly','moreover','much less','namely','neither','nevertheless','next','nonetheless','nor','not only','not to mention','notably','notwithstanding','on the condition that','on the other hand','on the subject of','on the whole','only if','or at least','otherwise','overall','owing to the fact','particularly','previously','provided that','providing that','rather','regarding','regardless','secondly','seeing that','similarly','so as to','so long as','so much so that','so that','speaking of which','specifically','still','subsequently','such as','that being the case','that is to say','therefore','thirdly','though','thus','to be brief','to begin with','to change the topic','to conclude','to get back to the point','to illustrate','to put it another way','to put it briefly','to resume','to return to the subject','to say nothing of','to start with','to sum up','to summarize','to tell the truth','to the end that','under those circumstances','unless,what is more','whatever happens','when in fact','whereas','whichever happens','while','with regards to','with this in mind'];
         var storage_ok = 'localStorage' in win;
 
@@ -538,6 +545,9 @@ HTML will be detected automatically and additional ranking criteria will be disp
               'now': function(){return new Date().getTime()}
             };
           }
+
+          win.lsi_words = [];
+          win.updateLSIWords = updateLSIWords;
 
           if(storage_ok){
             if(win.localStorage.getItem('autosaved_kw')){
@@ -602,6 +612,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
           k = keyword.value.toLowerCase().trim();
           rel_words = [];
+          lsi_words = [];
 
           if(storage_ok){
             win.localStorage.setItem('autosaved_kw', k);
@@ -612,6 +623,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
           }
 
           getRelatedWords();
+          getLSIWords();
         }
 
         function checkContent(){
@@ -622,6 +634,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
           wc = 0;
           kc = 0;
           rc = 0;
+          lc = 0;
           tc = 0;
           ssc = 0;
           spc = 0;
@@ -630,6 +643,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
           kd.textContent = '0%';
           rel_d.textContent = '0%';
+          lsi_d.textContent = '0%';
           trn_d.textContent = '0%';
           kfp.textContent = 'No';
           r_ease.textContent = 'N/A';
@@ -652,6 +666,8 @@ HTML will be detected automatically and additional ranking criteria will be disp
           } else {
             checkHTML();
           }
+
+          sweepJSONP();
         }
 
         function checkParagraphs(_p){
@@ -711,6 +727,9 @@ HTML will be detected automatically and additional ranking criteria will be disp
           rel_words.forEach(function(rel_w){
             rc += matchString(_plain, rel_w);
           });
+          lsi_words.forEach(function(lsi_w){
+            lc += matchString(_plain, lsi_w);
+          });
           // pv =
 
           checkParagraphs(_paras);
@@ -744,6 +763,9 @@ HTML will be detected automatically and additional ranking criteria will be disp
           kc = matchString(_html_txt, k);
           rel_words.forEach(function(rel_w){
             rc += matchString(_html_txt, rel_w);
+          });
+          lsi_words.forEach(function(lsi_w){
+            lc += matchString(_html_txt, lsi_w);
           });
           checkParagraphs(_html_paras);
           checkSentences(_html_sntcs);
@@ -808,9 +830,11 @@ HTML will be detected automatically and additional ranking criteria will be disp
           wrd_c.textContent = wc;
           kd.textContent = (kc / wc * 100 << 0) + '%';
           rel_d.textContent = (rc / wc * 100 << 0) + '%';
+          lsi_d.textContent = (lc / wc * 100 << 0) + '%';
           trn_d.textContent = (tc / _s_c * 100 << 0) + '%';
           adjustDensityColor(kc / wc * 100 << 0, kd);
           adjustDensityColor((rc / 2) / wc * 100 << 0, rel_d);
+          adjustDensityColor((lc / 2) / wc * 100 << 0, lsi_d);
           adjustWordCountColor(wc, wrd_c);
         }
 
@@ -870,13 +894,12 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
         function getRelatedWords(){
           var xhr = new XMLHttpRequest();
-          var prep, qs;
+          var qs;
 
           if(k.split(' ').length > 1){
-            prep = k.split(' ').map(function(word){
+            qs = k.split(' ').map(function(word){
               return win.encodeURIComponent(clean(word));
-            });
-            qs = prep.join('+');
+            }).join('+');
           } else {
             qs = k;
           }
@@ -898,7 +921,24 @@ HTML will be detected automatically and additional ranking criteria will be disp
         }
 
         function getLSIWords(){
+          var _script = doc.createElement('script');
+          var _qs;
+          if(k.split(' ').length > 1){
+            _qs = k.split(' ').map(function(word){
+              return win.encodeURIComponent(clean(word));
+            }).join('+');
+          } else {
+            _qs = k;
+          }
+          _script.async = !0;
+          _script.src = 'http://api.bing.com/osjson.aspx?JsonType=callback&JsonCallback=updateLSIWords&query=' + _qs;
+          _script.setAttribute('data-lsi','true');
+          doc.body.appendChild(_script);
+        }
 
+        function updateLSIWords(resp){
+          lsi_words = resp[1];
+          checkContent();
         }
 
         function countSyllables(word){
@@ -1011,6 +1051,12 @@ HTML will be detected automatically and additional ranking criteria will be disp
           if(storage_ok){
             doc.documentElement.setAttribute('data-night-mode', win.localStorage.getItem('night_mode') !== 'true' ? 'off' : 'on');
           }
+        }
+
+        function sweepJSONP(){
+          [].slice.call(doc.querySelectorAll('[data-lsi]')).forEach(function(el){
+            el.parentNode.removeChild(el);
+          });
         }
 
         function debounce(f, wait){
