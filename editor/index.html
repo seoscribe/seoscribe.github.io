@@ -494,8 +494,10 @@
 HTML will be detected automatically and additional ranking criteria will be displayed." tabindex="1" autocomplete="off" minlength="1" required></textarea>
     </main>
     <button id="btn_menu"></button>
+    <script src="https://seoscribe.net/assets/js/eventlisteneroptions.shim.js"></script>
     <script>
       ;(function(win,doc){
+        var storage_ok = 'localStorage' in win;
         var keyword = doc.getElementById('keyword');
         var sidebar = doc.getElementsByTagName('aside')[0];
         var content = doc.getElementsByTagName('textarea')[0];
@@ -522,6 +524,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
         var btn_menu = doc.getElementById('btn_menu');
         var font = doc.createElement('link');
         var k = keyword.value.toLowerCase();
+        var qs = '';
         var wc = 0;
         var kc = 0;
         var rc = 0;
@@ -534,7 +537,6 @@ HTML will be detected automatically and additional ranking criteria will be disp
         var p_syll = 0;
         var rel_words = [];
         var trn_words = ['I mean','above all','accordingly','as a consequence','actually','additionally','admittedly','after this','afterwards','albeit','all in all','all the same','also','alternatively','although','altogether','and yet','anyhow','anyway','as I have said','as a final point','as a matter of fact','as a result','as an illustration','as for','as has been mentioned','as has been noted','as long as','as was previously stated','as well','at any rate','at first','at last','be that as it may','because of the fact','before this','besides','briefly','but','but also','but even so','by the same token','by the way','by way of contrast','by way of example','concerning','consequently','considering','conversely','despite','due to the fact','either','either way','equally','ergo','especially','even if','even more','even though','eventually','finally','first of all','firstly','for a start','for as much as','for example','for fear','for instance','for one thing','for starters','for the purpose of','for the simple reason that','for this reason','further','furthermore','given that','given these points','granted that','granting that','hence','however','if not','if so','in a like manner','in a word','in addition to','in all honesty','in any case','in any event','in as much as','in case','in conclusion','in consequence','in contrast','in either case','in either event','in fact','in light of the fact','in order that','in order to','in other words','in particular','in short','in spite of','in summary','in that case','in that since','in the end','in the event that','in the first place','in the hope that','in the same way','in view of the fact','incidentally','including','indeed','initially','instead','last but not least','lastly','lest','let alone','likewise','long story short','more importantly','moreover','much less','namely','neither','nevertheless','next','nonetheless','nor','not only','not to mention','notably','notwithstanding','on the condition that','on the other hand','on the subject of','on the whole','only if','or at least','otherwise','overall','owing to the fact','particularly','previously','provided that','providing that','rather','regarding','regardless','secondly','seeing that','similarly','so as to','so long as','so much so that','so that','speaking of which','specifically','still','subsequently','such as','that being the case','that is to say','therefore','thirdly','though','thus','to be brief','to begin with','to change the topic','to conclude','to get back to the point','to illustrate','to put it another way','to put it briefly','to resume','to return to the subject','to say nothing of','to start with','to sum up','to summarize','to tell the truth','to the end that','under those circumstances','unless,what is more','whatever happens','when in fact','whereas','whichever happens','while','with regards to','with this in mind'];
-        var storage_ok = 'localStorage' in win;
 
         initApp();
         eventWireUp();
@@ -586,22 +588,22 @@ HTML will be detected automatically and additional ranking criteria will be disp
         function eventWireUp(){
           win.addEventListener('load', function(){
             doc.documentElement.setAttribute('data-font-loaded', !0);
-          }, false);
+          }, {passive: true, capture: false, once: true});
 
-          keyword.addEventListener('blur', startSEOScribe, false);
-          content.addEventListener('blur', checkContent, false);
-          content.addEventListener('keydown', debounce(checkContent, 100), false);
-          btn_exp_txt.addEventListener('click', exportText, false);
-          btn_exp_html.addEventListener('click', exportText, false);
+          keyword.addEventListener('blur', startSEOScribe, {passive: true, capture: false, once: false});
+          content.addEventListener('blur', checkContent, {passive: true, capture: false, once: false});
+          content.addEventListener('keydown', debounce(checkContent, 100), {passive: true, capture: false, once: false});
+          btn_exp_txt.addEventListener('click', exportText, {passive: true, capture: false, once: false});
+          btn_exp_html.addEventListener('click', exportText, {passive: true, capture: false, once: false});
           btn_menu.addEventListener('click',function(){
             sidebar.classList.toggle('in');
             btn_menu.classList.toggle('close');
-          }, false);
+          }, {passive: true, capture: false, once: false});
 
           if(storage_ok){
-            win.addEventListener('unload', saveToStorage, false);
-            btn_save.addEventListener('click', saveToStorage, false);
-            chk_nt_md.addEventListener('click', storeNightMode, false);
+            win.addEventListener('unload', saveToStorage, {passive: true, capture: false, once: true});
+            btn_save.addEventListener('click', saveToStorage, {passive: true, capture: false, once: false});
+            chk_nt_md.addEventListener('click', storeNightMode, {passive: true, capture: false, once: false});
           }
         }
 
@@ -612,7 +614,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
           k = keyword.value.toLowerCase().trim();
           rel_words = [];
-          lsi_words = [];
+          win.lsi_words = [];
 
           if(storage_ok){
             win.localStorage.setItem('autosaved_kw', k);
@@ -620,6 +622,14 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
           if(!k){
             return;
+          }
+
+          if(k.split(' ').length > 1){
+            qs = k.split(' ').map(function(word){
+              return win.encodeURIComponent(clean(word));
+            }).join('+');
+          } else {
+            qs = k;
           }
 
           getRelatedWords();
@@ -759,6 +769,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
             _html_wrds = _html_txt.match(/\w+/gi) ? _html_txt.match(/\w+/gi) : [];
             _html_passive = _html_txt.match(/(was|were)(\s|\n)[a-z]*(ing|ed)(\s|\n)by(\s|\n)/g) ? _html_txt.match(/(was|were)(\s|\n)[a-z]*(ing|ed)(\s|\n)by(\s|\n)/g) : [];
           }
+
           wc = _html_wrds.length;
           kc = matchString(_html_txt, k);
           rel_words.forEach(function(rel_w){
@@ -767,6 +778,7 @@ HTML will be detected automatically and additional ranking criteria will be disp
           lsi_words.forEach(function(lsi_w){
             lc += matchString(_html_txt, lsi_w);
           });
+
           checkParagraphs(_html_paras);
           checkSentences(_html_sntcs);
           updateKeywordMetrics(_html_sntcs.length);
@@ -894,16 +906,6 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
         function getRelatedWords(){
           var xhr = new XMLHttpRequest();
-          var qs;
-
-          if(k.split(' ').length > 1){
-            qs = k.split(' ').map(function(word){
-              return win.encodeURIComponent(clean(word));
-            }).join('+');
-          } else {
-            qs = k;
-          }
-
           xhr.open('GET', 'http://api.datamuse.com/words?ml=' + qs, true);
           xhr.responseType = 'json';
           xhr.onload = function(){
@@ -922,16 +924,8 @@ HTML will be detected automatically and additional ranking criteria will be disp
 
         function getLSIWords(){
           var _script = doc.createElement('script');
-          var _qs;
-          if(k.split(' ').length > 1){
-            _qs = k.split(' ').map(function(word){
-              return win.encodeURIComponent(clean(word));
-            }).join('+');
-          } else {
-            _qs = k;
-          }
           _script.async = !0;
-          _script.src = 'http://api.bing.com/osjson.aspx?JsonType=callback&JsonCallback=updateLSIWords&query=' + _qs;
+          _script.src = 'http://api.bing.com/osjson.aspx?JsonType=callback&JsonCallback=updateLSIWords&query=' + qs;
           _script.setAttribute('data-lsi','true');
           doc.body.appendChild(_script);
         }
