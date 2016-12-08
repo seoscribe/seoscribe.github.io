@@ -10,6 +10,7 @@ const CURRENT_CACHES = {
 self.addEventListener('install', function(event) {
   const urlsToPrefetch = [
     '/',
+    '/assets/js/home.js',
     '/assets/js/editor.js',
     '/assets/js/serviceworker-cache-polyfill.js',
     '/favicon.ico',
