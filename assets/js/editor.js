@@ -79,7 +79,7 @@
     }
 
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('https://seoscribe.net/editor/sw.js', {scope: './'})
+      navigator.serviceWorker.register('https://seoscribe.net/editor/sw.js', {scope: 'https://seoscribe.net/editor/'})
       .then(function(registration){console.info('SW registered [' + registration.scope + ']')})
       .catch(function(err){console.warn('SW failed to register [' + err + ']')});
     }
