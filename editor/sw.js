@@ -9,11 +9,11 @@ const CURRENT_CACHES = {
 
 self.addEventListener('install', function(event) {
   const urlsToPrefetch = [
-    './',
-    '/assets/js/editor.js',
-    '/assets/js/serviceworker-cache-polyfill.js',
-    '/favicon.ico',
-    '/manifest.json'
+    'https://seoscribe.net/editor/',
+    'https://seoscribe.net/assets/js/editor.js',
+    'https://seoscribe.net/assets/js/serviceworker-cache-polyfill.js',
+    'https://seoscribe.net/favicon.ico',
+    'https://seoscribe.net/manifest.json'
   ];
   self.skipWaiting();
   event.waitUntil(
