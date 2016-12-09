@@ -46,28 +46,34 @@
   eventWireUp();
 
   function initApp () {
-    if(!('performance' in win)){
+    if (!('performance' in win)) {
       win.performance = {
-        'now': function(){return new Date().getTime()}
+        'now': function () { return new Date().getTime() }
       };
     }
 
     if ('localStorage' in win) {
+      
       if (win.localStorage.getItem('autosaved_kw')) {
         keyword.value = win.localStorage.getItem('autosaved_kw');
       }
+      
       if (win.localStorage.getItem('autosaved_txt')){
         content.value = win.localStorage.getItem('autosaved_txt');
         checkContent();
       }
+      
       if (!win.localStorage.getItem('night_mode')) {
         storeNightMode();
+        
       } else if (win.localStorage.getItem('night_mode') !== 'false') {
         chk_nt_md.checked = !0;
         setNightMode();
+      
       } else {
         setNightMode();
       }
+      
     }
 
     if(keyword.value){
@@ -132,6 +138,7 @@
       qs = k.split(' ').map(function(word){
         return win.encodeURIComponent(clean(word));
       }).join('+');
+      
     } else {
       qs = k;
     }
@@ -150,11 +157,11 @@
 
     if(!k){
       return;
-    }
-    else if(!_has_html){
+    
+    } else if(!_has_html){
       processText(content.value);
-    }
-    else {
+    
+    } else {
       parseHTML();
     }
 
@@ -297,8 +304,10 @@
         if(para.split(' ').length < 200){
           spc++;
         }
+        
         if((spc / _p.length * 100 << 0) < 80){
           sp_warn.removeAttribute('hidden');
+          
         } else {
           sp_warn.setAttribute('hidden', '');
         }
@@ -315,6 +324,7 @@
 
         if((ssc / _s.length * 100 << 0) < 80){
           ss_warn.removeAttribute('hidden');
+          
         } else {
           ss_warn.setAttribute('hidden', '');
         }
@@ -349,44 +359,46 @@
 
   function adjustDensityColor(val, el){
     el.style.width = val + '%';
-    if(val >= 15 && val > 14){
+    
+    if (val >= 15 && val > 14) {
       el.style.borderColor = 'rgba(244,67,54,.7)';
-    }
-    else if(val < 14 && val >= 6 && val > 0){
+    
+    } else if(val < 14 && val >= 6 && val > 0){
       el.style.borderColor = 'rgba(255,138,34,.7)';
-    }
-    else if(val <= 5 && val >= 4 && val > 0){
+    
+    } else if(val <= 5 && val >= 4 && val > 0){
       el.style.borderColor = 'rgba(255,204,0,.7)';
-    }
-    else if(val < 4 && val > 0){
+    
+    } else if(val < 4 && val > 0){
       el.style.borderColor = 'rgba(154,205,50,.7)';
-    }
-    else {
+    
+    } else {
       el.style.borderColor = 'rgba(244,67,54,.7)';
     }
   }
 
   function adjustWordCountColor(val, el){
     el.style.width = val <= 1000 ? val / 10 + '%' : '100%';
-    if(val > 399){
+    
+    if (val > 399) {
       el.style.borderColor = 'rgba(154,205,50,.7)';
-    }
-    else if(val <= 399 && val > 299){
+    
+    } else if(val <= 399 && val > 299){
       el.style.borderColor = 'rgba(255,204,0,.7)';
-    }
-    else if(val <= 299 && val > 199){
+    
+    } else if(val <= 299 && val > 199){
       el.style.borderColor = 'rgba(255,138,34,.7)';
-    }
-    else if(val <= 199){
+    
+    } else if(val <= 199){
       el.style.borderColor = 'rgba(244,67,54,.7)';
-    }
-    else {
+    
+    } else {
       el.style.borderColor = 'rgba(244,67,54,.7)';
     }
   }
 
   function clean(word){
-    if(typeof word === 'string'){
+    if (typeof word === 'string') {
       return word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'').toLowerCase();
     }
     return word;
@@ -397,14 +409,14 @@
     xhr.open('GET', 'http://api.datamuse.com/words?ml=' + qs, true);
     xhr.responseType = 'json';
     xhr.onreadystatechange = function(){
-      if(xhr.readyState === 4 && xhr.status >= 200 && xhr.status < 300){
-        rel_words = xhr.response.map(function(datum){
+      if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status < 300) {
+        rel_words = xhr.response.map(function (datum) {
           return datum.word;
         });
         checkContent();
       }
     };
-    xhr.onerror = xhr.onabort = xhr.ontimeout = function(){
+    xhr.onerror = xhr.onabort = xhr.ontimeout = function () {
       console.error('There was an error with the request: ' + xhr.status);
     };
     xhr.send(null);
@@ -437,29 +449,41 @@
     );
   }
 
-  function getReadabilityScore(sntcs, wrds){
+  function getReadabilityScore (sntcs, wrds) {
     var _score = 0;
-    if(sntcs.length < 1 || wrds.length < 1) return 'N/A';
+    
+    if (sntcs.length < 1 || wrds.length < 1) {
+      return 'N/A';
+    }
     syll = 0;
+    
     wrds.forEach(function(wrd){
       syll += countSyllables(wrd);
     });
-    if(syll > 0){
+    
+    if (syll > 0) {
       _score = (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
     }
+    
     return _score > 100 ? '100.0' : _score < 0 ? '0.0' : _score;
   }
 
-  function getSMOGScore(sntcs,wrds){
+  function getSMOGScore (sntcs,wrds) {
     var _smog = 0;
-    if(sntcs.length < 1 || wrds.length < 1) return 'N/A';
+    
+    if (sntcs.length < 1 || wrds.length < 1) {
+      return 'N/A';
+    }
     p_syll = 0;
+    
     wrds.forEach(function(wrd){
       if(countSyllables(wrd) > 2) p_syll++;
     });
+    
     if(p_syll > 0){
       _smog = (1.0430 * Math.sqrt(p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1);
     }
+    
     return _smog > 100 ? '100.0' : _smog < 0 ? '0.0' : _smog;
   }
 
@@ -473,7 +497,7 @@
       win.setTimeout(function(){
         evt.textContent = 'Save';
         evt.removeAttribute('disabled');
-      },3e3);
+      }, 3e3);
     }
   }
 
@@ -488,7 +512,7 @@
     evt.setAttribute('disabled', '');
     win.setTimeout(function(){
       evt.removeAttribute('disabled');
-    },2e3);
+    }, 2e3);
 
     dl_link.href = createBlob(txt_type, _blob);
     dl_link.textContent = 'Download';
@@ -509,14 +533,14 @@
     dl_link.click();
   }
 
-  function removeThisEl(e){
+  function removeThisEl (e) {
     var evt = (e.target || this);
     evt.removeEventListener('click', removeThisEl, {passive: true, capture: false, once: true})
     doc.body.removeChild(evt);
   }
 
-  function createBlob(mimetype, data){
-    if('createObjectURL' in win.URL){
+  function createBlob (mimetype, data) {
+    if ('createObjectURL' in win.URL) {
       return win.URL.createObjectURL(new Blob([data], {type: mimetype}));
     }
     return 'data:' + mimetype + ',' + win.encodeURIComponent(data);
@@ -589,4 +613,4 @@
     }
   }
 
-})(window,window.document);
+})(window, window.document);
