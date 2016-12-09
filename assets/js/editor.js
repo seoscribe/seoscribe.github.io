@@ -1,5 +1,6 @@
 ;(function(win,doc){
   'use strict';
+  var _protocol = win.location.protocol !== 'https:' ? 'http:' : 'https:';
   var root_el = doc.documentElement || doc.getElementsByTagName('html')[0];
   var keyword = doc.getElementById('keyword');
   var sidebar = doc.getElementsByTagName('aside')[0];
@@ -84,7 +85,7 @@
       win.URL = win.webkitURL;
     }
 
-    if (win.location.protocol === 'https:' && 'serviceWorker' in win.navigator) {
+    if (_protocol === 'https:' && 'serviceWorker' in win.navigator) {
       win.navigator.serviceWorker.register('https://seoscribe.net/editor/sw.js', {scope: 'https://seoscribe.net/editor/'})
       .then(function(registration){console.info('SW registered [' + registration.scope + ']')})
       .catch(function(err){console.warn('SW failed to register [' + err + ']')});
@@ -406,7 +407,7 @@
 
   function getRelatedWords(){
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://api.datamuse.com/words?ml=' + qs, true);
+    xhr.open('GET', _protocol + '//api.datamuse.com/words?ml=' + qs, true);
     xhr.responseType = 'json';
     xhr.onreadystatechange = function(){
       if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status < 300) {
@@ -425,7 +426,7 @@
   function getLSIWords(){
     var _script = doc.createElement('script');
     _script.async = !0;
-    _script.src = 'http://api.bing.com/osjson.aspx?JsonType=callback&JsonCallback=updateLSIWords&query=' + qs;
+    _script.src = _protocol + '//api.bing.com/osjson.aspx?JsonType=callback&JsonCallback=updateLSIWords&query=' + qs;
     _script.setAttribute('data-lsi','true');
     doc.body.appendChild(_script);
   }
