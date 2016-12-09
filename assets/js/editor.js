@@ -49,7 +49,7 @@
   function initApp () {
     if (!('performance' in win)) {
       win.performance = {
-        'now': function () { return new Date().getTime() }
+        'now': function () { return new win.Date().getTime() }
       };
     }
 
@@ -77,7 +77,7 @@
       
     }
 
-    if(keyword.value){
+    if (keyword.value) {
       startSEOScribe();
     }
 
@@ -135,7 +135,7 @@
       return;
     }
 
-    if(k.split(' ').length > 1){
+    if (k.split(' ').length > 1) {
       qs = k.split(' ').map(function(word){
         return win.encodeURIComponent(clean(word));
       }).join('+');
@@ -197,7 +197,7 @@
       rc += matchString(_plain, rel_w);
     });
 
-    lsi_words.forEach(function(lsi_w){
+    win.lsi_words.forEach(function(lsi_w){
       lc += matchString(_plain, lsi_w);
     });
     // pv =
@@ -214,7 +214,7 @@
   }
 
   function parseHTML(){
-    var _prsr = new DOMParser();
+    var _prsr = new win.DOMParser();
     var _doc = _prsr.parseFromString('<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>','text/html');
     var _hdngs = [].slice.call(_doc.body.querySelectorAll('h1,h2,h3,h4,h5,h6,header'));
 
@@ -350,27 +350,29 @@
   }
 
   function matchString(string, to_match){
-    var rgx = new RegExp('\\b(' + to_match + '|' + to_match + '+s|i?es|ves)\\b', 'gi');
+    var rgx = new win.RegExp('\\b(' + to_match + '|' + to_match + '+s|i?es|ves)\\b', 'gi');
     var idx = string.match(rgx);
-    if(idx && idx.length > 0){
+    
+    if (idx && idx.length > 0) {
       return idx.length;
     }
+    
     return 0;
   }
 
-  function adjustDensityColor(val, el){
+  function adjustDensityColor (val, el) {
     el.style.width = val + '%';
     
     if (val >= 15 && val > 14) {
       el.style.borderColor = 'rgba(244,67,54,.7)';
     
-    } else if(val < 14 && val >= 6 && val > 0){
+    } else if (val < 14 && val >= 6 && val > 0) {
       el.style.borderColor = 'rgba(255,138,34,.7)';
     
-    } else if(val <= 5 && val >= 4 && val > 0){
+    } else if (val <= 5 && val >= 4 && val > 0) {
       el.style.borderColor = 'rgba(255,204,0,.7)';
     
-    } else if(val < 4 && val > 0){
+    } else if (val < 4 && val > 0) {
       el.style.borderColor = 'rgba(154,205,50,.7)';
     
     } else {
@@ -378,19 +380,19 @@
     }
   }
 
-  function adjustWordCountColor(val, el){
+  function adjustWordCountColor (val, el) {
     el.style.width = val <= 1000 ? val / 10 + '%' : '100%';
     
     if (val > 399) {
       el.style.borderColor = 'rgba(154,205,50,.7)';
     
-    } else if(val <= 399 && val > 299){
+    } else if (val <= 399 && val > 299) {
       el.style.borderColor = 'rgba(255,204,0,.7)';
     
-    } else if(val <= 299 && val > 199){
+    } else if (val <= 299 && val > 199) {
       el.style.borderColor = 'rgba(255,138,34,.7)';
     
-    } else if(val <= 199){
+    } else if (val <= 199) {
       el.style.borderColor = 'rgba(244,67,54,.7)';
     
     } else {
@@ -398,7 +400,7 @@
     }
   }
 
-  function clean(word){
+  function clean (word) {
     if (typeof word === 'string') {
       return word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'').toLowerCase();
     }
@@ -406,7 +408,7 @@
   }
 
   function getRelatedWords(){
-    var xhr = new XMLHttpRequest();
+    var xhr = new win.XMLHttpRequest();
     xhr.open('GET', _protocol + '//api.datamuse.com/words?ml=' + qs, true);
     xhr.responseType = 'json';
     xhr.onreadystatechange = function(){
@@ -418,7 +420,7 @@
       }
     };
     xhr.onerror = xhr.onabort = xhr.ontimeout = function () {
-      console.error('There was an error with the request: ' + xhr.status);
+      win.console.error('There was an error with the request: ' + xhr.status);
     };
     xhr.send(null);
   }
@@ -482,7 +484,7 @@
     });
     
     if(p_syll > 0){
-      _smog = (1.0430 * Math.sqrt(p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1);
+      _smog = (1.0430 * win.Math.sqrt(p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1);
     }
     
     return _smog > 100 ? '100.0' : _smog < 0 ? '0.0' : _smog;
@@ -504,7 +506,7 @@
 
   function exportText(e){
     var evt = (e.target || this);
-    var txt_type = 'text/' + ((event.target || this).getAttribute('data-txt-type') || 'plain');
+    var txt_type = 'text/' + (evt.getAttribute('data-txt-type') || 'plain');
     var dl_link = doc.createElement('a');
     var _blob = txt_type === 'text/html'
               ? '<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>'
@@ -523,7 +525,7 @@
     if ('download' in dl_link) {
       dl_link.download = (keyword.value || 'untitled')
                        + '-'
-                       + (new Date().toDateString().toLowerCase().split(' ').join('-'))
+                       + (new win.Date().toDateString().toLowerCase().split(' ').join('-'))
                        + (txt_type === 'text/html' ? '.html' : '.txt');
     } else {
       dl_link.target = '_blank';
@@ -542,7 +544,7 @@
 
   function createBlob (mimetype, data) {
     if ('createObjectURL' in win.URL) {
-      return win.URL.createObjectURL(new Blob([data], {type: mimetype}));
+      return win.URL.createObjectURL(new win.Blob([data], {type: mimetype}));
     }
     return 'data:' + mimetype + ',' + win.encodeURIComponent(data);
   }
@@ -602,14 +604,14 @@
       function later(){
         var last = win.performance.now - timestamp;
         if(last < wait){
-          scheduled = setTimeout(later, wait - last);
+          scheduled = win.setTimeout(later, wait - last);
         } else {
           scheduled = null;
           f.apply(context, args);
         }
       };
       if(!scheduled){
-       scheduled = setTimeout(later, wait);
+       scheduled = win.setTimeout(later, wait);
       }
     }
   }
