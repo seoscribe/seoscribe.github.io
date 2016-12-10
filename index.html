@@ -1,20 +1,593 @@
 <!doctype html>
-<html>
+<html lang="en" dir="ltr" data-font-loaded="false" data-menu-open="false" data-scrolled="false">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
-    <title>SEO Scribe &middot; the SEO Text Editor &middot; </title>
+    <base href="https://seoscribe.net/">
+    <link rel="manifest" href="https://seoscribe.net/manifest.json">
+    <link rel="canonical" href="https://seoscribe.net">
+    <link rel="publisher" href="https://plus.google.com/+">
+    <link rel="icon" href="https://seoscribe.net/assets/img/favicon.ico">
+    <meta name="format-detection" content="telephone=no;email=no">
+    <meta name="MobileOptimized" content="width">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="referrer" content="origin">
+    <meta name="description" content="">
+    <meta name="robots" content="nofollow,noindex">
+    <title>SEO Scribe &middot; SEO for Content Writers</title>
     <style>
-      
+      html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-webkit-font-smoothing:subpixel-antialiased;-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-overflow-scrolling:touch;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;touch-action:manipulation;font:normal normal 400 16px/1.2 Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,Helmet,Freesans,sans-serif}
+      *,:before,:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;touch-action:manipulation;margin:0;padding:0;border:0;font:inherit}:active,:focus{outline:0}article,dd,dl,dt,footer,header,main,nav,section,video{display:block}h1,h2,h3,h4,h5,h6,strong{font-weight:700}
+      a{-webkit-text-decoration-skip:objects;text-decoration:none}button,input,textarea{-webkit-appearance:none;-webkit-border-radius:0;border-radius:0;background:0 0}button,img,video{-webkit-touch-callout:none}button,a,img,video{-webkit-user-select:none;-moz-user-select:none}button,a{color:inherit;cursor:pointer}textarea{resize:none}[disabled]{opacity:.6;cursor:not-allowed}[hidden],video::-webkit-media-controls,video::-webkit-media-controls-play-button,video::-webkit-media-controls-volume-slider,video::-webkit-media-controls-mute-button,video::-webkit-media-controls-timeline,video::-webkit-media-controls-current-time-display{display:none!important}::selection{background:#111;color:#fff}::-moz-selection{background:#111;color:#fff}
+      nav {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        z-index: 100;
+        color: #fff;
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        will-change: transform;
+      }
+      nav:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        opacity: 0;
+        visibility: hidden;
+        -webkit-box-shadow: 0 0 6px 0 rgba(0,0,0,.1);
+        box-shadow: 0 0 6px 0 rgba(0,0,0,.1);
+        transition-property: opacity, visibility, -webkit-transform;
+        transition-property: opacity, visibility, transform;
+        transition-timing-function: cubic-bezier(.4,0,.2,1);
+        transition-duration: .2s;
+        z-index: -1;
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translate3d(0,0,0) rotateX(9deg);
+        transform: translate3d(0,0,0) rotateX(9deg);
+        will-change: transform;
+      }
+      .nav-item {
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 33.3333%;
+        width: -webkit-calc(100% / 3);
+        width: -moz-calc(100% / 3);
+        width: calc(100% / 3);
+        height: 100%;
+      }
+      .nav-item.left {
+        left: 0;
+        right: 66.6666%;
+        right: -webkit-calc(100% / 1.5);
+        right: -moz-calc(100% / 1.5);
+        right: calc(100% / 1.5);
+        text-align: left;
+      }
+      .nav-item.center {
+        left: 33.3333%;
+        left: -webkit-calc(100% / 3);
+        left: -moz-calc(100% / 3);
+        left: calc(100% / 3);
+        right: 33.3333%;
+        right: -webkit-calc(100% / 3);
+        right: -moz-calc(100% / 3);
+        right: calc(100% / 3);
+        text-align: center;
+      }
+      .nav-item.right {
+        left: 66.6666%;
+        left: -webkit-calc(100% / 1.5);
+        left: -moz-calc(100% / 1.5);
+        left: calc(100% / 1.5);
+        right: 0;
+        text-align: right;
+      }
+      .nav-item a,
+      .nav-item button {
+        display: block;
+        height: 64px;
+        line-height: 1;
+        font-size: 16px;
+        padding: 24px;
+      }
+      .nav-item.cta a {
+        text-transform: uppercase;
+        font-size: 14px;
+        padding: 26px;
+        letter-spacing: 1px;
+      }
+      .nav-item.hdr a {
+        font-size: 24px;
+        font-weight: 700;
+        padding: 20px;
+      }
+      .nav-item.btn button {
+        margin-left: auto;
+        margin-right: 0;
+        text-transform: uppercase;
+        font-size: 14px;
+        padding: 26px;
+        letter-spacing: 1px;
+      }
+      .nav-item.hdr a span {
+        display: inline-block;
+        position: relative;
+        padding-left: 28px;
+        letter-spacing: -2px;
+      }
+      .nav-item.hdr a span:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 24px;
+        height: 24px;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2248px%22%20height%3D%2248px%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cg%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M40.786%2C19.051c-0.526%2C0.165-0.819%2C0.727-0.654%2C1.254C40.708%2C22.141%2C41%2C24.057%2C41%2C26%20c0%2C10.477-8.523%2C19-19%2C19S3%2C36.477%2C3%2C26S11.523%2C7%2C22%2C7c1.943%2C0%2C3.858%2C0.292%2C5.691%2C0.867c0.528%2C0.165%2C1.089-0.129%2C1.254-0.654%20c0.165-0.527-0.128-1.089-0.654-1.254C26.264%2C5.322%2C24.146%2C5%2C22%2C5C10.421%2C5%2C1%2C14.421%2C1%2C26s9.421%2C21%2C21%2C21s21-9.421%2C21-21%20c0-2.146-0.323-4.265-0.96-6.295C41.875%2C19.18%2C41.315%2C18.885%2C40.786%2C19.051z%22%3E%3C/path%3E%3Cpolygon%20fill%3D%22%23ffc107%22%20points%3D%2238.672%2C5.086%2019.879%2C23.879%2018%2C30%2024.121%2C28.121%2042.914%2C9.328%20%22%3E%3C/polygon%3E%3Cpath%20fill%3D%22%23ffc107%22%20d%3D%22M44.328%2C7.914l1.793-1.793c1.172-1.171%2C1.172-3.071%2C0-4.242c-1.172-1.172-3.07-1.172-4.242%2C0%20l-1.793%2C1.793L44.328%2C7.914z%22%3E%3C/path%3E%3C/g%3E%3C/svg%3E);
+      }
+      .nav-item.btn button span {
+        display: inline-block;
+        position: relative;
+        padding-left: 28px;
+      }
+      .nav-item.btn button span:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -6px;
+        left: 0;
+        width: 24px;
+        height: 24px;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2248%22%20height%3D%2248%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M3%2018h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z%22/%3E%3C/svg%3E);
+      }
+      main {
+        position: relative;
+        margin-top: 100vh;
+        margin-bottom: 50vh;
+        z-index: 20;
+        box-shadow: 0 0 14px 0 rgba(0,0,0,.2)
+      }
+      main > section {
+        height: 100vh;
+      }
+      main > section {
+        background: #eee;
+      }
+      main > footer {
+        position: fixed;
+        top: 50vh;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 50vh;
+        z-index: -1;
+        background: rgba(0,0,0,.3);
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        will-change: transform;
+      }
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 100vh;
+        color: #fff;
+        z-index: -1;
+        background: url(https://operator.com/media/img/delta/home/home-hero@2x.jpg) center/cover no-repeat;
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        will-change: transform;
+      }
+      header:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 100vh;
+        z-index: 2;
+        background: -webkit-gradient(radial, 50% 50%, 50, 50% 50%, 500, from(rgba(0,0,0,.1)), to(rgba(0,0,0,.6)));
+        background: -moz-radial-gradient(50% 50%, contain, rgba(0,0,0,.1), rgba(0,0,0,.6));
+        background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,.1) 0%, rgba(0,0,0,.6) 100%);
+        background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,.1) 0%, rgba(0,0,0,.6) 100%);
+        background: radial-gradient(ellipse at center, rgba(0,0,0,.1) 0%, rgba(0,0,0,.6) 100%);
+        background: -webkit-radial-gradient(rgba(0,0,0,.1), rgba(0,0,0,.6));
+        background: radial-gradient(rgba(0,0,0,.1), rgba(0,0,0,.6));
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        will-change: transform;
+      }
+      header:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 100vh;
+        background-color: rgba(0,0,0,.1);
+        background-repeat: repeat;
+        background-size: 3px 3px;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAFUlEQVQYV2NkgID/IIIRygELIHMYAC1IAgI+CskLAAAAAElFTkSuQmCC);
+      }
+      h1,h2,.hdr-btn {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+        line-height: 1.1;
+      }
+      h1 {
+        font-size: 48px;
+        font-weight: 700;
+        margin-top: 40vh;
+        margin-top: calc(50vh - 48px);
+      }
+      h2 {
+        font-size: 24px;
+        font-weight: 400;
+        margin-top: 8px;
+      }
+      .hdr-btn {
+        display: block;
+        font-weight: 700;
+        margin-top: 32px;
+      }
+      .hdr-btn span {
+        display: inline-block;
+        vertical-align: baseline;
+        font-size: 21px;
+        padding: 26px 64px;
+        background: #4caf50;
+        border-radius: 6px;
+        box-shadow: 0 1px 14px 0 rgba(0,0,0,.2);
+      }
+      .hdr-btn span:hover {
+        background: #2d9a30;
+      }
+      footer > div {
+        position: absolute;
+        top: 32px;
+        bottom: 32px;
+        width: 25%;
+        padding: 26px;
+        color: #fff;
+      }
+      footer > div:nth-child(1) {
+        left: 0;
+        right: 75%;
+        border-right: 2px dashed rgba(255,255,255,.25);
+      }
+      footer > div:nth-child(2) {
+        left: 25%;
+        right: 50%;
+        border-right: 2px dashed rgba(255,255,255,.25);
+      }
+      footer > div:nth-child(3) {
+        left: 50%;
+        right: 25%;
+        border-right: 2px dashed rgba(255,255,255,.25);
+      }
+      footer > div:nth-child(4) {
+        left: 75%;
+        right: 0;
+      }
+      footer strong {
+        letter-spacing: -1px;
+        letter-spacing: -0.5px;
+      }
+      footer ul {
+        display: block;
+        list-style: none;
+      }
+      footer li {
+        display: block;
+        margin-bottom: 8px;
+      }
+      footer li > a {
+        letter-spacing: 1px;
+      }
+      aside {
+        position: fixed;
+        top: 64px;
+        right: 0;
+        bottom: 0;
+        z-index: 90;
+        width: 300px;
+        height: 100vh;
+        padding: 26px;
+        background: #fff;
+        color: #555;
+        opacity: 0;
+        visibility: hidden;
+        transition-property: opacity, visibility, -webkit-transform;
+        transition-property: opacity, visibility, transform;
+        transition-timing-function: cubic-bezier(.4,0,.2,1);
+        transition-duration: .2s;
+        -webkit-transform: translateX(302px);
+        transform: translateX(302px);
+        -webkit-transform: translate3d(302px,0,0);
+        transform: translate3d(302px,0,0);
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        will-change: transform;
+      }
+      aside dl {
+        margin-bottom: 32px;
+      }
+      aside dt {
+        color: rgba(85,85,85,.7);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px dashed rgba(0,0,0,.25);
+      }
+      aside dd {
+        margin: 8px auto;
+        font-size: 18px;
+      }
+
+      html[data-font-loaded="true"] {
+        font-family: Karla,Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,Helmet,Freesans,sans-serif;
+      }
+      html[data-scrolled="true"] nav,
+      html[data-menu-open="true"] nav {
+        color: #444;
+      }
+      html[data-scrolled="true"] nav:after,
+      html[data-menu-open="true"] nav:after {
+        opacity: 1;
+        visibility: visible;
+        -webkit-transform: translate3d(0,0,0) rotateX(0);
+        transform: translate3d(0,0,0) rotateX(0);
+      }
+      html[data-scrolled="true"] .nav-item.hdr a span:before,
+      html[data-menu-open="true"] .nav-item.hdr a span:before {
+        background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2248px%22%20height%3D%2248px%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cg%3E%3Cpath%20fill%3D%22%23555555%22%20d%3D%22M40.786%2C19.051c-0.526%2C0.165-0.819%2C0.727-0.654%2C1.254C40.708%2C22.141%2C41%2C24.057%2C41%2C26%20c0%2C10.477-8.523%2C19-19%2C19S3%2C36.477%2C3%2C26S11.523%2C7%2C22%2C7c1.943%2C0%2C3.858%2C0.292%2C5.691%2C0.867c0.528%2C0.165%2C1.089-0.129%2C1.254-0.654%20c0.165-0.527-0.128-1.089-0.654-1.254C26.264%2C5.322%2C24.146%2C5%2C22%2C5C10.421%2C5%2C1%2C14.421%2C1%2C26s9.421%2C21%2C21%2C21s21-9.421%2C21-21%20c0-2.146-0.323-4.265-0.96-6.295C41.875%2C19.18%2C41.315%2C18.885%2C40.786%2C19.051z%22%3E%3C/path%3E%3Cpolygon%20fill%3D%22%23ffc107%22%20points%3D%2238.672%2C5.086%2019.879%2C23.879%2018%2C30%2024.121%2C28.121%2042.914%2C9.328%20%22%3E%3C/polygon%3E%3Cpath%20fill%3D%22%23ffc107%22%20d%3D%22M44.328%2C7.914l1.793-1.793c1.172-1.171%2C1.172-3.071%2C0-4.242c-1.172-1.172-3.07-1.172-4.242%2C0%20l-1.793%2C1.793L44.328%2C7.914z%22%3E%3C/path%3E%3C/g%3E%3C/svg%3E);
+      }
+      html[data-scrolled="true"] .nav-item.btn button span:before,
+      html[data-menu-open="true"] .nav-item.btn button span:before {
+        background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2248%22%20height%3D%2248%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22%23555555%22%20d%3D%22M3%2018h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z%22/%3E%3C/svg%3E);
+      }
+      html[data-scrolled="true"] header h1,
+      html[data-scrolled="true"] header h2,
+      html[data-scrolled="true"] header .hdr-btn {
+        display: none;
+      }
+      html[data-scrolled="false"] main > footer {
+        opacity: 0;
+        visibility: hidden;
+        -webkit-pointer-events: none;
+        pointer-events: none;
+      }
+      html[data-scrolled="false"] main > footer > div {
+        display: none;
+      }
+      html[data-menu-open="true"] aside {
+        opacity: 1;
+        visibility: visible;
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+      }
     </style>
   </head>
   <body>
+    <nav>
+      <div class="nav-item left cta">
+        <a href="https://seoscribe.net/blog/">Read the blog</a>
+      </div>
+      <div class="nav-item center hdr">
+        <a href="https://seoscribe.net/">
+          <span>SEO Scribe</span>
+        </a>
+      </div>
+      <div class="nav-item right btn">
+        <button id="btn_menu">
+          <span>Menu</span>
+        </button>
+      </div>
+    </nav>
+    <header>
+      <h1>Write quality content for the web</h1>
+      <h2>Optimize yourself, your team &amp; your content for discoverability</h2>
+      <a href="https://seoscribe.net/editor/" class="hdr-btn">
+        <span>Try the app</span>
+      </a>
+    </header>
     <main>
+      <section>
+
+      </section>
+      <section>
+
+      </section>
+      <section>
+
+      </section>
+      <footer>
+        <div>
+          <ul>
+            <li>Logo</li>
+            <li>&copy;2016 <strong>SEO Scribe</strong></li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li><a href="https://seoscribe.net/blog/">Blog</a></li>
+            <li><a href="https://seoscribe.net/team/">The Team</a></li>
+            <li><a href="https://seoscribe.net/about/">About</a></li>
+            <li><a href="https://seoscribe.net/faq/">FAQs</a></li>
+            <li><a href="https://seoscribe.net/jobs/">Jobs</a></li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li><a href="https://seoscribe.net/contact/">Contact Us</a></li>
+            <li><a href="https://seoscribe.net/press/">Press</a></li>
+            <li><a href="https://seoscribe.net/terms/">Terms</a></li>
+            <li><a href="https://seoscribe.net/privacy/">Privacy</a></li>
+            <li><a href="https://seoscribe.net/sitemap/">Sitemap</a></li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li><a href="https://facebook.com/seoscribe/">Facebook</a></li>
+            <li><a href="https://twitter.com/seo_scribe/">Twitter</a></li>
+            <li><a href="https://plus.google.com/+seoscribe/">Google+</a></li>
+            <li><a href="https://instagram.com/seoscribe/">Instagram</a></li>
+            <li><a href="https://medium.com/seo_scribe/">Medium</a></li>
+          </ul>
+        </div>
+      </footer>
     </main>
+    <aside>
+      <dl>
+        <dt>Products</dt>
+        <dd><a href="https://seoscribe.net/editor/">Text Editor</a></dd>
+        <dd><a href="https://seoscribe.net/analyst/">Page Analyst</a></dd>
+        <dd><a href="https://seoscribe.net/planner/">Content Planner</a></dd>
+      </dl>
+      <dl>
+        <dt>Knowledge</dt>
+        <dd><a href="https://seoscribe.net/blog/">Our Blog</a></dd>
+        <dd><a href="https://seoscribe.net/forum/">Q&amp;A Forum</a></dd>
+        <dd><a href="https://seoscribe.net/debunked/">SEO Myths: Debunked</a></dd>
+        <dd><a href="https://seoscribe.net/guides/">Writing Guides</a></dd>
+        <dd><a href="https://seoscribe.net/glossary/">Glossary</a></dd>
+      </dl>
+      <dl>
+        <dt>
+          Support
+        </dt>
+        <dd><a href="https://seoscribe.net/advisors/">Find an Advisor</a></dd>
+        <dd><a href="https://seoscribe.net/links/">Useful Links</a></dd>
+        <dd><a href="https://seoscribe.net/contact/">Contact Us</a></dd>
+        <dd><a href="https://seoscribe.net/sitemap/">Sitemap</a></dd>
+      </dl>
+    </aside>
     <script>
-      ;(function(){
-        
-      })();
+      ;(function (win,doc) {
+        var root_el = doc.documentElement || doc.getElementsByTagName('html')[0];
+        var body_el = doc.body || doc.getElementsByTagName('body')[0];
+        var banner_el = doc.getElementsByTagName('header')[0];
+        var btn_menu = doc.getElementById('btn_menu');
+        var nav_el = doc.getElementsByTagName('nav')[0];
+        var wH = (win.innerHeight || banner_el.clientHeight) - 64;
+
+        init();
+
+        function init () {
+          asyncLoadFonts(['https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext']);
+          win.addEventListener('scroll', rebounce(handleScroll), { passive: true, capture: false, once: false });
+          win.addEventListener('load', handleLoad, { passive: true, capture: false, once: true });
+          btn_menu.addEventListener('click', showMenu, { passive: true, capture: false, once: false });
+        }
+
+        function handleLoad () {
+          win.removeEventListener('load', handleLoad, { passive: true, capture: false, once: true });
+          root_el.setAttribute('data-font-loaded', 'true');
+        }
+
+        function handleScroll () {
+          var oY = (win.scrollY || win.pageYOffset);
+
+          if (typeof root_el.getAttribute('data-scrolled') === 'undefined') {
+            return;
+
+          } else if (oY < wH && root_el.getAttribute('data-scrolled') === 'false') {
+            return;
+
+          } else if (oY >= wH && root_el.getAttribute('data-scrolled') === 'true') {
+            return;
+
+          } else if (oY >= wH && root_el.getAttribute('data-scrolled') === 'false') {
+            root_el.setAttribute('data-scrolled', 'true');
+
+          } else if(oY < wH && root_el.getAttribute('data-scrolled') === 'true') {
+            root_el.setAttribute('data-scrolled', 'false');
+
+          } else {
+            return;
+          }
+        }
+
+        function showMenu () {
+          root_el.setAttribute('data-menu-open', (root_el.getAttribute('data-menu-open') === 'true' ? 'false' : 'true'));
+        }
+
+        function asyncLoadFonts (urls) {
+          urls.forEach(function(url){
+            var font = doc.createElement('link');
+            font.href = url;
+            font.rel = 'stylesheet';
+            doc.head.appendChild(font);
+          });
+        }
+
+        function rebounce (func) {
+          var scheduled, context, args;
+          return function () {
+            var i = 0;
+            context = this, args = [];
+
+            for (; i < arguments.length; ++i) {
+              args[i] = arguments[i];
+            }
+
+            if (!!scheduled) {
+              win.cancelAnimationFrame(scheduled);
+            }
+
+            scheduled = win.requestAnimationFrame(function(){
+              func.apply(context, args);
+              scheduled = null;
+            });
+          }
+        }
+
+      })(window, window.document);
     </script>
   </body>
 </html>
