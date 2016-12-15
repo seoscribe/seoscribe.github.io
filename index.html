@@ -891,7 +891,6 @@
       </div>
     </nav>
     <header>
-      <div class="bg-vid"></div>
       <h1><span>Optimize your performance</span></h1>
       <h2>Learn how to create &amp; optimize high-quality, search-friendly content</h2>
       <a href="https://seoscribe.net/editor/" class="hdr-btn">
@@ -901,11 +900,9 @@
     <main>
       <section>
         <h3>About Us</h3>
-
       </section>
       <section>
         <h3>Products</h3>
-
       </section>
       <section>
         <h3>Knowledge</h3>
@@ -1027,7 +1024,7 @@
       </footer>
     </main>
     <aside>
-      <form method="GET" action="https://seoscribe.net/search" id="search" accept-charset="utf-8" enctype="application/x-www-form-urlencoded" autocomplete="off">
+      <form id="search" method="GET" action="https://seoscribe.net/search" accept-charset="utf-8" enctype="application/x-www-form-urlencoded" autocomplete="off">
         <fieldset>
           <input type="text" id="input_search" name="input_search" required="true" autocomplete="off" results="5">
           <button type="submit"></button>
@@ -1062,17 +1059,17 @@
     </aside>
     <div class="overlay" data-event="showMenu" role="presentation" aria-hidden="true"></div>
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><!--[if IE]><script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/2014.01.31/classList.min.js"></script><![endif]-->
+    <script src="https://cdn.polyfill.io/v2/polyfill.js?features=querySelector,localStorage,Array.prototype.forEach,Array.prototype.filter,Array.prototype.map,Array.prototype.reduce,Element.prototype.classList,XMLHttpRequest,requestAnimationFrame"></script>
+    <script src="https://seoscribe.net/assets/js/event-listener-options.shim.js"></script>
     <script>
       void function (win, doc) {
         var root_el = doc.documentElement || doc.getElementsByTagName('html')[0];
         var body_el = doc.body || doc.getElementsByTagName('body')[0];
         var banner_el = doc.getElementsByTagName('header')[0];
         var nav_el = doc.getElementsByTagName('nav')[0];
-        var bg_vid = doc.querySelector('.bg-vid');
         var last_sn = [].slice.call(doc.getElementsByTagName('section'), -1)[0];
-        var wH = (win.innerHeight || banner_el.clientHeight) - 64;
         var hdr_content = [].slice.call(doc.querySelector('header').querySelectorAll('h1,h2,a'));
-        var _supports_video = 'HTMLVideoElement' in win;
+        var _wh = (win.innerHeight || banner_el.clientHeight) - 64;
 
         init();
 
@@ -1084,7 +1081,6 @@
 
         function dispatchClicks (e) {
           var evt = (e.target || this);
-
           switch (evt.getAttribute('data-event')) {
             case 'showMenu':
               return showMenu();
@@ -1112,7 +1108,7 @@
 
         function handleScroll () {
           var oY = (win.scrollY || win.pageYOffset);
-          var oD = ((wH - oY) / wH);
+          var oD = ((_wh - oY) / _wh);
 
           hdr_content.forEach(function (el) {
             if (oD >= 0 && oD <= 1) {
@@ -1123,21 +1119,21 @@
           if (typeof root_el.getAttribute('data-scrolled') === 'undefined') {
             return;
 
-          } else if (oY < wH && root_el.getAttribute('data-scrolled') === 'false') {
+          } else if (oY < _wh && root_el.getAttribute('data-scrolled') === 'false') {
             return;
 
-          } else if (oY >= wH && root_el.getAttribute('data-scrolled') === 'true') {
+          } else if (oY >= _wh && root_el.getAttribute('data-scrolled') === 'true') {
 
-            if (last_sn.getBoundingClientRect().top < wH / 4) {
+            if (last_sn.getBoundingClientRect().top < _wh / 4) {
               root_el.setAttribute('data-footer-shown', 'true');
             } else {
               root_el.setAttribute('data-footer-shown','false');
             }
 
-          } else if (oY >= wH && root_el.getAttribute('data-scrolled') === 'false') {
+          } else if (oY >= _wh && root_el.getAttribute('data-scrolled') === 'false') {
             root_el.setAttribute('data-scrolled', 'true');
 
-          } else if(oY < wH && root_el.getAttribute('data-scrolled') === 'true') {
+          } else if(oY < _wh && root_el.getAttribute('data-scrolled') === 'true') {
             root_el.setAttribute('data-scrolled', 'false');
 
           } else {
@@ -1150,7 +1146,7 @@
             (root_el.getAttribute('data-menu-open') === 'true' ? 'false' : 'true')
           );
 
-          [].slice.call(bg_vid.getElementsByTagName('video')).forEach(function(vid){
+          [].slice.call(doc.getElementsByTagName('video')).forEach(function(vid){
             if (root_el.getAttribute('data-menu-open') === 'true') {
               if (isPlaying(vid)) {
                 vid.pause();
@@ -1190,9 +1186,9 @@
         }
 
         function addVideo () {
-          if (win.innerWidth > 768 && !!_supports_video) {
+          if (win.innerWidth > 768 && 'HTMLVideoElement' in win) {
             root_el.setAttribute('data-autoplay', 'true');
-            bg_vid.innerHTML = '<video preload="auto" autoplay="true" autostart="true" poster="https://seoscribe.net/assets/img/perf.jpg" muted loop webkit-playsinline playsinline><source src="https://seoscribe.net/assets/vid/perf.webm" type="video/webm"><source src="https://seoscribe.net/assets/vid/perf.mp4" type="video/mp4"></video>';
+            banner_el.insertAdjacentHTML('afterBegin', '<div class="bg-vid"><video preload="auto" autoplay="true" autostart="true" poster="https://seoscribe.net/assets/img/perf.jpg" muted loop webkit-playsinline playsinline><source src="https://seoscribe.net/assets/vid/perf.webm" type="video/webm"><source src="https://seoscribe.net/assets/vid/perf.mp4" type="video/mp4"></video></div>');
           }
         }
 
@@ -1217,11 +1213,11 @@
         function scrollToTop () {
           var sY = (win.scrollY || win.pageYOffset);
 
-          if (sY > (wH / 20 << 0)) {
+          if (sY > (_wh / 20 << 0)) {
             win.scrollBy(0, (-sY / 10 << 0));
             win.setTimeout(scrollToTop, 10);
 
-          } else if (sY <= (wH / 20 << 0)) {
+          } else if (sY <= (_wh / 20 << 0)) {
             win.scrollTo(0, 0);
           }
         }
