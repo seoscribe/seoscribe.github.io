@@ -14,11 +14,12 @@
     <meta name="referrer" content="origin">
     <meta name="description" content="">
     <title>SEO Scribe &middot; the SEO Text Editor &middot; </title>
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
     <style>
       html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-webkit-font-smoothing:subpixel-antialiased;-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-overflow-scrolling:touch;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;touch-action:manipulation;font:normal normal 400 16px/1.2 Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,Helmet,Freesans,sans-serif}
       *,:before,:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;touch-action:manipulation;margin:0;padding:0;border:0;font:inherit}:active,:focus{outline:0}article,footer,header,main,nav,section,video{display:block}
       html,body{height:100%;background:#eee;overflow:hidden}
-      a{-webkit-text-decoration-skip:objects;text-decoration:none}button,input,textarea{-webkit-appearance:none;-webkit-border-radius:0;border-radius:0;background:0 0}button,img,video{-webkit-touch-callout:none}button,a,img,video{-webkit-user-select:none;-moz-user-select:none}button,a{color:inherit;cursor:pointer}textarea{resize:none}[disabled]{opacity:.6;cursor:not-allowed}[hidden],video::-webkit-media-controls,video::-webkit-media-controls-play-button,video::-webkit-media-controls-volume-slider,video::-webkit-media-controls-mute-button,video::-webkit-media-controls-timeline,video::-webkit-media-controls-current-time-display{display:none!important}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#111;-webkit-border-radius:4px;border-radius:4px}::-webkit-scrollbar-track{background-color:transparent;background:rgba(0,0,0,0)}::selection{background:#111;color:#fff}::-moz-selection{background:#111;color:#fff}
+      a{-webkit-text-decoration-skip:objects;text-decoration:none}button,input,textarea{-webkit-appearance:none;-webkit-border-radius:0;border-radius:0;background:0 0}button,img,video{-webkit-touch-callout:none}button,a,img,video{-webkit-user-select:none;-moz-user-select:none}button,a{color:inherit;cursor:pointer}textarea{resize:none}[disabled]{opacity:.6;cursor:not-allowed;-webkit-pointer-events:none;pointer-events:none}[hidden]{display:none}video::-webkit-media-controls{display:none}video::-webkit-media-controls-play-button{display:none}video::-webkit-media-controls-volume-slider{display:none}video::-webkit-media-controls-mute-button{display:none}video::-webkit-media-controls-timeline{display:none}video::-webkit-media-controls-current-time-display{display:none}details summary::-webkit-details-marker{display:none}details summary::-moz-details-marker{display:none}details summary::details-marker{display:none}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#111;-webkit-border-radius:4px;border-radius:4px}::-webkit-scrollbar-track{background-color:transparent;background:rgba(0,0,0,0)}::selection{background:#111;color:#fff}::-moz-selection{background:#111;color:#fff}
       html[data-font-loaded="true"] {
         font-family: Karla,Roboto,-apple-system,BlinkMacSystemFont,Helvetica,Arial,Helmet,Freesans,sans-serif;
       }
@@ -72,7 +73,7 @@
       h1 span {
         margin-left: 34px;
       }
-      aside div {
+      aside details, aside div {
         position: relative;
         padding: 0 0 16px 0;
       }
@@ -130,15 +131,16 @@
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         resize: none;
       }
-      label[for] {
+      summary, label[for] {
         display: block;
         position: relative;
         font-size: 10px;
-        color: #555;
+        cursor: pointer;
+        color: #777;
         text-transform: uppercase;
         z-index: 2;
       }
-      label[for] > span {
+      summary > span, label[for] > span {
         position: absolute;
         margin-left: 1ex;
         width: 12px;
@@ -149,7 +151,7 @@
         border: 1px solid #c6c6c6;
         border-radius: 50%;
       }
-      label[for] > span:hover {
+      summary > span:hover, label[for] > span:hover {
         color: #3f51b5;
         border-color: #3f51b5;
       }
@@ -310,15 +312,20 @@
       [data-night-mode="on"] aside {
         background: #444;
       }
-      [data-night-mode="on"] label[for],
-      [data-night-mode="on"] input[type="text"]{
-        color: #eee;
+      [data-night-mode="on"] summary,
+      [data-night-mode="on"] label[for] {
+        color: #bbb;
       }
+      [data-night-mode="on"] input[type="text"] {
+        color: #fff;
+      }
+      [data-night-mode="on"] summary > span,
       [data-night-mode="on"] label[for] > span {
         background-color: #333;
         color: #eee;
         border-color: #333;
       }
+      [data-night-mode="on"] summary > span:hover,
       [data-night-mode="on"] label[for] > span:hover {
         color: #ffcc00;
         border-color: #ffcc00;
@@ -395,56 +402,53 @@
         }
       }
     </style>
-    <!--[if IE]><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--><!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><!--[if IE]><script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/2014.01.31/classList.min.js"></script><![endif]-->
   </head>
   <body>
     <aside>
       <h1>
         <span>SEO Scribe</span>
       </h1>
-      <div>
-        <label for="keyword">Keyword</label>
+      <details open>
+        <summary>Keyword</summary>
         <input id="keyword" type="text" tabindex="2" placeholder="Enter keyword" pattern=".{1,}" required>
         <span class="overlay" aria-hidden="true" role="presentation"></span>
-      </div>
-      <div>
-        <label for="keyword_density">Keyword density <span title="Percentage of total words that are keywords. Should be more than 0% and less than 5%.">?</span></label>
+      </details>
+      <details open>
+        <summary>Keyword density <span title="Percentage of total words that are keywords. Should be more than 0% and less than 5%.">?</span></summary>
         <output id="keyword_density">0%</output>
-      </div>
-      <div>
-        <label for="rel_density">Related word density <span title="Percentage of total words that are words related to keyword. Should be more than 0% and less than 10%.">?</span></label>
+      </details>
+      <details open>
+        <summary>Related word density <span title="Percentage of total words that are words related to keyword. Should be more than 0% and less than 10%.">?</span></summary>
         <output id="rel_density">0%</output>
-      </div>
-
-      <div>
-        <label for="lsi_density">LSI word density <span title="Percentage of total words that are latent semantic keywords/phrases. Should be more than 0% and less than 10%.">?</span></label>
+      </details>
+      <details open>
+        <summary>LSI word density <span title="Percentage of total words that are latent semantic keywords/phrases. Should be more than 0% and less than 10%.">?</span></summary>
         <output id="lsi_density">0%</output>
-      </div>
-
-      <div>
-        <label for="trn_density">Sentences with transition words <span title="Transition words are a good indicator of better quality content, and should appear in your content where possible.">?</span></label>
+      </details>
+      <details open>
+        <summary>Sentences with transition words <span title="Transition words are a good indicator of better quality content, and should appear in your content where possible.">?</span></summary>
         <output id="trn_density">0%</output>
-      </div>
-      <div>
-        <label for="readability_score">Ease of Readability <span title="A measurement of how easy your content is to read, using the Flesch-Kincaid reading ease metric. Lower is better.">?</span></label>
+      </details>
+      <details open>
+        <summary>Ease of Readability <span title="A measurement of how easy your content is to read, using the Flesch-Kincaid reading ease metric. Lower is better.">?</span></summary>
         <output id="readability_score">N/A</output>
-      </div>
-      <div hidden>
-        <label for="smog_score">SMOG Score <span title="The SMOG index is an alternative metric for readability, more accurate than Flesch-Kincaid. A lower score indicates a more readable text.">?</span></label>
+      </details>
+      <details open hidden>
+        <summary>SMOG Score <span title="The SMOG index is an alternative metric for readability, more accurate than Flesch-Kincaid. A lower score indicates a more readable text.">?</span></summary>
         <output id="smog_score">N/A</output>
-      </div>
-      <div>
-        <label for="keyword_first_paragraph">Keyword in first paragraph <span title="Your keyword should appear in the first paragraph of your content.">?</span></label>
+      </details>
+      <details open>
+        <summary>Keyword in first paragraph <span title="Your keyword should appear in the first paragraph of your content.">?</span></summary>
         <output id="keyword_first_paragraph">No</output>
-      </div>
-      <div hidden>
-        <label for="keyword_headings">Keyword in headings <span title="Your keyword should appear in your headings as well as your title and meta description.">?</span></label>
+      </details>
+      <details open hidden>
+        <summary>Keyword in headings <span title="Your keyword should appear in your headings as well as your title and meta description.">?</span></summary>
         <output id="keyword_headings">No</output>
-      </div>
-      <div>
-        <label for="word_count">Word count <span title="Total word count of your content. This should be a minimum of 300 words.">?</span></label>
+      </details>
+      <details open>
+        <summary>Word count <span title="Total word count of your content. This should be a minimum of 300 words.">?</span></summary>
         <output id="word_count">0</output>
-      </div>
+      </details>
       <div class="warning" hidden>
         0 sentences starting with same word
       </div>
@@ -495,6 +499,10 @@
 HTML will be detected automatically and additional ranking criteria will be displayed." tabindex="1" autocomplete="off" minlength="1" required></textarea>
     </main>
     <button id="btn_menu"></button>
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
     <script src="https://cdn.polyfill.io/v2/polyfill.js?features=querySelector,Array.prototype.forEach,Array.prototype.filter,Array.prototype.map,Array.prototype.reduce,Element.prototype.classList,XMLHttpRequest"></script>
     <script src="https://seoscribe.net/assets/js/event-listener-options.shim.js"></script>
     <script async defer src="https://seoscribe.net/assets/js/editor.js"></script>
