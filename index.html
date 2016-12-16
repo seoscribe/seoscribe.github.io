@@ -483,9 +483,9 @@
         display: inline-block;
         padding: 8px;
         color: #fff;
-        font-size: 12px;
+        font-size: 16px;
+        letter-spacing: -1px;
         font-weight: 700;
-        text-transform: uppercase;
         border-radius: 4px;
       }
       .btn.login {
@@ -813,7 +813,7 @@
       }
       .tab {
         display: inline-block;
-        padding: 8px;
+        padding: 5px;
         color: #222;
         font-size: 16px;
         letter-spacing: -1px;
@@ -1247,10 +1247,11 @@
         }
 
         function rebounce (func) {
-          var scheduled, context, args;
+          var scheduled, context, args, i;
           return function () {
-            var i = 0;
-            context = this, args = [];
+            context = this;
+            args = [];
+            i = 0;
             for (; i < arguments.length; ++i) {
               args[i] = arguments[i];
             }
@@ -1273,6 +1274,7 @@
 
           } else if (sY <= (_wh / 20 << 0)) {
             win.scrollTo(0, 0);
+
           }
         }
 
