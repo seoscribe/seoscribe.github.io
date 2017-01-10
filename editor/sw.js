@@ -11,7 +11,6 @@ self.addEventListener('install', event => {
   const urlsToPrefetch = [
     'https://seoscribe.net/editor/',
     'https://seoscribe.net/assets/js/editor.js',
-    'https://seoscribe.net/assets/js/serviceworker-cache-polyfill.js',
     'https://seoscribe.net/favicon.ico',
     'https://seoscribe.net/manifest.json'
   ];
