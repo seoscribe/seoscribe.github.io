@@ -3,9 +3,7 @@
 self.importScripts('https://seoscribe.net/assets/js/serviceworker-cache-polyfill.js');
 
 const CACHE_VERSION = 21;
-const CURRENT_CACHES = {
-  prefetch: 'seoscribe-v' + CACHE_VERSION
-};
+const CURRENT_CACHES = { prefetch: 'seoscribe-v' + CACHE_VERSION };
 
 self.addEventListener('install', event => {
   const urlsToPrefetch = [
@@ -25,8 +23,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   const expectedCacheNames = self.Object.keys(CURRENT_CACHES).map(key => {
     return CURRENT_CACHES[key];
-  });
-  
+  });  
   event.waitUntil(
     self.caches.keys().then(cacheNames => {
       return self.Promise.all(
