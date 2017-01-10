@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr" data-night-mode="off" data-font-loaded="false" data-menu-open="false">
+<html lang="en" dir="ltr" data-night-mode="off" data-font-loaded="false" data-menu-open="false" data-has-html="false">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
@@ -96,9 +96,6 @@
         bottom: 0;
         right: 0;
         line-height: 38px;
-      }
-      [data-menu-open="true"] #btn_menu:after {
-        content:'\00D7';
       }
       main {
         position: absolute;
@@ -303,6 +300,12 @@
         padding: 2px 4px;
         margin-bottom: 1px;
         border-radius: 2px;
+      }
+      [data-menu-open="true"] #btn_menu:after {
+        content:'\00D7';
+      }
+      [data-has-html="true"] textarea {
+        font-family: Consolas,Menlo,Monaco,Cousine,"Anonymous Pro",Inconsolata,"Courier New",Courier,monospace;
       }
       [data-night-mode="on"],
       [data-night-mode="on"] body {
