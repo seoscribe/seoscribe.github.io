@@ -16,8 +16,6 @@ self.addEventListener('install', event => {
     'https://seoscribe.net/manifest.json'
   ];
 
-  self.skipWaiting();
-  
   event.waitUntil(
     caches.open(CURRENT_CACHES.prefetch).then(cache => {
       return cache.addAll(urlsToPrefetch);
