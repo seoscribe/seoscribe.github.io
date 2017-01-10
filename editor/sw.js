@@ -2,12 +2,12 @@
 
 self.importScripts('https://seoscribe.net/assets/js/serviceworker-cache-polyfill.js');
 
-const CACHE_VERSION = 18;
+const CACHE_VERSION = 19;
 const CURRENT_CACHES = {
   prefetch: 'seoscribe-v' + CACHE_VERSION
 };
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', event => {
   const urlsToPrefetch = [
     'https://seoscribe.net/editor/',
     'https://seoscribe.net/assets/js/editor.js',
@@ -15,22 +15,25 @@ self.addEventListener('install', function(event) {
     'https://seoscribe.net/favicon.ico',
     'https://seoscribe.net/manifest.json'
   ];
+
   self.skipWaiting();
+  
   event.waitUntil(
-    caches.open(CURRENT_CACHES.prefetch).then(function(cache){
+    caches.open(CURRENT_CACHES.prefetch).then(cache => {
       return cache.addAll(urlsToPrefetch);
     })
   );
 });
 
-self.addEventListener('activate', function(event){
-  const expectedCacheNames = Object.keys(CURRENT_CACHES).map(function(key) {
+self.addEventListener('activate', event => {
+  const expectedCacheNames = Object.keys(CURRENT_CACHES).map(key => {
     return CURRENT_CACHES[key];
   });
+  
   event.waitUntil(
-    caches.keys().then(function(cacheNames){
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(function(cacheName){
+        cacheNames.map(cacheName => {
           if (expectedCacheNames.indexOf(cacheName) === -1){
             return caches.delete(cacheName);
           }
@@ -40,11 +43,11 @@ self.addEventListener('activate', function(event){
   );
 });
 
-self.addEventListener('fetch', function(event){
-  if(event.request.mode==='navigate'||(event.request.method==='GET'&&event.request.headers.get('accept').includes('text/html'))){
+self.addEventListener('fetch', event => {
+  if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
     event.respondWith(
       fetch(event.request.url)
-        .catch(function(){
+        .catch(() => {
           return caches.match('/offline/');
         })
     );
@@ -52,8 +55,8 @@ self.addEventListener('fetch', function(event){
   else{
     event.respondWith(
       caches.match(event.request)
-        .then(function(response){
-          return response||fetch(event.request);
+        .then(response => {
+          return response || fetch(event.request);
         })
     );
   }
