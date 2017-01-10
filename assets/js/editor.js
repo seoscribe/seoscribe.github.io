@@ -198,10 +198,19 @@
       _vrb_ord = _plain.match(/''(\s|\n)(asked|replied|said|whispered)(\s|\n)[A-Za-z]*/) ? _plain.match(/''(\s|\n)(asked|replied|said|whispered)(\s|\n)[A-Za-z]*/) : [];
     }
 
-    checkParagraphs(_paras);
-    checkSentences(_sntcs);
-    updateKeywordMetrics(_sntcs.length);
-    r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
+    if (_sntcs.length <= 0 && _paras.length <= 0) {
+      return;
+    }
+
+    if (_sntcs.length > 0) {
+      checkSentences(_sntcs);
+      updateKeywordMetrics(_sntcs.length);
+      r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
+    }
+
+    if (_paras.length > 0) {
+      checkParagraphs(_paras);
+    }
 
     if (_sntcs.length > 29) {
       r_smog.parentNode.removeAttribute('hidden');
@@ -264,7 +273,7 @@
     hc = 0;
 
     _hdngs.forEach(function(heading){
-      if(matchString(heading.textContent, k) > 0){
+      if (matchString(heading.textContent, k) > 0) {
         hc++;
       } else {
         for (var j = 0; j < rel_words.length; ++j) {
