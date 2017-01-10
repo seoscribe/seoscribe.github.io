@@ -1,4 +1,4 @@
-;(function(win,doc){
+;(function (win,doc) {
   'use strict';
   var _protocol = win.location.protocol !== 'https:' ? 'http:' : 'https:';
   var root_el = doc.documentElement || doc.getElementsByTagName('html')[0];
