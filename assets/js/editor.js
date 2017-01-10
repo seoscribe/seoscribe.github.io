@@ -164,9 +164,11 @@
       return;
 
     } else if (!_has_html) {
+      root_el.setAttribute('data-has-html', 'false');
       processText(_txt_to_process);
 
     } else {
+      root_el.setAttribute('data-has-html', 'true');
       parseHTML();
     }
 
