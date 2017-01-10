@@ -95,13 +95,13 @@
   }
 
   function eventWireUp () {
-    win.addEventListener('load', function (){
+    win.addEventListener('load', function () {
       root_el.setAttribute('data-font-loaded', !0);
     }, {passive: true, capture: false, once: true});
 
     keyword.addEventListener('blur', startSEOScribe, {passive: true, capture: false, once: false});
     content.addEventListener('blur', checkContent, {passive: true, capture: false, once: false});
-    content.addEventListener('keydown', debounce(checkContent, 100), {passive: true, capture: false, once: false});
+    content.addEventListener('keydown', rebounce(checkContent), {passive: true, capture: false, once: false});
     btn_exp_txt.addEventListener('click', exportText, {passive: true, capture: false, once: false});
     btn_exp_html.addEventListener('click', exportText, {passive: true, capture: false, once: false});
 
@@ -118,7 +118,7 @@
     }
   }
 
-  function startSEOScribe(){
+  function startSEOScribe () {
     var _k = keyword.value;
 
     if (_k.toLowerCase().trim() === k) {
@@ -160,7 +160,7 @@
 
     resetAll();
 
-    if (!k && !_txt_to_process.trim()) {
+    if (!k && !_txt_to_process) {
       return;
 
     } else if (!_has_html) {
@@ -185,8 +185,6 @@
     var _hck_phr = [];
     var _vrb_ord = [];
 
-    wc = _wrds.length;
-
     if (!!_plain && typeof _plain.match === 'function') {
       _paras = _plain.split('\n') ? _plain.split('\n') : [];
       _sntcs = _plain.match(/[^\.!\?\n]+[\.!\?\n]+/g) ? _plain.match(/[^\.!\?\n]+[\.!\?\n]+/g) : [];
@@ -198,13 +196,12 @@
       _vrb_ord = _plain.match(/''(\s|\n)(asked|replied|said|whispered)(\s|\n)[A-Za-z]*/) ? _plain.match(/''(\s|\n)(asked|replied|said|whispered)(\s|\n)[A-Za-z]*/) : [];
     }
 
-    if (_sntcs.length <= 0 && _paras.length <= 0) {
-      return;
+    if (_wrds.length > 0) {
+      wc = _wrds.length;
     }
 
     if (_sntcs.length > 0) {
       checkSentences(_sntcs);
-      updateKeywordMetrics(_sntcs.length);
       r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
     }
 
@@ -217,10 +214,6 @@
       r_smog.textContent = getSMOGScore(_sntcs, _wrds);
     }
 
-    if (!k) {
-      return;
-    }
-
     kc = matchString(_plain, k);
 
     rel_words.forEach(function (rel_w) {
@@ -230,6 +223,8 @@
     win.lsi_words.forEach(function (lsi_w) {
       lc += matchString(_plain, lsi_w);
     });
+
+    updateKeywordMetrics(_sntcs.length);
   }
 
   function parseHTML(){
@@ -239,31 +234,31 @@
 
     processText(_doc.body.textContent);
 
-    if(_hdngs.length < 1){
+    if (_hdngs.length < 1) {
       no_hdngs.removeAttribute('hidden');
     } else {
       no_hdngs.setAttribute('hidden', '');
     }
 
-    if(_doc.querySelectorAll('a[href]').length < 1){
+    if (_doc.querySelectorAll('a[href]').length < 1) {
       no_links.removeAttribute('hidden');
     } else {
       no_links.setAttribute('hidden', '');
     }
 
-    if(_doc.querySelectorAll('ul li,ol li').length < 1){
+    if (_doc.querySelectorAll('ul li,ol li').length < 1) {
       no_lists.removeAttribute('hidden');
     } else {
       no_lists.setAttribute('hidden', '');
     }
 
-    if(_doc.querySelectorAll('img[src]').length < 1){
+    if (_doc.querySelectorAll('img[src]').length < 1) {
       no_imgs.removeAttribute('hidden');
     } else {
       no_imgs.setAttribute('hidden', '');
     }
 
-    if(_doc.querySelectorAll('img[src]').length > 0 && _doc.querySelectorAll('img[alt]').length < 1){
+    if (_doc.querySelectorAll('img[src]').length > 0 && _doc.querySelectorAll('img[alt]').length < 1) {
       no_img_alts.removeAttribute('hidden');
     } else {
       no_img_alts.setAttribute('hidden', '');
@@ -350,7 +345,7 @@
         }
 
         trn_words.forEach(function (trn_w) {
-          tc += matchString(sntc, trn_w);
+          tc += matchString(sntc, trn_w, true);
         });
       });
     }
@@ -368,8 +363,11 @@
     adjustWordCountColor(wc, wrd_c);
   }
 
-  function matchString (string, to_match) {
-    var rgx = new win.RegExp('\\b(' + to_match + '|' + to_match + '+s|i?es|ves)\\b', 'gi');
+  function matchString (string, to_match, exact) {
+    var rgx = typeof exact !== 'undefined' && !!exact ?
+      new win.RegExp('\\b(' + to_match + ')\\b', 'gi') :
+        new win.RegExp('\\b(' + to_match + '|' + to_match + 's|i?es|ves)\\b', 'gi');
+
     var idx = string.match(rgx);
 
     if (idx && idx.length > 0) {
@@ -498,11 +496,13 @@
     }
     p_syll = 0;
 
-    wrds.forEach(function(wrd){
-      if(countSyllables(wrd) > 2) p_syll++;
+    wrds.forEach(function (wrd) {
+      if (countSyllables(wrd) > 2) {
+        p_syll++;
+      }
     });
 
-    if(p_syll > 0){
+    if (p_syll > 0) {
       _smog = (1.0430 * win.Math.sqrt(p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1);
     }
 
@@ -514,12 +514,14 @@
     if ('localStorage' in win) {
       win.localStorage.setItem('autosaved_txt', content.value);
       win.localStorage.setItem('autosaved_kw', k);
-      evt.textContent = 'Saved';
-      evt.setAttribute('disabled', '');
-      win.setTimeout(function(){
-        evt.textContent = 'Save';
-        evt.removeAttribute('disabled');
-      }, 3e3);
+      if (typeof evt !== 'undefined' && 'setAttribute' in evt) {
+        evt.textContent = 'Saved';
+        evt.setAttribute('disabled', '');
+        win.setTimeout(function () {
+          evt.textContent = 'Save';
+          evt.removeAttribute('disabled');
+        }, 3e3);
+      }
     }
   }
 
@@ -532,7 +534,7 @@
               : content.value;
 
     evt.setAttribute('disabled', '');
-    win.setTimeout(function(){
+    win.setTimeout(function () {
       evt.removeAttribute('disabled');
     }, 2e3);
 
@@ -613,32 +615,26 @@
     });
   }
 
-  function debounce (f, wait) {
-    var scheduled, args, context, timestamp, len, i;
+  function rebounce (func) {
+    var scheduled, context, args, len, i;
     return function () {
       context = this;
       args = [];
-      timestamp = win.performance.now;
       len = arguments.length;
       i = 0;
 
-      for (; i < len; ++i){
+      for (; i < len; ++i) {
         args[i] = arguments[i];
       }
 
-      if (!scheduled) {
-       scheduled = win.setTimeout(later, wait);
+      if (!!scheduled) {
+        win.cancelAnimationFrame(scheduled);
       }
 
-      function later () {
-        var last = win.performance.now - timestamp;
-        if (last < wait) {
-          scheduled = win.setTimeout(later, wait - last);
-        } else {
-          scheduled = null;
-          f.apply(context, args);
-        }
-      }
+      scheduled = win.requestAnimationFrame(function () {
+        func.apply(context, args);
+        scheduled = null;
+      });
     }
   }
 
