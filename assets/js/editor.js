@@ -54,27 +54,27 @@
     }
 
     if ('localStorage' in win) {
-      
+
       if (win.localStorage.getItem('autosaved_kw')) {
         keyword.value = win.localStorage.getItem('autosaved_kw');
       }
-      
+
       if (win.localStorage.getItem('autosaved_txt')){
         content.value = win.localStorage.getItem('autosaved_txt');
         checkContent();
       }
-      
+
       if (!win.localStorage.getItem('night_mode')) {
         storeNightMode();
-        
+
       } else if (win.localStorage.getItem('night_mode') !== 'false') {
         chk_nt_md.checked = !0;
         setNightMode();
-      
+
       } else {
         setNightMode();
       }
-      
+
     }
 
     if (keyword.value) {
@@ -119,27 +119,29 @@
   }
 
   function startSEOScribe(){
-    if (keyword.value.toLowerCase().trim() === k) {
+    var _k = keyword.value;
+
+    if (_k.toLowerCase().trim() === k) {
       return;
     }
 
-    k = keyword.value.toLowerCase().trim();
+    k = _k.toLowerCase().trim();
     rel_words = [];
     win.lsi_words = [];
+
+    if (!k) {
+      return;
+    }
 
     if ('localStorage' in win) {
       win.localStorage.setItem('autosaved_kw', k);
     }
 
-    if(!k){
-      return;
-    }
-
     if (k.split(' ').length > 1) {
-      qs = k.split(' ').map(function(word){
+      qs = k.split(' ').map(function (word) {
         return win.encodeURIComponent(clean(word));
       }).join('+');
-      
+
     } else {
       qs = k;
     }
@@ -148,20 +150,22 @@
     getLSIWords();
   }
 
-  function checkContent(){
-    var _has_html = !!content.value && content.value.match(/<\/?[\w\s="/.':;#-\/\?]+>+[\/?[\w\s="/.':;#-\/\?]+<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
+  function checkContent () {
+    var _txt_to_process = content.value;
+    var _has_html = !!_txt_to_process && _txt_to_process.match(/<\/?[\w\s="/.':;#-\/\?]+>+[\/?[\w\s="/.':;#-\/\?]+<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
+
     if ('localStorage' in win ) {
-      win.localStorage.setItem('autosaved_txt', content.value);
+      win.localStorage.setItem('autosaved_txt', _txt_to_process);
     }
 
     resetAll();
 
-    if(!k){
+    if (!k && !_txt_to_process.trim()) {
       return;
-    
-    } else if(!_has_html){
-      processText(content.value);
-    
+
+    } else if (!_has_html) {
+      processText(_txt_to_process);
+
     } else {
       parseHTML();
     }
@@ -169,7 +173,7 @@
     sweepJSONP();
   }
 
-  function processText(_plain){
+  function processText (_plain) {
     var _paras = [];
     var _sntcs = [];
     var _wrds = [];
@@ -179,7 +183,9 @@
     var _hck_phr = [];
     var _vrb_ord = [];
 
-    if(!!_plain && typeof _plain.match === 'function'){
+    wc = _wrds.length;
+
+    if (!!_plain && typeof _plain.match === 'function') {
       _paras = _plain.split('\n') ? _plain.split('\n') : [];
       _sntcs = _plain.match(/[^\.!\?\n]+[\.!\?\n]+/g) ? _plain.match(/[^\.!\?\n]+[\.!\?\n]+/g) : [];
       _wrds = _plain.match(/\w+/gi) ? _plain.match(/\w+/gi) : [];
@@ -190,27 +196,29 @@
       _vrb_ord = _plain.match(/''(\s|\n)(asked|replied|said|whispered)(\s|\n)[A-Za-z]*/) ? _plain.match(/''(\s|\n)(asked|replied|said|whispered)(\s|\n)[A-Za-z]*/) : [];
     }
 
-    wc = _wrds.length;
-    kc = matchString(_plain, k);
-
-    rel_words.forEach(function(rel_w){
-      rc += matchString(_plain, rel_w);
-    });
-
-    win.lsi_words.forEach(function(lsi_w){
-      lc += matchString(_plain, lsi_w);
-    });
-    // pv =
-
     checkParagraphs(_paras);
     checkSentences(_sntcs);
     updateKeywordMetrics(_sntcs.length);
     r_ease.textContent = getReadabilityScore(_sntcs, _wrds);
 
-    if(_sntcs.length > 29){
+    if (_sntcs.length > 29) {
       r_smog.parentNode.removeAttribute('hidden');
       r_smog.textContent = getSMOGScore(_sntcs, _wrds);
     }
+
+    if (!k) {
+      return;
+    }
+
+    kc = matchString(_plain, k);
+
+    rel_words.forEach(function (rel_w) {
+      rc += matchString(_plain, rel_w);
+    });
+
+    win.lsi_words.forEach(function (lsi_w) {
+      lc += matchString(_plain, lsi_w);
+    });
   }
 
   function parseHTML(){
@@ -257,8 +265,8 @@
       if(matchString(heading.textContent, k) > 0){
         hc++;
       } else {
-        for(var j = 0; j < rel_words.length; ++j){
-          if(matchString(heading.textContent, rel_words[j]) > 0){
+        for (var j = 0; j < rel_words.length; ++j) {
+          if (matchString(heading.textContent, rel_words[j]) > 0) {
             hc++;
             break;
           }
@@ -269,7 +277,7 @@
     kh.textContent = hc > 0 && hc === _hdngs.length ? 'Yes' : 'No';
   }
 
-  function resetAll(){
+  function resetAll () {
     wc = 0;
     kc = 0;
     rc = 0;
@@ -297,18 +305,18 @@
     r_smog.parentNode.setAttribute('hidden','');
   }
 
-  function checkParagraphs(_p){
+  function checkParagraphs (_p) {
     if(_p.length > 0){
       kfp.textContent = !!matchString(_p[0], k) ? 'Yes' : 'No';
 
-      _p.forEach(function(para){
-        if(para.split(' ').length < 200){
+      _p.forEach(function (para) {
+        if (para.split(' ').length < 200) {
           spc++;
         }
-        
-        if((spc / _p.length * 100 << 0) < 80){
+
+        if ((spc / _p.length * 100 << 0) < 80) {
           sp_warn.removeAttribute('hidden');
-          
+
         } else {
           sp_warn.setAttribute('hidden', '');
         }
@@ -316,28 +324,28 @@
     }
   }
 
-  function checkSentences(_s){
+  function checkSentences (_s) {
     if(_s.length > 0){
-      _s.forEach(function(sntc){
-        if(sntc.split(' ').length < 30){
+      _s.forEach(function (sntc) {
+        if (sntc.split(' ').length < 30) {
           ssc++;
         }
 
-        if((ssc / _s.length * 100 << 0) < 80){
+        if ((ssc / _s.length * 100 << 0) < 80) {
           ss_warn.removeAttribute('hidden');
-          
+
         } else {
           ss_warn.setAttribute('hidden', '');
         }
 
-        trn_words.forEach(function(trn_w){
+        trn_words.forEach(function (trn_w) {
           tc += matchString(sntc, trn_w);
         });
       });
     }
   }
 
-  function updateKeywordMetrics(_s_c){
+  function updateKeywordMetrics (_s_c) {
     wrd_c.textContent = wc;
     kd.textContent = (kc / wc * 100 << 0) + '%';
     rel_d.textContent = (rc / wc * 100 << 0) + '%';
@@ -349,32 +357,32 @@
     adjustWordCountColor(wc, wrd_c);
   }
 
-  function matchString(string, to_match){
+  function matchString (string, to_match) {
     var rgx = new win.RegExp('\\b(' + to_match + '|' + to_match + '+s|i?es|ves)\\b', 'gi');
     var idx = string.match(rgx);
-    
+
     if (idx && idx.length > 0) {
       return idx.length;
     }
-    
+
     return 0;
   }
 
   function adjustDensityColor (val, el) {
     el.style.width = val + '%';
-    
+
     if (val >= 15 && val > 14) {
       el.style.borderColor = 'rgba(244,67,54,.7)';
-    
+
     } else if (val < 14 && val >= 6 && val > 0) {
       el.style.borderColor = 'rgba(255,138,34,.7)';
-    
+
     } else if (val <= 5 && val >= 4 && val > 0) {
       el.style.borderColor = 'rgba(255,204,0,.7)';
-    
+
     } else if (val < 4 && val > 0) {
       el.style.borderColor = 'rgba(154,205,50,.7)';
-    
+
     } else {
       el.style.borderColor = 'rgba(244,67,54,.7)';
     }
@@ -382,19 +390,19 @@
 
   function adjustWordCountColor (val, el) {
     el.style.width = val <= 1000 ? val / 10 + '%' : '100%';
-    
+
     if (val > 399) {
       el.style.borderColor = 'rgba(154,205,50,.7)';
-    
+
     } else if (val <= 399 && val > 299) {
       el.style.borderColor = 'rgba(255,204,0,.7)';
-    
+
     } else if (val <= 299 && val > 199) {
       el.style.borderColor = 'rgba(255,138,34,.7)';
-    
+
     } else if (val <= 199) {
       el.style.borderColor = 'rgba(244,67,54,.7)';
-    
+
     } else {
       el.style.borderColor = 'rgba(244,67,54,.7)';
     }
@@ -407,7 +415,7 @@
     return word;
   }
 
-  function getRelatedWords(){
+  function getRelatedWords () {
     var xhr = new win.XMLHttpRequest();
     xhr.open('GET', _protocol + '//api.datamuse.com/words?ml=' + qs, true);
     xhr.responseType = 'json';
@@ -425,7 +433,7 @@
     xhr.send(null);
   }
 
-  function getLSIWords(){
+  function getLSIWords () {
     var _script = doc.createElement('script');
     _script.async = !0;
     _script.src = _protocol + '//api.bing.com/osjson.aspx?JsonType=callback&JsonCallback=updateLSIWords&query=' + qs;
@@ -433,12 +441,12 @@
     doc.body.appendChild(_script);
   }
 
-  function updateLSIWords(resp){
+  function updateLSIWords (resp) {
     win.lsi_words = resp[1];
     checkContent();
   }
 
-  function countSyllables(word){
+  function countSyllables (word) {
     var _wrd = clean(word).toLowerCase();
     if(word.length <= 3){
       return 1;
@@ -454,43 +462,43 @@
 
   function getReadabilityScore (sntcs, wrds) {
     var _score = 0;
-    
+
     if (sntcs.length < 1 || wrds.length < 1) {
       return 'N/A';
     }
     syll = 0;
-    
-    wrds.forEach(function(wrd){
+
+    wrds.forEach(function (wrd) {
       syll += countSyllables(wrd);
     });
-    
+
     if (syll > 0) {
       _score = (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
     }
-    
+
     return _score > 100 ? '100.0' : _score < 0 ? '0.0' : _score;
   }
 
   function getSMOGScore (sntcs,wrds) {
     var _smog = 0;
-    
+
     if (sntcs.length < 1 || wrds.length < 1) {
       return 'N/A';
     }
     p_syll = 0;
-    
+
     wrds.forEach(function(wrd){
       if(countSyllables(wrd) > 2) p_syll++;
     });
-    
+
     if(p_syll > 0){
       _smog = (1.0430 * win.Math.sqrt(p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1);
     }
-    
+
     return _smog > 100 ? '100.0' : _smog < 0 ? '0.0' : _smog;
   }
 
-  function saveToStorage(e){
+  function saveToStorage (e) {
     var evt = (e.target || this);
     if ('localStorage' in win) {
       win.localStorage.setItem('autosaved_txt', content.value);
@@ -504,7 +512,7 @@
     }
   }
 
-  function exportText(e){
+  function exportText (e) {
     var evt = (e.target || this);
     var txt_type = 'text/' + (evt.getAttribute('data-txt-type') || 'plain');
     var dl_link = doc.createElement('a');
@@ -549,27 +557,27 @@
     return 'data:' + mimetype + ',' + win.encodeURIComponent(data);
   }
 
-  function exportRTF(){
+  function exportRTF () {
   }
 
-  function exportWord(){
+  function exportWord () {
     //var doc = new DOCXjs();
     //doc.text('');
   }
 
-  function exportPDF(){
+  function exportPDF () {
     //var doc = new jsPDF();
     //doc.text('');
   }
 
-  function storeNightMode(){
+  function storeNightMode () {
     if ('localStorage' in win) {
       win.localStorage.setItem('night_mode', chk_nt_md.checked);
       setNightMode();
     }
   }
 
-  function setNightMode(){
+  function setNightMode () {
     if ('localStorage' in win) {
       doc.documentElement.setAttribute('data-night-mode',
         win.localStorage.getItem('night_mode') !== 'true'
@@ -579,14 +587,14 @@
     }
   }
 
-  function sweepJSONP(){
+  function sweepJSONP () {
     [].slice.call(doc.querySelectorAll('[data-lsi]')).forEach(function(el){
       el.parentNode.removeChild(el);
     });
   }
 
-  function asyncLoadFonts(urls){
-    urls.forEach(function(url){
+  function asyncLoadFonts (urls) {
+    urls.forEach(function (url) {
       var font = doc.createElement('link');
       font.href = url;
       font.rel = 'stylesheet';
@@ -594,24 +602,31 @@
     });
   }
 
-  function debounce(f, wait){
-    var scheduled, args, context, timestamp;
-    return function(){
-      context = this; args = []; timestamp = win.performance.now;
-      for (var i = 0; i < arguments.length; ++i){
+  function debounce (f, wait) {
+    var scheduled, args, context, timestamp, len, i;
+    return function () {
+      context = this;
+      args = [];
+      timestamp = win.performance.now;
+      len = arguments.length;
+      i = 0;
+
+      for (; i < len; ++i){
         args[i] = arguments[i];
       }
-      function later(){
+
+      if (!scheduled) {
+       scheduled = win.setTimeout(later, wait);
+      }
+
+      function later () {
         var last = win.performance.now - timestamp;
-        if(last < wait){
+        if (last < wait) {
           scheduled = win.setTimeout(later, wait - last);
         } else {
           scheduled = null;
           f.apply(context, args);
         }
-      };
-      if(!scheduled){
-       scheduled = win.setTimeout(later, wait);
       }
     }
   }
