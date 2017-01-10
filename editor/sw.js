@@ -12,7 +12,6 @@ self.addEventListener('install', event => {
     'https://seoscribe.net/favicon.ico',
     'https://seoscribe.net/manifest.json'
   ];
-
   event.waitUntil(
     self.caches.open(CURRENT_CACHES.prefetch).then(cache => {
       return cache.addAll(urlsToPrefetch);
