@@ -2,7 +2,7 @@
 
 self.importScripts('https://seoscribe.net/assets/js/serviceworker-cache-polyfill.js');
 
-const CACHE_VERSION = 21;
+const CACHE_VERSION = 22;
 const CURRENT_CACHES = { prefetch: 'seoscribe-v' + CACHE_VERSION };
 
 self.addEventListener('install', event => {
