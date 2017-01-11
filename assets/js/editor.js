@@ -173,7 +173,7 @@
 
   function parseHTML () {
     var _prsr = new win.DOMParser();
-    var _doc = _prsr.parseFromString('<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>','text/html');
+    var _doc = _prsr.parseFromString(['<!doctype html><html><head><meta charset="utf-8"></head><body>', content.value, '</body></html>'].join(''),'text/html');
     var _hdngs = [].slice.call(_doc.body.querySelectorAll('h1,h2,h3,h4,h5,h6,header'));
     processText(_doc.body.textContent);
     if (_hdngs.length < 1) {
@@ -203,7 +203,7 @@
     }
     kh.parentNode.removeAttribute('hidden');
     hc = 0;
-    _hdngs.forEach(function(heading){
+    _hdngs.forEach(function (heading) {
       if (matchString(heading.textContent, k) > 0) {
         hc++;
       } else {
@@ -522,5 +522,4 @@
       });
     }
   }
-  
 })(window, window.document);
