@@ -388,9 +388,7 @@
     if (sntcs.length < 1 || wrds.length < 1) { return 'N/A'; }
     syll = 0;
     wrds.forEach(function (wrd) { syll += countSyllables(wrd); });
-    if (syll > 0) {
-      _score = (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1);
-    }
+    if (syll > 0) { _score = (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (syll / wrds.length)).toFixed(1); }
     return _score > 100 ? '100.0' : _score < 0 ? '0.0' : _score;
   }
 
@@ -398,14 +396,8 @@
     var _smog = 0;
     if (sntcs.length < 1 || wrds.length < 1) { return 'N/A'; }
     p_syll = 0;
-    wrds.forEach(function (wrd) {
-      if (countSyllables(wrd) > 2) {
-        p_syll++;
-      }
-    });
-    if (p_syll > 0) {
-      _smog = (1.0430 * win.Math.sqrt(p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1);
-    }
+    wrds.forEach(function (wrd) { if (countSyllables(wrd) > 2) { p_syll++; } });
+    if (p_syll > 0) { _smog = (1.0430 * win.Math.sqrt(p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1); }
     return _smog > 100 ? '100.0' : _smog < 0 ? '0.0' : _smog;
   }
 
@@ -430,33 +422,33 @@
     var txt_type = 'text/' + (evt.getAttribute('data-txt-type') || 'plain');
     var dl_link = doc.createElement('a');
     var _blob = txt_type === 'text/html'
-              ? '<!doctype html><html><head><meta charset="utf-8"></head><body>' + content.value + '</body></html>'
+              ? ['<!doctype html><html><head><meta charset="utf-8"></head><body>', content.value, '</body></html>'].join('')
               : content.value;
     evt.setAttribute('disabled', '');
     win.setTimeout(function () { evt.removeAttribute('disabled') }, 2e3);
     dl_link.href = createBlob(txt_type, _blob);
     dl_link.textContent = 'Download';
     dl_link.style.display = 'none';
-    dl_link.addEventListener('click', removeThisEl, {passive: true, capture: false, once: true});
+    dl_link.addEventListener('click', removeThisEl, { passive: true, capture: false, once: true });
     if ('download' in dl_link) {
       dl_link.download = [(k || 'untitled'), '-', (new win.Date().toDateString().split(' ').join('-')), (txt_type === 'text/html' ? '.html' : '.txt')].join('');
     } else {
       dl_link.target = '_blank';
       dl_link.rel = 'noreferrer noopener nofollow';
     }
-    doc.body.appendChild(dl_link);
+    (doc.body || doc.getElementsByTagName('body')[0]).appendChild(dl_link);
     dl_link.click();
   }
 
   function removeThisEl (e) {
     var evt = (e.target || this);
-    evt.removeEventListener('click', removeThisEl, {passive: true, capture: false, once: true});
-    doc.body.removeChild(evt);
+    evt.removeEventListener('click', removeThisEl, { passive: true, capture: false, once: true });
+    (doc.body || doc.getElementsByTagName('body')[0]).removeChild(evt);
   }
 
   function createBlob (mimetype, data) {
     if ('createObjectURL' in win.URL) {
-      return win.URL.createObjectURL(new win.Blob([data], {type: mimetype}));
+      return win.URL.createObjectURL(new win.Blob([data], { type: mimetype }));
     }
     return 'data:' + mimetype + ',' + win.encodeURIComponent(data);
   }
@@ -530,4 +522,5 @@
       });
     }
   }
+  
 })(window, window.document);
