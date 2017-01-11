@@ -368,7 +368,7 @@
     if ((typeof exact !== 'undefined' && !!exact) || _multi > 1) {
       rgx = new win.RegExp('\\b(' + to_match + ')\\b', 'gi');
     } else {
-      rgx = new win.RegExp('\\b(' + to_match + '|' + to_match + 's|i?es|ves)\\b', 'gi');
+      rgx = new win.RegExp('\\b(' + to_match + '|' + to_match + 's|' + to_match + 'i?es)\\b', 'gi');
     }
 
     idx = string.match(rgx);
