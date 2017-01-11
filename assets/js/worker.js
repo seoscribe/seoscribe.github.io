@@ -88,7 +88,21 @@ function processText (keyword, plain, rel_wrds, lsi_wrds) {
     }
   }
 
-  return [_wc, _kwd_d, _rel_d, _lsi_d, _trs_d, _rdblty, _smog, _psv_v, _prd_lc, _all_uc, _para_data, _sntc_data];
+  return self.JSON.stringify({
+    'word_count': _wc,
+    'keyword_density': _kwd_d,
+    'related_word_density': _rel_d,
+    'lsi_word_density': _lsi_d,
+    'transitive_verb_density': _sntc_data[0],
+    'readability': _rdblty,
+    'SMOG_readability': _smog,
+    'passive_voice': _psv_v,
+    'period_lowercase': _prd_lc,
+    'all_caps': _all_uc,
+    'keyword_in_first_para': _para_data[0],
+    'paragraphs_too_long': _para_data[1],
+    'sentences_too_long': _sntc_data[1]
+  });
 }
 
 function checkParagraphs (paras) {
@@ -112,7 +126,7 @@ function checkParagraphs (paras) {
     });
   }
 
-  return [_first, _para_wc, _warn];
+  return [_first, _warn];
 }
 
 function checkSentences (sntcs) {
@@ -137,7 +151,7 @@ function checkSentences (sntcs) {
     });
   }
 
-  return [_tc, _sntc_wc, _warn]
+  return [_tc, _warn]
 }
 
 function matchString (string, to_match, exact) {
