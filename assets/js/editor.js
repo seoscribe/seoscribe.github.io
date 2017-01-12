@@ -212,8 +212,6 @@
       return;
     }
 
-    resetUI();
-
     if (e.type === 'message' && !!e.data) {
       updatePlain(e.data);
 
