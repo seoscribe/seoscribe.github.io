@@ -84,7 +84,7 @@ function processText (keyword, plain, rel_wrds, lsi_wrds) {
 
   if (typeof lsi_wrds !== 'undefined' && m > 0) {
     for (; n < m; ++n) {
-      _lc += matchString(plain, lsi_wrd[n], false);
+      _lc += matchString(plain, lsi_wrds[n], false);
     }
   }
 
