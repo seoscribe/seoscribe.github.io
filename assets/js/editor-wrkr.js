@@ -228,7 +228,7 @@
         'links': _doc.querySelectorAll('a[href]').length,
         'lists': _doc.querySelectorAll('ul li,ol li,dl dd').length,
         'images': _doc.querySelectorAll('img[src]').length,
-        'no_alts': _doc.querySelectorAll('img[src]').length > 0 && _doc.querySelectorAll('img[alt]').length < 1,
+        'no_alts': _doc.querySelectorAll('img[src]').length > 0 && _doc.querySelectorAll('img[alt]').length < 1
       }
     });
 
@@ -256,19 +256,14 @@
 
   function adjustDensityColor (val, el) {
     el.style.width = val + '%';
-
     if (val >= 15 && val > 14) {
       el.style.borderColor = 'rgba(244,67,54,.7)';
-
     } else if (val < 14 && val >= 6 && val > 0) {
       el.style.borderColor = 'rgba(255,138,34,.7)';
-
     } else if (val <= 5 && val >= 4 && val > 0) {
       el.style.borderColor = 'rgba(255,204,0,.7)';
-
     } else if (val < 4 && val > 0) {
       el.style.borderColor = 'rgba(154,205,50,.7)';
-
     } else {
       el.style.borderColor = 'rgba(244,67,54,.7)';
     }
@@ -276,19 +271,14 @@
 
   function adjustWordCountColor (val, el) {
     el.style.width = val <= 1000 ? val / 10 + '%' : '100%';
-
     if (val > 399) {
       el.style.borderColor = 'rgba(154,205,50,.7)';
-
     } else if (val <= 399 && val > 299) {
       el.style.borderColor = 'rgba(255,204,0,.7)';
-
     } else if (val <= 299 && val > 199) {
       el.style.borderColor = 'rgba(255,138,34,.7)';
-
     } else if (val <= 199) {
       el.style.borderColor = 'rgba(244,67,54,.7)';
-
     } else {
       el.style.borderColor = 'rgba(244,67,54,.7)';
     }
