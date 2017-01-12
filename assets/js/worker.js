@@ -122,21 +122,23 @@ function checkParagraphs (paras, keyword) {
   var _first = false;
   var _para_wc = 0;
   var _warn = false;
+  var i = paras.length;
+  var j = 0;
 
-  if (paras.length > 0) {
+  if (i > 0) {
     if (typeof keyword !== 'undefined' && !!matchString(paras[0], keyword)) {
       _first = true;
     }
 
-    paras.forEach(function (para) {
-      if (para.split(' ').length < 200) {
+    for (; j < i; ++j) {
+      if (paras[j].split(' ').length < 200) {
         _para_wc++;
       }
 
-      if ((_para_wc / paras.length * 100 << 0) < 80) {
+      if ((_para_wc / i * 100 << 0) < 80) {
         _warn = true;
       }
-    });
+    }
   }
 
   return [_first, _warn];
@@ -149,21 +151,25 @@ function checkSentences (sntcs) {
   var _tc = 0;
   var _sntc_wc = 0;
   var _warn = false;
+  var i = sntcs.length;
+  var j = 0;
+  var m = _trs_words.length;
+  var n = 0;
 
-  if (sntcs.length > 0) {
-    sntcs.forEach(function (sntc) {
-      if (sntc.split(' ').length < 30) {
+  if (i > 0) {
+    for (; j < i; ++j) {
+      if (sntcs[j].split(' ').length < 30) {
         _sntc_wc++;
       }
 
-      if ((_sntc_wc / sntcs.length * 100 << 0) < 80) {
-        _warn = true;
+      for (; n < m; ++n) {
+        _tc += matchString(sntcs[j], _trs_words[n], true);
       }
+    }
 
-      _trs_words.forEach(function (trs_word) {
-        _tc += matchString(sntc, trs_word, true);
-      });
-    });
+    if (_warn === false && (_sntc_wc / i * 100 << 0) < 80) {
+      _warn = true;
+    }
   }
 
   return [_tc, _warn]
@@ -214,14 +220,16 @@ function matchString (string, to_match, exact) {
 function getReadabilityScore (sntcs, wrds) {
   var _syll = 0;
   var _score = 0;
+  var i = wrds.length;
+  var j = 0;
 
   if (sntcs.length < 1 || wrds.length < 1) {
     return 'N/A';
   }
 
-  wrds.forEach(function (wrd) {
-    _syll += countSyllables(wrd);
-  });
+  for (; j < i; ++j) {
+    _syll += countSyllables(wrds[j]);
+  }
 
   if (_syll > 0) {
     _score = (206.835 - 1.015 * (wrds.length / sntcs.length) - 84.6 * (_syll / wrds.length)).toFixed(1);
@@ -237,16 +245,18 @@ function getReadabilityScore (sntcs, wrds) {
 function getSMOGScore (sntcs, wrds) {
   var _smog = 0;
   var _p_syll = 0;
+  var i = wrds.length;
+  var j = 0;
 
   if (sntcs.length < 1 || wrds.length < 1) {
     return 'N/A';
   }
 
-  wrds.forEach(function (wrd) {
-    if (countSyllables(wrd) > 2) {
-      _p_syll++;
+  for (; j < i; ++j) {
+    if (countSyllables(wrds[j]) > 2) {
+      _syll += countSyllables(wrds[j]);
     }
-  });
+  }
 
   if (_p_syll > 0) {
     _smog = (1.0430 * self.Math.sqrt(_p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1);
