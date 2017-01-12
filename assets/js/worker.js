@@ -254,7 +254,7 @@ function getSMOGScore (sntcs, wrds) {
 
   for (; j < i; ++j) {
     if (countSyllables(wrds[j]) > 2) {
-      _syll += countSyllables(wrds[j]);
+      _p_syll += countSyllables(wrds[j]);
     }
   }
 
