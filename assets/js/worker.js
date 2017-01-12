@@ -172,7 +172,7 @@ function checkSentences (sntcs) {
     }
   }
 
-  return [_tc, _warn]
+  return [_tc, _warn];
 }
 
 // our generic matchString function also used on the main thread (sparingly)
