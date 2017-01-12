@@ -251,16 +251,16 @@
   }
 
   function updateHTML (results) {
-    var _hc;
-    var g, h, i, j;
+    var _hc = 0;
+    var h = 0, j = 0, m = 0;
 
     _UI.keyword_headings.parentNode.getAttribute('hidden') ?
       _UI.keyword_headings.parentNode.removeAttribute('hidden') :
         _UI.keyword_headings.parentNode.setAttribute('hidden', '');
 
     results.headings.length < 1 ?
-      _UI.no_hdngs.removeAttribute('hidden') :
-        _UI.no_hdngs.setAttribute('hidden', '');
+      _UI.no_headings.removeAttribute('hidden') :
+        _UI.no_headings.setAttribute('hidden', '');
 
     results.links < 1 ?
       _UI.no_links.removeAttribute('hidden') :
@@ -272,26 +272,27 @@
 
     results.images < 1 ?
       _UI.no_images.removeAttribute('hidden') :
-        _UI.no_imgs.setAttribute('hidden', '');
+        _UI.no_images.setAttribute('hidden', '');
 
     !!results.no_alts ?
       _UI.no_alts.removeAttribute('hidden') :
         _UI.no_alts.setAttribute('hidden', '');
 
-    _hc = 0;
-    g = results.headings.length;
-    h = 0;
-    i = win.rel_words.length;
-    j = 0;
-
-    for (; h < g; ++h) {
+    for (; h < results.headings.length; ++h) {
       if (matchString(results.headings[h].textContent, _keyword, false) > 0) {
         _hc++;
       } else {
-        for (; j < i; ++j) {
+        for (; j < win.rel_words.length; ++j) {
           if (matchString(results.headings[h].textContent, win.rel_words[j], true) > 0) {
             _hc++;
             break;
+          } else {
+            for (; m < win.lsi_words.length; ++m) {
+              if (matchString(results.headings[h].textContent, win.rel_words[m], true) > 0) {
+                _hc++;
+                break;
+              }
+            }
           }
         }
       }
