@@ -29,7 +29,7 @@
     'btn_toggle_menu': doc.getElementById('btn_menu'),
     'chk_night_mode': doc.getElementById('night_mode')
   };
-  var _keyword = UI.keyword_field.value.trim().toLowerCase();
+  var _keyword = _UI.keyword_field.value.trim().toLowerCase();
   win.rel_words = [];
   win.lsi_words = [];
   win.updateLSIWords = updateLSIWords;
@@ -159,7 +159,7 @@
   }
 
   function checkContent () {
-    var _txt_to_process = UI.content_field.value;
+    var _txt_to_process = _UI.content_field.value;
     var _has_html = !!_txt_to_process && _txt_to_process.match(/<\/?[\w\s="/.':;#-\/\?]+>+[\/?[\w\s="/.':;#-\/\?]+<\/?[\w\s="/.':;#-\/\?]+>/gi) ? true : false;
 
     if ('localStorage' in win ) {
@@ -176,7 +176,7 @@
       _UI.root.setAttribute('data-has-html', 'true');
     }
 
-    wrkr.postMessage({
+    _worker.postMessage({
       'keyword': _keyword,
       'plain': (!!_has_html ? parseHTML(_txt_to_process) : _txt_to_process),
       'rel_wrds': win.rel_words,
@@ -231,7 +231,7 @@
     _UI.keyword_first_para.textContent      = results.keyword_in_first_para;
     _UI.readability.textContent             = results.readability;
 
-    if (_results.SMOG_readability > 0) {
+    if (results.SMOG_readability > 0) {
       _UI.smog_readability.textContent      = results.SMOG_readability;
       _UI.smog_readability.parentNode.removeAttribute('hidden');
     }
@@ -362,7 +362,7 @@
       to_match :
         to_match + '|' + to_match + 's|' + to_match + 'i?es';
 
-    _idx = string.match(new self.RegExp('\\b(' + _rgx + ')\\b', 'gi'));
+    _idx = string.match(new win.RegExp('\\b(' + _rgx + ')\\b', 'gi'));
 
     if (_idx && _idx.length > 0) {
       return _idx.length;
@@ -400,19 +400,19 @@
   function getRelatedWords () {
     var _querystring = generateQueryString();
     var _xhr = new win.XMLHttpRequest();
-    xhr.open('GET', win.location.protocol + '//api.datamuse.com/words?ml=' + _querystring, true);
-    xhr.responseType = 'json';
-    xhr.onreadystatechange = function(){
-      if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status < 300) {
-        win.rel_words = xhr.response.map(function (datum) {
+    _xhr.open('GET', win.location.protocol + '//api.datamuse.com/words?ml=' + _querystring, true);
+    _xhr.responseType = 'json';
+    _xhr.onreadystatechange = function(){
+      if (_xhr.readyState === 4 && _xhr.status >= 200 && _xhr.status < 300) {
+        win.rel_words = _xhr.response.map(function (datum) {
           return datum.word;
         });
       }
     };
-    xhr.onerror = xhr.onabort = xhr.ontimeout = function () {
-      win.console.error('XHR failed or cancelled: ' + xhr.status);
+    _xhr.onerror = _xhr.onabort = _xhr.ontimeout = function () {
+      win.console.error('XHR failed or cancelled: ' + _xhr.status);
     };
-    xhr.send(null);
+    _xhr.send(null);
   }
 
   function getLSIWords () {
