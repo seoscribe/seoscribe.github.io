@@ -1,6 +1,6 @@
 ;(function (win,doc) {
   'use strict';
-  var wrkr = new Worker('https://seoscribe.net/assets/js/worker.js');
+  var wrkr;
   var root_el = doc.documentElement || doc.getElementsByTagName('html')[0];
   var keyword = doc.getElementById('keyword');
   var content = doc.getElementsByTagName('textarea')[0];
@@ -35,9 +35,11 @@
   eventWireUp();
 
   function initApp () {
-    if (!('worker' in win)) {
-      throw new Error('Please use an up-to-date browser');
+    if (!('Worker' in win)) {
+      throw new win.Error('Please use an up-to-date browser');
     }
+    
+    wrkr = new win.Worker('https://seoscribe.net/assets/js/worker.js');
 
     if (!('performance' in win)) {
       win.performance = {
