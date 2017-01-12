@@ -154,7 +154,7 @@
     win.rel_words = [];
     win.lsi_words = [];
 
-    getRelatedWords();
+    getRelatedWords(['//api.datamuse.com/words?ml=']);
     getLSIWords(['//suggestqueries.google.com/complete/search?client=youtube&hl=en&jsonp=googleLSIWords&q=','//api.bing.com/osjson.aspx?JsonType=callback&JsonCallback=bingLSIWords&query=']);
     checkContent();
   }
@@ -384,22 +384,26 @@
     return _qs;
   }
 
-  function getRelatedWords () {
-    var _querystring = generateQueryString();
-    var _xhr = new win.XMLHttpRequest();
-    _xhr.open('GET', win.location.protocol + '//api.datamuse.com/words?ml=' + _querystring, true);
-    _xhr.responseType = 'json';
-    _xhr.onreadystatechange = function(){
-      if (_xhr.readyState === 4 && _xhr.status >= 200 && _xhr.status < 300) {
-        win.rel_words = _xhr.response.map(function (datum) {
-          return datum.word;
-        });
-      }
-    };
-    _xhr.onerror = _xhr.onabort = _xhr.ontimeout = function () {
-      win.console.error('XHR failed or cancelled: ' + _xhr.status);
-    };
-    _xhr.send(null);
+  function getRelatedWords (uris) {
+    uris.forEach(function (uri) {
+      var _querystring = generateQueryString();
+      var _xhr = new win.XMLHttpRequest();
+      _xhr.open('GET', win.location.protocol + uri + _querystring, true);
+      _xhr.responseType = 'json';
+      _xhr.onreadystatechange = function () {
+        if (_xhr.readyState === 4 && _xhr.status >= 200 && _xhr.status < 300) {
+          win.rel_words = win.rel_words.concat(
+            _xhr.response.map(function (datum) {
+              return datum.word;
+            })
+          );
+        }
+      };
+      _xhr.onerror = _xhr.onabort = _xhr.ontimeout = function () {
+        win.console.error('XHR failed or cancelled: ' + _xhr.status);
+      };
+      _xhr.send(null);
+    });
   }
 
   function getLSIWords (uris) {
