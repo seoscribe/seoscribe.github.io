@@ -57,6 +57,9 @@ function analyseText (keyword, plain, rel_wrds, lsi_wrds) {
   _prd_lc = plain.match(/\.+\s+[a-z]/g) ?
     plain.match(/\.+\s+[a-z]/g) : [];
 
+  // we avoid standard acronyms by seeking more than one caps character,
+  // followed by another caps character, followed by a word boundary and then two more
+  // caps character, e.g. WE[LL]\b[DO]NE
   _all_uc = plain.match(/([A-Z]+[A-Z]+\s+[A-Z]+[A-Z])/g) ?
     plain.match(/([A-Z]+[A-Z]+\s+[A-Z]+[A-Z])/g) : [];
 
