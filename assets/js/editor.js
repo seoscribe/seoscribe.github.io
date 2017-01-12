@@ -299,19 +299,6 @@
     _UI.keyword_headings.textContent = _hc === results.headings.length && _hc > 0 ? 'Yes' : 'No';
   }
 
-  function resetUI () {
-    _UI.keyword_density.textContent = '0%';
-    _UI.related_word_density.textContent = '0%';
-    _UI.lsi_word_density.textContent = '0%';
-    _UI.transition_word_density.textContent = '0%';
-    _UI.keyword_first_para.textContent = 'No';
-    _UI.readability.textContent = 'N/A';
-    _UI.smog_readability.textContent = 'N/A';
-    _UI.smog_readability.parentNode.setAttribute('hidden', '');
-    _UI.sentences_too_long.setAttribute('hidden', '');
-    _UI.paragraphs_too_long.setAttribute('hidden', '');
-  }
-
   function adjustDensityColor (val, el) {
     el.style.width = val + '%';
     if (val >= 15 && val > 14) {
