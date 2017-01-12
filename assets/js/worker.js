@@ -1,3 +1,5 @@
+'use strict';
+
 // listen for the postMessage from the text editor
 // no need for a dispatcher, only one event to listen for
 self.addEventListener('message', respondWithData);
