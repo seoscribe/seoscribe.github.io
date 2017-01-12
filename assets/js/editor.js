@@ -12,7 +12,7 @@
     'keyword_headings': doc.getElementById('keyword_headings'),
     'keyword_first_para': doc.getElementById('keyword_first_para'),
     'readability': doc.getElementById('readability_score'),
-    'SMOG_score': doc.getElementById('smog_score'),
+    'SMOG_readability': doc.getElementById('smog_score'),
     'related_word_density': doc.getElementById('rel_density'),
     'lsi_word_density': doc.getElementById('lsi_density'),
     'transition_word_density': doc.getElementById('trs_density'),
@@ -308,7 +308,7 @@
     _UI.keyword_first_para.textContent = 'No';
     _UI.readability.textContent = 'N/A';
     _UI.smog_readability.textContent = 'N/A';
-    _UI.smog_reaability.parentNode.setAttribute('hidden', '');
+    _UI.smog_readability.parentNode.setAttribute('hidden', '');
     _UI.sntc_warn.setAttribute('hidden', '');
     _UI.para_warn.setAttribute('hidden', '');
   }
