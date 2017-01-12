@@ -70,9 +70,6 @@
         setNightMode();
       }
     }
-    
-    eventWireUp();
-    startSEOScribe();
 
     if (win.location.protocol === 'https:' && 'serviceWorker' in win.navigator) {
       win.navigator.serviceWorker.register('https://seoscribe.net/editor/sw.js', {
@@ -83,27 +80,21 @@
         win.console.warn('SW failed to register [' + err + ']')
       });
     }
-
+    
+    eventWireUp();
+    startSEOScribe();
     asyncLoadFonts(['https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext']);
   }
 
   function eventWireUp () {
-    win.addEventListener('load', function () {
-      root_el.setAttribute('data-font-loaded', !0);
-    }, {passive: true, capture: false, once: true});
-    
+    win.addEventListener('load', function () {root_el.setAttribute('data-font-loaded',!0)}, {passive: true, capture: false, once: true});
     wrkr.addEventListener('message', updateUI, {passive: true, capture: false, once: false});
     keyword.addEventListener('blur', startSEOScribe, {passive: true, capture: false, once: false});
     content.addEventListener('blur', checkContent, {passive: true, capture: false, once: false});
-    content.addEventListener('keydown', rebounce(checkContent), {passive: true, capture: false, once: false});
-
+    content.addEventListener('keyup', rebounce(checkContent), {passive: true, capture: false, once: false});
     btn_exp_txt.addEventListener('click', exportText, {passive: true, capture: false, once: false});
     btn_exp_html.addEventListener('click', exportText, {passive: true, capture: false, once: false});
-    btn_menu.addEventListener('click', function () {
-      root_el.getAttribute('data-menu-open') === 'true'
-        ? root_el.setAttribute('data-menu-open','false')
-        : root_el.setAttribute('data-menu-open','true');
-    }, {passive: true, capture: false, once: false});
+    btn_menu.addEventListener('click', toggleMenu, {passive: true, capture: false, once: false});
 
     if ('localStorage' in win) {
       win.addEventListener('unload', saveToStorage, {passive: true, capture: false, once: true});
@@ -140,8 +131,8 @@
       }
       
       adjustDensityColor(_results.keyword_density, kd);
-      adjustDensityColor((_results.related_word_density / 2) << 0, rel_d);
-      adjustDensityColor((_results.lsi_word_density / 2) << 0, lsi_d);
+      adjustDensityColor(_results.related_word_density, rel_d);
+      adjustDensityColor(_results.lsi_word_density, lsi_d);
       adjustWordCountColor(_results.word_count, wrd_c);
       
     } else if (!!e.html_data && typeof e.html_data === 'object') {
@@ -291,10 +282,10 @@
     var _idx;       // the regex matches
 
     switch (true) {
-      case (typeof string !== 'string'):
-      case (typeof to_match !== 'string'):
-      case (!string):
-      case (!to_match):
+      case !!(typeof string !== 'string'):
+      case !!(typeof to_match !== 'string'):
+      case !(string):
+      case !(to_match):
         return 0;
     }
 
@@ -435,6 +426,12 @@
     for (; j < i; ++j) {
       _scripts[j].parentNode.removeChild(_scripts[j]);
     }
+  }
+  
+  function toggleMenu () {
+    root_el.getAttribute('data-menu-open') === 'true'
+      ? root_el.setAttribute('data-menu-open','false')
+        : root_el.setAttribute('data-menu-open','true');
   }
 
   function asyncLoadFonts (urls) {
