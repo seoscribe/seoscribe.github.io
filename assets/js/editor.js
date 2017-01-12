@@ -1,4 +1,4 @@
-;(function (win,doc) {
+;(function (win, doc) {
   'use strict';
   var _worker;
   var _UI = {
