@@ -119,11 +119,11 @@
     if (typeof e !== 'object' || !e) {
       return;
     }
+    
+    resetUI();
 
     if (e.type === 'message' && !!e.data) {
-      resetUI(false);
       _results = e.data;
-      
       wrd_c.textContent = _results.word_count;
       kd.textContent = _results.keyword_density + '%';
       rel_d.textContent = _results.related_word_density + '%';
@@ -145,7 +145,6 @@
       adjustWordCountColor(_results.word_count, wrd_c);
       
     } else if (!!e.html_data && typeof e.html_data === 'object') {
-      resetUI(true);
       _results = e.html_data;
       kh.parentNode.getAttribute('hidden') ? kh.parentNode.removeAttribute('hidden') : kh.parentNode.setAttribute('hidden', '');
       _results.headings.length < 1 ? no_hdngs.removeAttribute('hidden') : no_hdngs.setAttribute('hidden', '');
@@ -243,7 +242,7 @@
     return _doc.body.textContent;
   }
 
-  function resetUI (html) {
+  function resetUI () {
     kd.textContent = '0%';
     rel_d.textContent = '0%';
     lsi_d.textContent = '0%';
@@ -254,17 +253,6 @@
     r_smog.parentNode.setAttribute('hidden', '');
     ss_warn.setAttribute('hidden', '');
     sp_warn.setAttribute('hidden', '');
-    
-    if (!!html) {
-      return;
-    }
-    
-    kh.parentNode.setAttribute('hidden', '');
-    no_hdngs.setAttribute('hidden', '');
-    no_links.setAttribute('hidden', '');
-    no_lists.setAttribute('hidden', '');
-    no_imgs.setAttribute('hidden', '');
-    no_img_alts.setAttribute('hidden', '');
   }
 
   function adjustDensityColor (val, el) {
