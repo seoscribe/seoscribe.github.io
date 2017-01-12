@@ -104,7 +104,7 @@ function analyseText (keyword, plain, rel_wrds, lsi_wrds) {
     'keyword_density': (_kc / _wc * 100 << 0),
     'related_word_density': (_rc / _wc * 100 << 0),
     'lsi_word_density': (_lc / _wc * 100 << 0),
-    'transitive_verb_density': (_sntc_data[0] / _wc * 100 << 0),
+    'transition_word_density': (_sntc_data[0] / _sntcs.length * 100 << 0),
     'readability': _rdblty,
     'SMOG_readability': _smog,
     'passive_voice': _psv_v,
