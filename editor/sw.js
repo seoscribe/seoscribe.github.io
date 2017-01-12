@@ -2,13 +2,14 @@
 
 self.importScripts('https://seoscribe.net/assets/js/serviceworker-cache-polyfill.js');
 
-const CACHE_VERSION = 22;
-const CURRENT_CACHES = { prefetch: 'seoscribe-v' + CACHE_VERSION };
+const CACHE_VERSION = 1;
+const CURRENT_CACHES = { prefetch: 'editor-v' + CACHE_VERSION };
 
 self.addEventListener('install', event => {
   const urlsToPrefetch = [
     'https://seoscribe.net/editor/',
     'https://seoscribe.net/assets/js/editor.js',
+    'https://seoscribe.net/assets/js/editor-worker.js',
     'https://seoscribe.net/favicon.ico',
     'https://seoscribe.net/manifest.json'
   ];
