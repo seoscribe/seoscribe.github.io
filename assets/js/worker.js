@@ -1,8 +1,11 @@
 self.addEventListener('message', getJSON);
 
 function getJSON (e) {
-  if (e.data) { return conductAnalyses(JSON.parse(e.data)); }
-  else { self.close(); }
+  if (e.data) {
+    return conductAnalyses(e.data);
+  } else {
+    self.close();
+  }
 }
 
 function conductAnalyses (data) {
@@ -12,9 +15,9 @@ function conductAnalyses (data) {
 
 function processText (keyword, plain, rel_wrds, lsi_wrds) {
   var _wc = 0;
-  var _kwd_d = 0;
-  var _rel_d = 0;
-  var _lsi_d = 0;
+  var _kc= 0;
+  var _rc = 0;
+  var _lc = 0;
 
   var _rdblty = 0;
   var _smog = 0;
@@ -73,27 +76,27 @@ function processText (keyword, plain, rel_wrds, lsi_wrds) {
   }
 
   if (typeof keyword !== 'undefined' && !!keyword) {
-    _kwd_d = matchString(plain, keyword, false);
+    _kc = matchString(plain, keyword, false);
   }
 
   if (typeof rel_wrds !== 'undefined' && i > 0) {
     for (; j < i; ++j) {
-      _rel_d += matchString(plain, rel_wrds[j], false);
+      _rc += matchString(plain, rel_wrds[j], false);
     }
   }
 
   if (typeof lsi_wrds !== 'undefined' && m > 0) {
     for (; n < m; ++n) {
-      _lsi_d += matchString(plain, lsi_wrd[n], false);
+      _lc += matchString(plain, lsi_wrd[n], false);
     }
   }
 
   return self.JSON.stringify({
     'word_count': _wc,
-    'keyword_density': _kwd_d,
-    'related_word_density': _rel_d,
-    'lsi_word_density': _lsi_d,
-    'transitive_verb_density': _sntc_data[0],
+    'keyword_density': (_kc / _wc * 100 << 0),
+    'related_word_density': (_rc / _wc * 100 << 0),
+    'lsi_word_density': (_lc / _wc * 100 << 0),
+    'transitive_verb_density': (_sntc_data[0] / _wc * 100 << 0),
     'readability': _rdblty,
     'SMOG_readability': _smog,
     'passive_voice': _psv_v,
