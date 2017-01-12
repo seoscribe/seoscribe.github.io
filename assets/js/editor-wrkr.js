@@ -150,7 +150,7 @@
       _results.headings.length < 1 ? no_hdngs.removeAttribute('hidden') : no_hdngs.setAttribute('hidden', '');
       _results.links < 1 ? no_links.removeAttribute('hidden') : no_links.setAttribute('hidden', '');
       _results.lists < 1 ? no_lists.removeAttribute('hidden') : no_lists.setAttribute('hidden', '');
-      _results.imgs < 1 ? no_imgs.removeAttribute('hidden') : no_imgs.setAttribute('hidden', '');
+      _results.images < 1 ? no_imgs.removeAttribute('hidden') : no_imgs.setAttribute('hidden', '');
       !!_results.no_alts ? no_img_alts.removeAttribute('hidden') : no_img_alts.setAttribute('hidden', '');
 
       _results.headings.forEach(function (heading) {
