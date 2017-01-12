@@ -129,7 +129,7 @@
       kd.textContent = _results.keyword_density + '%';
       rel_d.textContent = _results.related_word_density + '%';
       lsi_d.textContent = _results.lsi_word_density + '%';
-      trn_d.textContent = _results.transitive_verb_density + '%';
+      trn_d.textContent = _results.transition_word_density + '%';
       kfp.textContent = _results.keyword_in_first_para;
 
       adjustDensityColor(_results.keyword_density, kd);
