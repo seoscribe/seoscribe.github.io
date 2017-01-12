@@ -192,7 +192,7 @@
 
     updateUI({
       'html_data': {
-        'headings': [].slice.call(_doc.body.querySelectorAll('h1,h2,h3,h4,h5,h6,header')),
+        'headings': _doc.body.querySelectorAll('h1,h2,h3,h4,h5,h6,header'),
         'links': _doc.querySelectorAll('a[href]').length,
         'lists': _doc.querySelectorAll('ul li,ol li,dl dd').length,
         'images': _doc.querySelectorAll('img[src]').length,
@@ -252,7 +252,7 @@
     var _hc = 0;
     var h = 0, j = 0, m = 0;
 
-    _UI.keyword_headings.parentNode.getAttribute('hidden') ?
+    _UI.keyword_headings.parentNode.getAttribute('hidden') !== null ?
       _UI.keyword_headings.parentNode.removeAttribute('hidden') :
         _UI.keyword_headings.parentNode.setAttribute('hidden', '');
 
@@ -286,7 +286,7 @@
             break;
           } else {
             for (; m < win.lsi_words.length; ++m) {
-              if (matchString(results.headings[h].textContent, win.rel_words[m], true) > 0) {
+              if (matchString(results.headings[h].textContent, win.lsi_words[m], true) > 0) {
                 _hc++;
                 break;
               }
@@ -434,9 +434,11 @@
     var _evt = (e.target || this);
     var _txt_type = 'text/' + (_evt.getAttribute('data-txt-type') || 'plain');
     var _dl_link = doc.createElement('a');
-    var _blob = _txt_type === 'text/html'
-              ? ['<!doctype html><html><head><meta charset="utf-8"></head><body>', _UI.content_field.value, '</body></html>'].join('')
-              : _UI.content_field.value;
+    
+    var _blob = _txt_type === 'text/html' ? 
+      ['<!doctype html><html><head><meta charset="utf-8"></head><body>', _UI.content_field.value, '</body></html>'].join('') : 
+        _UI.content_field.value;
+    
     _evt.setAttribute('disabled', '');
 
     win.setTimeout(function () {
@@ -446,7 +448,6 @@
     _dl_link.href = createBlob(_txt_type, _blob);
     _dl_link.textContent = 'Download';
     _dl_link.style.display = 'none';
-
     _dl_link.addEventListener('click', removeThisEl, {
       passive: true, capture: false, once: true
     });
