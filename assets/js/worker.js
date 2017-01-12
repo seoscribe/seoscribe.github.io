@@ -119,7 +119,7 @@ function analyseText (keyword, plain, rel_wrds, lsi_wrds) {
 // we want to check if the keyword is present in the first paragraph,
 // and we want to warn the user if their paragraphs are too long
 function checkParagraphs (paras, keyword) {
-  var _first = false;
+  var _first = 'No';
   var _para_wc = 0;
   var _warn = false;
   var i = paras.length;
@@ -127,7 +127,7 @@ function checkParagraphs (paras, keyword) {
 
   if (i > 0) {
     if (typeof keyword !== 'undefined' && !!matchString(paras[0], keyword)) {
-      _first = true;
+      _first = 'Yes';
     }
 
     for (; j < i; ++j) {
