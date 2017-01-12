@@ -32,7 +32,8 @@
   var _keyword = _UI.keyword_field.value.trim().toLowerCase();
   win.rel_words = [];
   win.lsi_words = [];
-  win.updateLSIWords = updateLSIWords;
+  win.googleLSIWords = googleLSIWords;
+  win.bingLSIWords = bingLSIWords;
 
   initApp();
 
@@ -154,7 +155,7 @@
     win.lsi_words = [];
 
     getRelatedWords();
-    getLSIWords();
+    getLSIWords(['//suggestqueries.google.com/complete/search?client=youtube&hl=en&jsonp=googleLSIWords&q=','//api.bing.com/osjson.aspx?JsonType=callback&JsonCallback=bingLSIWords&query=']);
     checkContent();
   }
 
@@ -229,9 +230,9 @@
     _UI.keyword_first_para.textContent      = results.keyword_in_first_para;
     _UI.readability.textContent             = results.readability;
     _UI.smog_readability.textContent        = results.smog_readability;
-    
-    results.smog_readability > 0 ?  
-      _UI.smog_readability.parentNode.removeAttribute('hidden') : 
+
+    results.smog_readability > 0 ?
+      _UI.smog_readability.parentNode.removeAttribute('hidden') :
         _UI.smog_readability.parentNode.setAttribute('hidden', '');
 
     results.sentences_too_long ?
@@ -401,17 +402,31 @@
     _xhr.send(null);
   }
 
-  function getLSIWords () {
-    var _querystring = generateQueryString();
-    var _script = doc.createElement('script');
-    _script.async = !0;
-    _script.src = win.location.protocol + '//api.bing.com/osjson.aspx?JsonType=callback&JsonCallback=updateLSIWords&query=' + _querystring;
-    _script.setAttribute('data-lsi', 'true');
-    doc.body.appendChild(_script);
+  function getLSIWords (uris) {
+    uris.forEach(function(uri){
+      var _querystring = generateQueryString();
+      var _script = doc.createElement('script');
+      _script.async = !0;
+      _script.src = win.location.protocol + uri + _querystring;
+      _script.setAttribute('data-lsi', 'true');
+      doc.body.appendChild(_script);
+    });
   }
 
-  function updateLSIWords (resp) {
-    win.lsi_words = resp[1];
+  function googleLSIWords (resp) {
+    win.lsi_words = win.lsi_words.concat(
+      resp[1].map(function (datum) {
+        return datum[0];
+      })
+    ).filter(function(word, idx, arr) {
+      return idx === arr.indexOf(word);
+    });
+  }
+
+  function bingLSIWords (resp) {
+    win.lsi_words = win.lsi_words.concat(resp[1]).filter(function(word, idx, arr) {
+      return idx === arr.indexOf(word);
+    });
   }
 
   function saveToStorage (e) {
@@ -434,11 +449,11 @@
     var _evt = (e.target || this);
     var _txt_type = 'text/' + (_evt.getAttribute('data-txt-type') || 'plain');
     var _dl_link = doc.createElement('a');
-    
-    var _blob = _txt_type === 'text/html' ? 
-      ['<!doctype html><html><head><meta charset="utf-8"></head><body>', _UI.content_field.value, '</body></html>'].join('') : 
+
+    var _blob = _txt_type === 'text/html' ?
+      ['<!doctype html><html><head><meta charset="utf-8"></head><body>', _UI.content_field.value, '</body></html>'].join('') :
         _UI.content_field.value;
-    
+
     _evt.setAttribute('disabled', '');
 
     win.setTimeout(function () {
@@ -519,15 +534,13 @@
   }
 
   function asyncLoadFonts (urls) {
-    var font;
-    var i = urls.length;
-    var j = 0;
-    for (; j < i; ++j) {
-      font = doc.createElement('link');
-      font.href = urls[j];
-      font.rel = 'stylesheet';
-      _UI.head.appendChild(font);
-    }
+    urls.forEach(function (url) {
+      var _font;
+      _font = doc.createElement('link');
+      _font.href = url;
+      _font.rel = 'stylesheet';
+      _UI.head.appendChild(_font);
+    });
   }
 
   function rebounce (func) {
