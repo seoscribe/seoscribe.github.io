@@ -163,11 +163,13 @@
   }
 
   function startSEOScribe () {
-    var _k = keyword.value;
-    if (_k.toLowerCase().trim() === k) { return; }
-    k = _k.toLowerCase().trim();
-    rel_words = [];
-    win.lsi_words = [];
+    var _k = keyword.value.trim().toLowerCase();
+    
+    if (_k === k) { 
+      return;
+    }
+    
+    k = _k;
 
     if (!k) {
       return;
@@ -185,6 +187,9 @@
     } else {
       qs = k;
     }
+    
+    rel_words = [];
+    win.lsi_words = [];
 
     getRelatedWords();
     getLSIWords();
