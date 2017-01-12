@@ -122,6 +122,7 @@
     }
 
     if (e.data) {
+      console.log(e);
       _results = e.data;
       
       wrd_c.textContent = _results.word_count;
