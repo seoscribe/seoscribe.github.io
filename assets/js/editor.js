@@ -119,7 +119,7 @@
       passive: true, capture: false, once: false
     });
 
-    _UI.btn_menu.addEventListener('click', toggleMenu, {
+    _UI.btn_toggle_menu.addEventListener('click', toggleMenu, {
       passive: true, capture: false, once: false});
 
     if ('localStorage' in win) {
