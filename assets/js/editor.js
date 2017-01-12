@@ -12,7 +12,7 @@
     'keyword_headings': doc.getElementById('keyword_headings'),
     'keyword_first_para': doc.getElementById('keyword_first_para'),
     'readability': doc.getElementById('readability_score'),
-    'SMOG_readability': doc.getElementById('smog_score'),
+    'smog_readability': doc.getElementById('smog_score'),
     'related_word_density': doc.getElementById('rel_density'),
     'lsi_word_density': doc.getElementById('lsi_density'),
     'transition_word_density': doc.getElementById('trs_density'),
