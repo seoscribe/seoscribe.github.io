@@ -92,13 +92,13 @@ function analyseText (keyword, plain, rel_wrds, lsi_wrds) {
 
   if (typeof rel_wrds !== 'undefined' && i > 0) {
     for (; j < i; ++j) {
-      _rc += matchString(plain, rel_wrds[j], false);
+      _rc += matchString(plain, rel_wrds[j], true);
     }
   }
 
   if (typeof lsi_wrds !== 'undefined' && m > 0) {
     for (; n < m; ++n) {
-      _lc += matchString(plain, lsi_wrds[n], false);
+      _lc += matchString(plain, lsi_wrds[n], true);
     }
   }
 
