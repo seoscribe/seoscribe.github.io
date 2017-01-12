@@ -88,7 +88,7 @@ function processText (keyword, plain, rel_wrds, lsi_wrds) {
     }
   }
 
-  return self.JSON.stringify({
+  return {
     'word_count': _wc,
     'keyword_density': (_kc / _wc * 100 << 0),
     'related_word_density': (_rc / _wc * 100 << 0),
@@ -102,7 +102,7 @@ function processText (keyword, plain, rel_wrds, lsi_wrds) {
     'keyword_in_first_para': _para_data[0],
     'paragraphs_too_long': _para_data[1],
     'sentences_too_long': _sntc_data[1]
-  });
+  };
 }
 
 function checkParagraphs (paras, keyword) {
