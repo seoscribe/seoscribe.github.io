@@ -253,10 +253,6 @@
     var _hc = 0;
     var h = 0, j = 0, m = 0;
 
-    _UI.keyword_headings.parentNode.getAttribute('hidden') !== null ?
-      _UI.keyword_headings.parentNode.removeAttribute('hidden') :
-        _UI.keyword_headings.parentNode.setAttribute('hidden', '');
-
     results.headings.length < 1 ?
       _UI.no_headings.removeAttribute('hidden') :
         _UI.no_headings.setAttribute('hidden', '');
