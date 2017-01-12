@@ -121,8 +121,7 @@
       return;
     }
 
-    if (e.data) {
-      console.log(e);
+    if (!!e.data) {
       _results = e.data;
       
       wrd_c.textContent = _results.word_count;
