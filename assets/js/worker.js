@@ -129,7 +129,7 @@ function checkParagraphs (paras, keyword) {
   var j = 0;
 
   if (i > 0) {
-    if (typeof keyword !== 'undefined' && !!matchString(paras[0], keyword)) {
+    if (typeof keyword !== 'undefined' && !!matchString(paras[0], keyword, false)) {
       _first = 'Yes';
     }
 
@@ -166,7 +166,10 @@ function checkSentences (sntcs) {
       }
 
       for (; n < m; ++n) {
-        _tc += matchString(sntcs[j], _trs_words[n], true);
+        if (!!matchString(sntcs[j], _trs_words[n], true)) {
+          _tc++;
+          break;
+        }
       }
     }
 
