@@ -237,12 +237,12 @@
     }
 
     results.sentences_too_long ?
-      _UI.sntc_warn.removeAttribute('hidden') :
-        _UI.sntc_warn.setAttribute('hidden', '');
+      _UI.sentences_too_long.removeAttribute('hidden') :
+        _UI.sentences_too_long.setAttribute('hidden', '');
 
     results.paragraphs_too_long ?
-      _UI.para_warn.removeAttribute('hidden') :
-        _UI.para_warn.setAttribute('hidden', '');
+      _UI.paragraphs_too_long.removeAttribute('hidden') :
+        _UI.paragraphs_too_long.setAttribute('hidden', '');
 
     adjustWordCountColor(results.word_count, _UI.word_count);
     adjustDensityColor(results.keyword_density, _UI.keyword_density);
@@ -309,8 +309,8 @@
     _UI.readability.textContent = 'N/A';
     _UI.smog_readability.textContent = 'N/A';
     _UI.smog_readability.parentNode.setAttribute('hidden', '');
-    _UI.sntc_warn.setAttribute('hidden', '');
-    _UI.para_warn.setAttribute('hidden', '');
+    _UI.sentences_too_long.setAttribute('hidden', '');
+    _UI.paragraphs_too_long.setAttribute('hidden', '');
   }
 
   function adjustDensityColor (val, el) {
