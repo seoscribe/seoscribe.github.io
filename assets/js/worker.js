@@ -168,7 +168,6 @@ function checkSentences (sntcs) {
       for (; n < m; ++n) {
         if (!!matchString(sntcs[j], _trs_words[n], true)) {
           _tc++;
-          break;
         }
       }
     }
