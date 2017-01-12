@@ -38,7 +38,7 @@
       throw new win.Error('Please use an up-to-date browser');
     }
     
-    wrkr = new win.Worker('https://seoscribe.net/assets/js/worker.js');
+    wrkr = new win.Worker('https://seoscribe.net/assets/js/editor-worker.js');
 
     if (!('performance' in win)) {
       win.performance = {
