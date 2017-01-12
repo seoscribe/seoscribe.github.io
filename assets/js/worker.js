@@ -3,14 +3,11 @@ self.addEventListener('message', getJSON);
 function getJSON (e) {
   if (e.data) {
     return conductAnalyses(e.data);
-  } else {
-    self.close();
   }
 }
 
 function conductAnalyses (data) {
   self.postMessage(processText(data.keyword, data.plain, data.rel_wrds, data.lsi_wrds));
-  self.close();
 }
 
 function processText (keyword, plain, rel_wrds, lsi_wrds) {
