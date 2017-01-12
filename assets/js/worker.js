@@ -65,7 +65,7 @@ function processText (keyword, plain, rel_wrds, lsi_wrds) {
   }
 
   if (_paras.length > 0) {
-    _para_data = checkParagraphs(_paras);
+    _para_data = checkParagraphs(_paras, keyword);
   }
 
   if (_sntcs.length > 0) {
@@ -108,13 +108,13 @@ function processText (keyword, plain, rel_wrds, lsi_wrds) {
   });
 }
 
-function checkParagraphs (paras) {
+function checkParagraphs (paras, keyword) {
   var _first = false;
   var _para_wc = 0;
   var _warn = false;
 
   if (paras.length > 0) {
-    if (!!matchString(paras[0], k)) {
+    if (!!matchString(paras[0], keyword)) {
       _first = true;
     }
 
