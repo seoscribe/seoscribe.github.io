@@ -78,9 +78,9 @@
       win.navigator.serviceWorker.register('https://seoscribe.net/editor/sw.js', {
         scope: 'https://seoscribe.net/editor/'
       }).then(function (registration) {
-        console.info('SW registered [' + registration.scope + ']')
+        win.console.info('SW registered [' + registration.scope + ']')
       }).catch(function (err) {
-        console.warn('SW failed to register [' + err + ']')
+        win.console.warn('SW failed to register [' + err + ']')
       });
     }
 
@@ -122,6 +122,7 @@
     }
 
     if (e.type === 'message' && !!e.data) {
+      win.console.log(e);
       _results = e.data;
       
       wrd_c.textContent = _results.word_count;
@@ -135,8 +136,7 @@
       adjustDensityColor((_results.related_word_density / 2) << 0, rel_d);
       adjustDensityColor((_results.lsi_word_density / 2) << 0, lsi_d);
       adjustWordCountColor(_results.word_count, wrd_c);
-    }
-    else if (!!e.html_data && typeof e.html_data === 'object') {
+    } else if (!!e.html_data && typeof e.html_data === 'object') {
       _results = e.html_data;
       if (kh.parentNode.getAttribute('hidden')) { kh.parentNode.removeAttribute('hidden'); }
       if (_results.headings.length < 1) { no_hdngs.removeAttribute('hidden'); }
@@ -282,6 +282,35 @@
       el.style.borderColor = 'rgba(244,67,54,.7)';
     }
   }
+  
+  function matchString (string, to_match, exact) {
+    var _is_phrase; // if to_match is a phrase
+    var _rgx;       // the regular expression pattern
+    var _idx;       // the regex matches
+
+    switch (true) {
+      case (typeof string !== 'string'):
+      case (typeof to_match !== 'string'):
+      case (!string):
+      case (!to_match):
+        return 0;
+    }
+
+    _is_phrase = !!(to_match.split(' ').length > 1);
+
+    _rgx = ((typeof exact !== 'undefined' && !!exact) || !!_is_phrase) ?
+      to_match :
+        to_match + '|' + to_match + 's|' + to_match + 'i?es';
+    
+    _idx = string.match(new self.RegExp('\\b(' + _rgx + ')\\b', 'gi'));
+
+    if (_idx && _idx.length > 0) {
+      return _idx.length;
+    }
+
+    return 0;
+  }
+
 
   function clean (word) {
     if (typeof word !== 'string') {
