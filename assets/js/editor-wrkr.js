@@ -201,8 +201,6 @@
       win.localStorage.setItem('autosaved_txt', _txt_to_process);
     }
 
-    resetAll();
-
     if (!k && !_txt_to_process) {
       return;
     } else if (!_has_html) {
@@ -211,7 +209,7 @@
       root_el.setAttribute('data-has-html', 'true');
     }
 
-    worker.postMessage({
+    wrkr.postMessage({
       'keyword': k,
       'plain': (!!_has_html ? parseHTML(_txt_to_process) : _txt_to_process),
       'rel_wrds': rel_words,
