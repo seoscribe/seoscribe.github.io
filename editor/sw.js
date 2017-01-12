@@ -12,7 +12,6 @@ self.addEventListener('install', event => {
     'https://seoscribe.net/editor/',
     'https://seoscribe.net/assets/js/editor.js',
     'https://seoscribe.net/assets/js/editor-worker.js',
-    'https://seoscribe.net/favicon.ico',
     'https://seoscribe.net/manifest.json'
   ];
   event.waitUntil(
