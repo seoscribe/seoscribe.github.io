@@ -228,11 +228,11 @@
     _UI.transition_word_density.textContent = results.transition_word_density + '%';
     _UI.keyword_first_para.textContent      = results.keyword_in_first_para;
     _UI.readability.textContent             = results.readability;
-
-    if (results.SMOG_readability > 0) {
-      _UI.smog_readability.textContent      = results.SMOG_readability;
-      _UI.smog_readability.parentNode.removeAttribute('hidden');
-    }
+    _UI.smog_readability.textContent        = results.smog_readability;
+    
+    results.smog_readability > 0 ?  
+      _UI.smog_readability.parentNode.removeAttribute('hidden') : 
+        _UI.smog_readability.parentNode.setAttribute('hidden', '');
 
     results.sentences_too_long ?
       _UI.sentences_too_long.removeAttribute('hidden') :
