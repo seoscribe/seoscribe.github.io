@@ -121,7 +121,7 @@
       return;
     }
 
-    if (!!e.data) {
+    if (e.type === 'message' && !!e.data) {
       _results = e.data;
       
       wrd_c.textContent = _results.word_count;
