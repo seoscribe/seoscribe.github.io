@@ -111,7 +111,7 @@ function analyseText (keyword, plain, rel_wrds, lsi_wrds) {
     'lsi_word_density': (_lc / _wc * 100 << 0),
     'transition_word_density': (_sntc_data[0] / _sntcs.length * 100 << 0),
     'readability': _rdblty,
-    'SMOG_readability': _smog,
+    'smog_readability': _smog,
     'passive_voice': _psv_v,
     'period_lowercase': _prd_lc,
     'all_caps': _all_uc,
