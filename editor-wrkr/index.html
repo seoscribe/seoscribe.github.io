@@ -307,6 +307,9 @@
       [data-has-html="true"] main textarea {
         font-family: Consolas,Menlo,Monaco,Cousine,"Anonymous Pro",Inconsolata,"Courier New",Courier,monospace;
       }
+      [data-has-html="false"] .html-warning {
+        display: none;
+      }
       [data-night-mode="on"],
       [data-night-mode="on"] body {
         background: #444;
@@ -444,7 +447,7 @@
         <summary>Keyword in first paragraph <span title="Your keyword should appear in the first paragraph of your content.">?</span></summary>
         <output id="keyword_first_paragraph">No</output>
       </details>
-      <details open hidden>
+      <details class="html-warning" open hidden>
         <summary>Keyword in headings <span title="Your keyword should appear in your headings as well as your title and meta description.">?</span></summary>
         <output id="keyword_headings">No</output>
       </details>
@@ -467,19 +470,19 @@
       <div class="warning" hidden>
         0% in passive voice
       </div>
-      <div class="warning" id="no_hdngs" hidden>
+      <div class="warning html-warning" id="no_hdngs" hidden>
         Use headings to structure your content
       </div>
-      <div class="warning" id="no_links" hidden>
+      <div class="warning html-warning" id="no_links" hidden>
         Don't forget to include external links
       </div>
-      <div class="warning" id="no_lists" hidden>
+      <div class="warning html-warning" id="no_lists" hidden>
         Consider using lists in your content
       </div>
-      <div class="warning" id="no_imgs" hidden>
+      <div class="warning html-warning" id="no_imgs" hidden>
         Adding images can improve quality
       </div>
-      <div class="warning" id="no_img_alts" hidden>
+      <div class="warning html-warning" id="no_img_alts" hidden>
         Images should have alternate text
       </div>
       <div class="switch-row">
