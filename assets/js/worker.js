@@ -185,10 +185,10 @@ function matchString (string, to_match, exact) {
   // if string/to_match not present or not strings, return no matches
   // no point throwing an error and breaking everything
   switch (true) {
-    case (typeof string !== 'string'):
-    case (typeof to_match !== 'string'):
-    case (!string):
-    case (!to_match):
+    case !!(typeof string !== 'string'):
+    case !!(typeof to_match !== 'string'):
+    case !(string):
+    case !(to_match):
       return 0;
   }
 
@@ -208,7 +208,7 @@ function matchString (string, to_match, exact) {
   // greedy and case insensitive, because we want to retrieve all possible matches
   _idx = string.match(new self.RegExp('\\b(' + _rgx + ')\\b', 'gi'));
 
-  if (_idx && _idx.length > 0) {
+  if (!!_idx && _idx.length > 0) {
     return _idx.length;
   }
 
