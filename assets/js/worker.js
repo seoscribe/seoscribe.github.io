@@ -139,10 +139,9 @@ function checkParagraphs (paras, keyword) {
       if (paras[j].split(' ').length < 200) {
         _para_wc++;
       }
-
-      if ((_para_wc / i * 100 << 0) < 80) {
-        _warn = true;
-      }
+    }
+    if ((_para_wc / i * 100 << 0) < 80) {
+      _warn = true;
     }
   }
 
