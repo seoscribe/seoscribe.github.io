@@ -32,7 +32,6 @@
   win.updateLSIWords = updateLSIWords;
 
   initApp();
-  eventWireUp();
 
   function initApp () {
     if (!('Worker' in win)) {
@@ -71,9 +70,8 @@
         setNightMode();
       }
     }
-
-    wrkr.addEventListener('message', updateUI);
-
+    
+    eventWireUp();
     startSEOScribe();
 
     if (win.location.protocol === 'https:' && 'serviceWorker' in win.navigator) {
@@ -93,7 +91,8 @@
     win.addEventListener('load', function () {
       root_el.setAttribute('data-font-loaded', !0);
     }, {passive: true, capture: false, once: true});
-
+    
+    wrkr.addEventListener('message', updateUI, {passive: true, capture: false, once: false});
     keyword.addEventListener('blur', startSEOScribe, {passive: true, capture: false, once: false});
     content.addEventListener('blur', checkContent, {passive: true, capture: false, once: false});
     content.addEventListener('keydown', rebounce(checkContent), {passive: true, capture: false, once: false});
