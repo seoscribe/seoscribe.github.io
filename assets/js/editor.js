@@ -90,7 +90,7 @@
 
     eventWireUp();
     startSEOScribe();
-    asyncLoadFonts(['https://fonts.googleapis.com/css?family=Karla:400,700&subset=latin-ext','https://fonts.googleapis.com/css?family=PT+Mono']);
+    asyncLoadFonts(['https://fonts.googleapis.com/css?family=Karla:400,700&subset=latin-ext','https://fonts.googleapis.com/css?family=Roboto+Mono:400&subset=latin-ext']);
   }
 
   function eventWireUp () {
