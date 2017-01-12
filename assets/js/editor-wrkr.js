@@ -115,18 +115,15 @@
   function updateUI (e) {
     var _results;
     var hc = 0;
-    console.log('1');
     resetUI();
 
     if (typeof e !== 'object' || !e) {
       return;
     }
-    
-    console.log('2');
 
-    if (!!e.data && typeof e.data === 'object') {
+    if (e.data) {
       _results = e.data;
-      console.log('3');
+      
       wrd_c.textContent = _results.word_count;
       kd.textContent = _results.keyword_density + '%';
       rel_d.textContent = _results.related_word_density + '%';
