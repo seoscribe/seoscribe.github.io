@@ -165,7 +165,7 @@ function matchString (string, to_match, exact) {
 
   _multi = to_match.split(' ').length;
   _rgx = ((typeof exact !== 'undefined' && !!exact) || _multi > 1) ? to_match : to_match + '|' + to_match + 's|' + to_match + 'i?es';
-  _idx = string.match(new win.RegExp('\\b(' + _rgx + ')\\b', 'gi'));
+  _idx = string.match(new self.RegExp('\\b(' + _rgx + ')\\b', 'gi'));
 
   if (_idx && _idx.length > 0) {
     return _idx.length;
@@ -210,7 +210,7 @@ function getSMOGScore (sntcs, wrds) {
   });
 
   if (_p_syll > 0) {
-    _smog = (1.0430 * win.Math.sqrt(p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1);
+    _smog = (1.0430 * self.Math.sqrt(p_syll * (30 / sntcs.length)) + 3.1291).toFixed(1);
   }
 
   return _smog > 100 ?
@@ -231,7 +231,7 @@ function countSyllables (word) {
 
 function clean (word) {
   if (typeof word !== 'string') {
-    throw new TypeError('Expected param of type \'string\'; received: ' + typeof word);
+    throw new self.TypeError('Expected param of type \'string\'; received: ' + typeof word);
   }
   return word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'').toLowerCase();
 }
