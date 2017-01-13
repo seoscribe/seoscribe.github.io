@@ -14,7 +14,7 @@ function respondWithRTF (e) {
 
 // Borrowing the work of a Mr. James Greene:
 // reference: http://jsfiddle.net/JamesMGreene/2b6Lc/
-function convertHTMLToRTF(html) {
+function convertHTMLToRTF (html) {
   if (!html || !(typeof html === 'string' && html)) return null;
   
   var tmpRichText, hasHyperlinks;
