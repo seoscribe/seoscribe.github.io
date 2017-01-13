@@ -46,7 +46,7 @@
 
     if (!('performance' in win)) {
       win.performance = {
-        'now': function () { return new win.Date().getTime()}
+        'now': function () { return new win.Date().getTime() }
       };
     }
 
@@ -61,9 +61,6 @@
 
       if (win.localStorage.getItem('autosaved_txt')) {
         _UI.content_field.value = win.localStorage.getItem('autosaved_txt');
-        if (_UI.keyword_field.value) {
-          startSEOScribe();
-        }
       }
 
       if (!win.localStorage.getItem('night_mode')) {
