@@ -140,6 +140,9 @@
       _keyword = _UI.keyword_field.value.trim().toLowerCase();
     }
 
+    win.rel_words = [];
+    win.lsi_words = [];
+    
     if (!_keyword) {
       return;
     }
@@ -147,9 +150,6 @@
     if ('localStorage' in win) {
       win.localStorage.setItem('autosaved_kw', _keyword);
     }
-
-    win.rel_words = [];
-    win.lsi_words = [];
 
     getRelatedWords(['//api.datamuse.com/words?ml=']);
     getLSIWords(['//suggestqueries.google.com/complete/search?client=youtube&hl=en&jsonp=googleLSIWords&q=','//api.bing.com/osjson.aspx?JsonType=callback&JsonCallback=bingLSIWords&query=']);
