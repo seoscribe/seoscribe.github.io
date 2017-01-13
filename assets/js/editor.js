@@ -105,7 +105,7 @@
       passive: true, capture: false, once: false
     });
 
-    _UI.content_field.addEventListener('keydown', rebounce(checkContent), {
+    _UI.content_field.addEventListener('input', rebounce(checkContent), {
       passive: true, capture: false, once: false
     });
 
