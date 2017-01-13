@@ -197,7 +197,7 @@
         'links': _doc.querySelectorAll('a[href]').length,
         'lists': _doc.querySelectorAll('ul li,ol li,dl dd').length,
         'images': _doc.querySelectorAll('img[src]').length,
-        'no_alts': _doc.querySelectorAll('img[src]').length > 0 && _doc.querySelectorAll('img[alt]').length < 1
+        'no_alts': _doc.querySelectorAll('img:not([alt])').length
       }
     });
 
@@ -269,7 +269,7 @@
       _UI.no_images.removeAttribute('hidden') :
         _UI.no_images.setAttribute('hidden', '');
 
-    !!results.no_alts ?
+    results.no_alts > 0 ?
       _UI.no_alts.removeAttribute('hidden') :
         _UI.no_alts.setAttribute('hidden', '');
 
