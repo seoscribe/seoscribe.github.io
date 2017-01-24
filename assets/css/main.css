@@ -424,6 +424,15 @@ section > details > hr {
     font-size: 21px;
     letter-spacing: -1px;
   }
+  .legal section {
+    padding-top: 15vh;
+    padding-bottom: 15vh;
+  }
+  .legal section > h3,
+  .legal section > details {
+    margin: 0 auto;
+    max-width: 70%;
+  }
 }
 @media screen and (min-width: 992px) {
   .grid > article {
