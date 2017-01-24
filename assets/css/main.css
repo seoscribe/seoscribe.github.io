@@ -314,8 +314,14 @@ section > details > summary {
 section > details > p {
   margin-bottom: 2ex;
 }
+section > details > address:last-child,
 section > details > p:last-child {
   margin-bottom: 3ex;
+}
+section > details > hr {
+  display: block;
+  border-bottom: 1px dashed #ccc;
+  margin-bottom: 2ex;
 }
 @media only screen and (min-width: 380px) {
   .article-body > h5 {
