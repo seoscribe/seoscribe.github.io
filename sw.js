@@ -11,8 +11,11 @@ self.addEventListener('install', event => {
   const urlsToPrefetch = [
     'https://seoscribe.net/',
     'https://seoscribe.net/assets/css/main.css',
-    'https://seoscribe.net/assets/js/main.js',
     'https://seoscribe.net/assets/js/event-listener-options.shim.js',
+    'https://seoscribe.net/assets/js/main.js',
+    'https://seoscribe.net/editor/',
+    'https://seoscribe.net/editor/editor.js',
+    'https://seoscribe.net/editor/editor-worker.js',
     'https://seoscribe.net/manifest.json',
     'https://seoscribe.net/assets/vid/perf.webm',
     'https://seoscribe.net/assets/vid/perf.mp4',
