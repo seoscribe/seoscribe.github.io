@@ -166,12 +166,13 @@
 
   function scrollToTop () {
     var sY = (win.scrollY || win.pageYOffset);
-    if (sY > (_wh / 20 << 0)) {
-      win.scrollBy(0, (-sY / 10 << 0));
-      win.setTimeout(scrollToTop, 10);
-
-    } else if (sY <= (_wh / 20 << 0)) {
-      win.scrollTo(0, 0);
+    if (sY > _wh / 10) {
+      return win.requestAnimationFrame(function () {
+        win.scrollTo(0, win.scrollY / 2);
+        return scrollToTop();
+      });
+    } else {
+      win.location.replace('#');
     }
   }
 
