@@ -45,6 +45,16 @@
     }
 
     handleScroll();
+    
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('https://seoscribe.net/sw.js', {
+        scope: '/'
+      }).then(function (registration) {
+        console.info('SW registered [' + registration.scope + ']');
+      }).catch(function (err) {
+        console.warn('SW failed to register [' + err + ']');
+      });
+    }
   }
 
   function handleScroll () {
