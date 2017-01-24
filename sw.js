@@ -1,10 +1,6 @@
 'use strict';
 
-// lets use ES6 because why not?
-// this polyfill is useless -- the ServiceWorker will not work in Chrome 40 due to arrow functions
-// self.importScripts('https://seoscribe.net/assets/js/serviceworker-cache-polyfill.js');
-
-const CACHE_VERSION = 11;
+const CACHE_VERSION = 14;
 const CURRENT_CACHES = { prefetch: 'seoscribe-v' + CACHE_VERSION };
 
 self.addEventListener('install', event => {
@@ -61,7 +57,6 @@ self.addEventListener('fetch', event => {
     case !(event.request.mode === 'navigate'):
     case !(event.request.method === 'GET' && event.request.headers.get('accept').indexOf('text/html') > -1):
       return event.respondWith(self.caches.match(event.request).then(response => { return response || self.fetch(event.request);}));
-    
     default:
       event.respondWith(fetch(event.request.url).catch(err => {return caches.match('/offline/');}));
   }
