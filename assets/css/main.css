@@ -311,8 +311,8 @@ section > details > summary {
   letter-spacing: -1px;
   color: #555;
 }
-section > details > p {
-  margin-bottom: 2ex;
+section > details > p + p {
+  margin-top: 2ex;
 }
 section > details > address:last-child,
 section > details > p:last-child {
@@ -429,7 +429,8 @@ section > hr {
     padding-bottom: 15vh;
   }
   .legal section > h3,
-  .legal section > details {
+  .legal section > details,
+  .legal section > p {
     margin: 0 auto;
     max-width: 70%;
   }
