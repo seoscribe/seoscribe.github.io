@@ -3,6 +3,7 @@
   var body_el = doc.body || doc.getElementsByTagName('body')[0];
   var banner_el = doc.getElementsByTagName('header')[0];
   var nav_el = doc.getElementsByTagName('nav')[0];
+  var menu_el = doc.getElementById('menu');
   var last_sn = [].slice.call(doc.getElementsByTagName('section'), -1)[0];
   var hdr_content = [].slice.call(doc.querySelector('header').querySelectorAll('h1,h2,a'));
   var _wh = (win.innerHeight || banner_el.clientHeight) - 64;
@@ -84,6 +85,9 @@
   function showMenu () {
     root_el.setAttribute('data-menu-open',
       (root_el.getAttribute('data-menu-open') === 'true' ? 'false' : 'true')
+    );
+    menu_el.setAttribute('aria-hidden',
+      (menu_el.getAttribute('aria-hidden') === 'true' ? 'false' : 'true')
     );
     [].slice.call(doc.getElementsByTagName('video')).forEach(function(vid){
       if (root_el.getAttribute('data-menu-open') === 'true') {
