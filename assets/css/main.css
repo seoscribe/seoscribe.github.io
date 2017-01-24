@@ -199,16 +199,29 @@ dl.support {
   font-size: 0;
 }
 .grid > .cell {
-  display: block;
+  display: inline-block;
   position: relative;
+  vertical-align: top;
   font-size: 16px;
+  width: 50%;
 }
-.cell > div {
-  position: relative;
-  padding: 8px;
+.grid > .cell:after {
+  content: '';
+  display: block;
+  padding-bottom: 100%;
 }
-.cell > a {
-  position: relative;
+.article-body {
+  position: absolute;
+  background: #eee;
+  overflow: hidden;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  padding: 16px;
+  z-index: 3;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
 }
 .article-body > h5 {
   -webkit-font-smoothing: antialiased;
@@ -311,6 +324,18 @@ section > hr {
   margin: 2ex auto;
 }
 @media only screen and (min-width: 380px) {
+  .article-body > h5 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 85%;
+    width: -webkit-calc(100% - 16px);
+    width: -moz-calc(100% - 16px);
+    width: calc(100% - 16px);
+    padding: 16px;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+  }
   aside dd .sidebar-link {
     position: relative;
   }
@@ -347,40 +372,14 @@ section > hr {
   }
 }
 @media screen and (min-width: 580px) {
-  .grid > .cell {
-    display: inline-block;
-    vertical-align: top;
-    width: 50%;
-  }
-  .grid > article.cell:after {
-    content: '';
-    display: block;
-    padding-bottom: 100%;
-  }
-  .cell > .article-body {
-    position: absolute;
-    background: #eee;
-    overflow: hidden;
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    padding: 16px;
-    z-index: 3;
-    -webkit-perspective: 1000px;
-    perspective: 1000px;
+  .grid > article.cell {
+    width: 33.3333%;
+    width: -webkit-calc(100% / 3);
+    width: -moz-calc(100% / 3);
+    width: calc(100% / 3);
   }
   .article-body > h5 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 85%;
-    width: -webkit-calc(100% - 16px);
-    width: -moz-calc(100% - 16px);
-    width: calc(100% - 16px);
-    padding: 16px;
-    -webkit-transform: translate(-50%,-50%);
-    transform: translate(-50%,-50%);
+    font-size: 18px;
   }
 }
 @media screen and (min-height: 480px) {
@@ -433,14 +432,9 @@ section > hr {
     left: 75%;
     right: 0;
   }
-  .grid > article.cell {
-    width: 33.3333%;
-    width: -webkit-calc(100% / 3);
-    width: -moz-calc(100% / 3);
-    width: calc(100% / 3);
-  }
   .article-body > h5 {
-    font-size: 18px;
+    font-size: 21px;
+    letter-spacing: -1px;
   }
   .legal section > h3,
   .legal section > details,
@@ -458,7 +452,6 @@ section > hr {
   }
   .article-body > h5 {
     font-size: 26px;
-    letter-spacing: -1px;
   }
 }
 html[data-font-loaded="true"] {
