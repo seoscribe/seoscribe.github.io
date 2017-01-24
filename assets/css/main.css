@@ -205,7 +205,10 @@ dl.support {
 }
 .cell > div {
   position: relative;
-  padding: 16px;
+  padding: 8px;
+}
+.cell > a {
+  position: relative;
 }
 .article-body > h5 {
   -webkit-font-smoothing: antialiased;
