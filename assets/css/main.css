@@ -424,13 +424,10 @@ section > hr {
     font-size: 21px;
     letter-spacing: -1px;
   }
-  .legal section {
-    padding-top: 15vh;
-    padding-bottom: 15vh;
+  section {
+    padding: 10vh 10vw;
   }
-  .legal section > h3,
-  .legal section > details,
-  .legal section > p {
+  .legal section > details {
     margin: 0 auto;
     max-width: 70%;
   }
