@@ -318,7 +318,7 @@ section > details > address:last-child,
 section > details > p:last-child {
   margin-bottom: 3ex;
 }
-section > details > hr {
+section > hr {
   display: block;
   border-bottom: 1px dashed #ccc;
   margin-bottom: 2ex;
@@ -432,6 +432,10 @@ section > details > hr {
   .legal section > details {
     margin: 0 auto;
     max-width: 70%;
+  }
+  .legal section > hr {
+    margin: 0 auto;
+    max-width: 65%;
   }
 }
 @media screen and (min-width: 992px) {
