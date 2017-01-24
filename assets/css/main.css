@@ -77,36 +77,6 @@ footer li > a:focus {
   vertical-align: top;
   letter-spacing: -2px;
 }
-aside {
-  position: fixed;
-  top: 64px;
-  right: 0;
-  z-index: 90;
-  width: 300px;
-  padding: 38px 26px 26px;
-  background: #fff;
-  color: #222;
-  opacity: 0;
-  visibility: hidden;
-  overflow: auto;
-  overflow-x: hidden;
-  min-height: -webkit-calc(100vh - 64px);
-  min-height: -moz-calc(100vh - 64px);
-  min-height: calc(100vh - 64px);
-  transition-property: opacity, visibility, -webkit-transform;
-  transition-property: opacity, visibility, transform;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
-  transition-duration: .2s;
-  -webkit-perspective: 1000px;
-  perspective: 1000px;
-  -webkit-transform: translateY(102%);
-  transform: translateY(102%);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -webkit-pointer-events: none;
-  pointer-events: none;
-  will-change: transform;
-}
 aside dl {
   margin-bottom: 32px;
 }
