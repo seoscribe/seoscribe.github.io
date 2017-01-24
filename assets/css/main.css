@@ -423,7 +423,9 @@ section > hr {
     font-size: 21px;
     letter-spacing: -1px;
   }
-  .legal section > details {
+  .legal section > h3,
+  .legal section > details,
+  .legal section > p {
     margin: 0 auto;
     max-width: 70%;
   }
