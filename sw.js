@@ -14,10 +14,10 @@ self.addEventListener('install', event => {
     'https://seoscribe.net/assets/js/main.js',
     'https://seoscribe.net/assets/js/event-listener-options.shim.js',
     'https://seoscribe.net/manifest.json',
-    'https://seoscribe.net/perf.webm',
-    'https://seoscribe.net/perf.mp4',
-    'https://seoscribe.net/perf.gif',
-    'https://seoscribe.net/perf.jpg',
+    'https://seoscribe.net/assets/vid/perf.webm',
+    'https://seoscribe.net/assets/vid/perf.mp4',
+    'https://seoscribe.net/assets/img/perf.gif',
+    'https://seoscribe.net/assets/img/perf.jpg',
     'https://seoscribe.net/favicon.ico',
     'https://seoscribe.net/404'
   ];
