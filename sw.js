@@ -19,6 +19,12 @@ self.addEventListener('install', event => {
     'https://seoscribe.net/assets/img/perf.gif',
     'https://seoscribe.net/assets/img/perf.jpg',
     'https://seoscribe.net/favicon.ico',
+    'https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext',
+    'https://fonts.gstatic.com/s/karla/v5/suoMYBGv5sGCUIrF9mVTffesZW2xOQ-xsNqO47m55DA.woff2',
+    'https://fonts.gstatic.com/s/karla/v5/Zi_e6rBgGqv33BWF8WTq8g.woff2',
+    'https://cdn.rawgit.com/wnda/stabs/master/stabs.js',
+    'https://cdn.rawgit.com/wnda/toad/master/toad.js',
+    'https://cdn.polyfill.io/v2/polyfill.js?features=querySelector,localStorage,Array.prototype.forEach,Array.prototype.indexOf,Array.prototype.filter,Array.prototype.map,Array.prototype.reduce,Element.prototype.classList,XMLHttpRequest,requestAnimationFrame',
     'https://seoscribe.net/404'
   ];
   event.waitUntil(
