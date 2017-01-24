@@ -305,6 +305,18 @@ dl.support {
 .asterisk {
   color: crimson;
 }
+section > details > summary {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: #555;
+}
+section > details > p {
+  margin-bottom: 2ex;
+}
+section > details > p:last-child {
+  margin-bottom: 3ex;
+}
 @media only screen and (min-width: 380px) {
   .article-body > h5 {
     position: absolute;
