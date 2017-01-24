@@ -321,7 +321,7 @@ section > details > p:last-child {
 section > hr {
   display: block;
   border-bottom: 1px dashed #ccc;
-  margin-bottom: 2ex;
+  margin: 2ex auto;
 }
 @media only screen and (min-width: 380px) {
   .article-body > h5 {
@@ -435,7 +435,6 @@ section > hr {
     max-width: 70%;
   }
   .legal section > hr {
-    margin: 0 auto;
     max-width: 65%;
   }
 }
