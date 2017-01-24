@@ -297,6 +297,7 @@ dl.support {
   color: #111;
   font-weight: 400;
   border-radius: 4px;
+  text-align: left;
 }
 .tabpane.active {
   display: block;
@@ -391,6 +392,16 @@ section > hr {
     margin: 104px 26px;
     padding: 8vh;
     padding: 8vmax;
+  }
+  main > section h4 {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 1ex;
+  }
+  main > section h3,
+  main > section h4,
+  .tabcontainer {
+    text-align: center;
   }
   main > footer {
     left: 26px;
