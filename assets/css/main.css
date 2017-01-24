@@ -389,7 +389,6 @@ section > hr {
 @media screen and (min-width: 768px) {
   main > section {
     margin: 104px 26px;
-    padding: 10vh 12vw;
   }
   main > footer {
     left: 26px;
