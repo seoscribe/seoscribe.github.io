@@ -198,14 +198,14 @@ dl.support {
   margin: -16px;
   font-size: 0;
 }
-.grid > article {
+.grid > .cell {
   display: inline-block;
   position: relative;
   vertical-align: top;
   font-size: 16px;
   width: 50%;
 }
-.grid > article:after {
+.grid > .cell:after {
   content: '';
   display: block;
   padding-bottom: 100%;
@@ -372,7 +372,7 @@ section > hr {
   }
 }
 @media screen and (min-width: 580px) {
-  .grid > article {
+  .grid > .cell {
     width: 33.3333%;
     width: -webkit-calc(100% / 3);
     width: -moz-calc(100% / 3);
@@ -447,7 +447,7 @@ section > hr {
   }
 }
 @media screen and (min-width: 992px) {
-  .grid > article {
+  .grid > .cell {
     width: 25%;
   }
   .article-body > h5 {
