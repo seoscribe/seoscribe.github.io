@@ -46,9 +46,18 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    self.caches.match(event.request).then(response => {
-      return response || self.fetch(event.request);
-    })
-  );
+  if(event.request.mode==='navigate'||(event.request.method==='GET'&&event.request.headers.get('accept').includes('text/html'))){
+    event.respondWith(
+      fetch(event.request.url)
+      .catch(err => {
+        return caches.match('/offline/');
+      })
+    );
+  } else {
+    event.respondWith(
+      self.caches.match(event.request).then(response => {
+        return response || self.fetch(event.request);
+      })
+    );
+  }
 });
