@@ -4,7 +4,7 @@
 // this polyfill is useless -- the ServiceWorker will not work in Chrome 40 due to arrow functions
 // self.importScripts('https://seoscribe.net/assets/js/serviceworker-cache-polyfill.js');
 
-const CACHE_VERSION = 6;
+const CACHE_VERSION = 8;
 const CURRENT_CACHES = { prefetch: 'seoscribe-v' + CACHE_VERSION };
 
 self.addEventListener('install', event => {
@@ -25,6 +25,7 @@ self.addEventListener('install', event => {
     'https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext',
     'https://fonts.gstatic.com/s/karla/v5/suoMYBGv5sGCUIrF9mVTffesZW2xOQ-xsNqO47m55DA.woff2',
     'https://fonts.gstatic.com/s/karla/v5/Zi_e6rBgGqv33BWF8WTq8g.woff2',
+    'https://fonts.gstatic.com/s/robotomono/v4/hMqPNLsu_dywMa4C_DEpY44P5ICox8Kq3LLUNMylGO4.woff2',
     'https://cdn.rawgit.com/wnda/stabs/master/stabs.js',
     'https://cdn.rawgit.com/wnda/toad/master/toad.js',
     'https://cdn.polyfill.io/v2/polyfill.js?features=querySelector,localStorage,Array.prototype.forEach,Array.prototype.indexOf,Array.prototype.filter,Array.prototype.map,Array.prototype.reduce,Element.prototype.classList,XMLHttpRequest,requestAnimationFrame',
