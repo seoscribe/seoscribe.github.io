@@ -372,7 +372,7 @@ section > hr {
   }
 }
 @media screen and (min-width: 580px) {
-  .grid > .cell {
+  .grid > article.cell {
     width: 33.3333%;
     width: -webkit-calc(100% / 3);
     width: -moz-calc(100% / 3);
@@ -447,7 +447,7 @@ section > hr {
   }
 }
 @media screen and (min-width: 992px) {
-  .grid > .cell {
+  .grid > article.cell {
     width: 25%;
   }
   .article-body > h5 {
