@@ -11,7 +11,7 @@
   init();
 
   function init () {
-    win.addEventListener('scroll', rebounce(handleScroll), { passive: true, capture: false, once: false });
+    win.addEventListener('scroll', rebounce.bind(win, handleScroll), { passive: true, capture: false, once: false });
     win.addEventListener('load', handleLoad, { passive: true, capture: false, once: true });
     win.addEventListener('click', dispatchClicks, { passive: true, capture: false, once: false });
   }
