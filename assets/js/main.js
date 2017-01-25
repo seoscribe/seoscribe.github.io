@@ -14,6 +14,8 @@
     win.addEventListener('scroll', rebounce(handleScroll), { passive: true, capture: false, once: false });
     win.addEventListener('load', handleLoad, { passive: true, capture: false, once: true });
     win.addEventListener('click', dispatchClicks, { passive: true, capture: false, once: false });
+    win.console.log('%c%s', 'color:#222;background:#ffc107;font-size:18px;font-weight:bold;padding:4px;', 'Welcome to SEO Scribe');
+    win.console.log('%c%s', 'color:#222;background:#ffc107;font-size:14px;padding:4px;', 'Thanks for taking an interest in what\'s under the hood. \n\n You can also check out all of our source code on Github: \n\n https://github.com/seoscribe/');
   }
 
   function dispatchClicks (e) {
