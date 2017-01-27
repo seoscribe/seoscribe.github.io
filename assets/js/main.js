@@ -34,10 +34,7 @@
     win.removeEventListener('load', handleLoad, { passive: true, capture: false, once: true });
     win.clearTimeout(win.connection.timer);
 
-    asyncLoadCSS([
-      'https://seoscribe.net/assets/css/main.css',
-      'https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext'
-    ]);
+    asyncLoadCSS(['https://fonts.googleapis.com/css?family=Karla:400,700&amp;subset=latin-ext']);
 
     root_el.setAttribute('data-font-loaded', 'true');
 
@@ -121,6 +118,10 @@
   }
 
   function asyncLoadCSS (urls) {
+    var _preloads = doc.querySelectorAll('link[rel="preload"][as="style"]');
+    var i = _preloads.length; 
+    var j = 0;
+    for (; j < i; ++j) { urls.push(_preloads[j]); }
     urls.forEach(function (url) {
       var _css = doc.createElement('link');
       _css.href = url;
