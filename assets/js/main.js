@@ -48,7 +48,7 @@
 
     handleScroll();
     
-    if('serviceWorker' in navigator){
+    if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('https://seoscribe.net/sw.js', {
         scope: '/'
       }).then(function (registration) {
@@ -56,6 +56,8 @@
       }).catch(function (err) {
         console.warn('SW failed to register [' + err + ']');
       });
+    } else if ('applicationCache' in win) {
+      root_el.setAttribute('manifest', '/main.appcache');
     }
   }
 
