@@ -1,0 +1,11 @@
+CACHE MANIFEST
+# v22 2017-01-27
+/
+/main.css
+/main.js
+
+NETWORK:
+*
+
+FALLBACK:
+/offline
