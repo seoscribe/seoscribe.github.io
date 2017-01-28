@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_VERSION = 14;
+const CACHE_VERSION = 16;
 const CURRENT_CACHES = { prefetch: 'seoscribe-v' + CACHE_VERSION };
 
 self.addEventListener('install', event => {
