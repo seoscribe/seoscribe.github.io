@@ -119,9 +119,13 @@
 
   function asyncLoadCSS (urls) {
     var _preloads = doc.querySelectorAll('link[rel="preload"][as="style"]');
-    var i = _preloads.length; 
-    var j = 0;
-    for (; j < i; ++j) { urls.push(_preloads[j].getAttribute('href')); }
+    var i, j = 0;
+    if (_preloads.length > 0) {
+      i = _preloads.length;
+      for (; j < i; ++j) { 
+        urls.push(_preloads[j].getAttribute('href'));
+      }
+    }
     urls.forEach(function (url) {
       var _css = doc.createElement('link');
       _css.href = url;
