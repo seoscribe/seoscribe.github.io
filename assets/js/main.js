@@ -121,7 +121,7 @@
     var _preloads = doc.querySelectorAll('link[rel="preload"][as="style"]');
     var i = _preloads.length; 
     var j = 0;
-    for (; j < i; ++j) { urls.push(_preloads[j]); }
+    for (; j < i; ++j) { urls.push(_preloads[j].getAttribute('href')); }
     urls.forEach(function (url) {
       var _css = doc.createElement('link');
       _css.href = url;
