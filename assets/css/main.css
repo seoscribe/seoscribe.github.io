@@ -210,7 +210,7 @@ dl.support {
   display: block;
   padding-bottom: 100%;
 }
-.article-body {
+.article-body, .cell-body {
   position: absolute;
   background: #eee;
   overflow: hidden;
